@@ -1,0 +1,26 @@
+
+# Build files
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# Misc ignore files
+.vscode/
+*.user
+*.suo
+*.ntvs*
+*.njsproj
+*.sdf
+*.cachefile

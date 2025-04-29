@@ -1,0 +1,13 @@
+* text=auto eol=lf
+
+dependencies/**/* -text -eol linguist-vendored
+
+*.png  -text -eol
+*.jpg  -text -eol
+*.ico  -text -eol
+*.wav  -text -eol
+*.ogg  -text -eol
+*.flac -text -eol
+*.ttf  -text -eol
+*.icns -text -eol
+*.rtf  -text -eol
