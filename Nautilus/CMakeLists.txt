@@ -27,16 +27,18 @@ file(GLOB_RECURSE Nautilus_FILES
 )
 
 add_library(Nautilus SHARED ${Nautilus_FILES})
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 
 # Include the source directory
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
 )
 
 # Link any dependencies
 target_link_libraries(Nautilus
-    # Add any dependencies required by Nautilus (None so far)
+    spdlog::spdlog
 )
 
 # Set the output directories

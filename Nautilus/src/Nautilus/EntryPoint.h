@@ -18,11 +18,18 @@
     #define _NT_NAUTILUS_ENTRY_POINT_H_
 
 #include "Application.h"
+#include "Log.h"
 
 extern Nt::Application* Nt::CreateApplication();
 
 int main(int argc, char** argv)
 {
+    if (!Nt::Log::Initialize())
+        return -1;
+
+    NT_CORE_LOG_INFO("Nautilus Engine initialized!");
+    NT_CLIENT_LOG_INFO("Sandbox initialized!");
+
     auto app = Nt::CreateApplication();
     app->Run();
     delete app;

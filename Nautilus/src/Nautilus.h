@@ -19,6 +19,7 @@
 
 // Nautilus application usage
 #include "Nautilus/Core.h"
+#include "Nautilus/Log.h"
 #include "Nautilus/Application.h"
 
 // Entry point
