@@ -12,25 +12,22 @@
 
 #pragma endregion LICENSE
 
-#ifndef _SBX_SANDBOX_CPP_
-    #define _SBX_SANDBOX_CPP_
+#pragma once
 
-#include <Nautilus.h>
+#ifndef _NT_NAUTILUS_ENTRY_POINT_H_
+    #define _NT_NAUTILUS_ENTRY_POINT_H_
 
-class Sandbox :
-    public Nt::Application
+#include "Application.h"
+
+extern Nt::Application* Nt::CreateApplication();
+
+int main(int argc, char** argv)
 {
-public:
-    Sandbox()
-    {}
+    auto app = Nt::CreateApplication();
+    app->Run();
+    delete app;
 
-    ~Sandbox()
-    {}
-};
-
-Nt::Application* Nt::CreateApplication()
-{
-    return new Sandbox();
+    return 0;
 }
 
-#endif // _SBX_SANDBOX_CPP_
+#endif // _NT_NAUTILUS_ENTRY_POINT_H_

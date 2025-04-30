@@ -14,20 +14,24 @@
 
 #pragma once
 
-#ifndef _NT_NAUTILUS_TEST_H_
-    #define _NT_NAUTILUS_TEST_H_
+#ifndef _NT_NAUTILUS_APPLICATION_H_
+    #define _NT_NAUTILUS_APPLICATION_H_
 
-#if defined(NT_PLATFORM_WINDOWS)
-    #define NT_API __declspec(dllexport)
-#elif defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_MACOS)
-    #define NT_API __attribute__((visibility("default")))
-#else
-    #define NT_API
-#endif // defined(NT_PLATFORM_WINDOWS), defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_MACOS)
+#include "Core.h"
 
 namespace Nt
 {
-    NT_API void print();
+    class NT_API Application
+    {
+    public:
+        Application();
+        virtual ~Application();
+
+        void Run();
+    };
+
+    // *Defined by the client*
+    Application* CreateApplication();
 } // namespace Nt
 
-#endif // _NT_NAUTILUS_TEST_H_
+#endif // _NT_NAUTILUS_APPLICATION_H_

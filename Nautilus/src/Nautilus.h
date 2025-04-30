@@ -12,19 +12,16 @@
 
 #pragma endregion LICENSE
 
-#ifndef _NT_NAUTILUS_TEST_CPP_
-    #define _NT_NAUTILUS_TEST_CPP_
+#pragma once
 
-#include "Test.h"
+#ifndef _NT_NAUTILUS_H_
+    #define _NT_NAUTILUS_H_
 
-#include <cstdio>
+// Nautilus application usage
+#include "Nautilus/Core.h"
+#include "Nautilus/Application.h"
 
-namespace Nt
-{
-    NT_API void print()
-    {
-        printf("Welcome to Nautilus Engine\n");
-    }
-} // namespace Nt
+// Entry point
+#include "Nautilus/EntryPoint.h"
 
-#endif // _NT_NAUTILUS_TEST_CPP_
+#endif // _NT_NAUTILUS_H_
