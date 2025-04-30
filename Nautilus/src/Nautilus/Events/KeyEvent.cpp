@@ -17,8 +17,6 @@
 
 #include "KeyEvent.h"
 
-#include <sstream>
-
 namespace Nt
 {
     int KeyEvent::GetKeyCode() const

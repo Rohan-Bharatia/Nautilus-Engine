@@ -17,8 +17,6 @@
 
 #include "ApplicationEvent.h"
 
-#include <sstream>
-
 namespace Nt
 {
     WindowResizeEvent::WindowResizeEvent(const unsigned int width, const unsigned int height) :

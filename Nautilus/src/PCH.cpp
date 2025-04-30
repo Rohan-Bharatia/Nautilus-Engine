@@ -12,25 +12,9 @@
 
 #pragma endregion LICENSE
 
-#ifndef _NT_NAUTILUS_APPLICATION_CPP_
-    #define _NT_NAUTILUS_APPLICATION_CPP_
+#ifndef _NT_PCH_CPP_
+    #define _NT_PCH_CPP_
 
-#include "Application.h"
+#include "PCH.h"
 
-#include "Events/ApplicationEvent.h"
-
-namespace Nt
-{
-    Application::Application()
-    {}
-
-    Application::~Application()
-    {}
-
-    void Application::Run()
-    {
-        while (1); // Infinite loop
-    }
-} // namespace Nt
-
-#endif // _NT_NAUTILUS_APPLICATION_CPP_
+#endif // _NT_PCH_CPP_

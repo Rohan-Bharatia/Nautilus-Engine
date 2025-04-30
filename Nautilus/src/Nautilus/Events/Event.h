@@ -17,10 +17,7 @@
 #ifndef _NT_NAUTILUS_EVENTS_EVENT_H_
     #define _NT_NAUTILUS_EVENTS_EVENT_H_
 
-#include "Nautilus/Core.h"
-
-#include <string>
-#include <functional>
+#include "PCH.h"
 
 #define BIT(x) (1 << x)
 

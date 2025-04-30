@@ -18,8 +18,8 @@ else()
 endif()
 add_compile_definitions(NT_BUILD_SHARED)
 
-# Create the Nautilus library
-file(GLOB_RECURSE Nautilus_FILES
+# Gather source files
+file(GLOB_RECURSE Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.h
@@ -27,9 +27,16 @@ file(GLOB_RECURSE Nautilus_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
 )
+file(GLOB_RECURSE Nautilus_PCH_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.cpp
+)
 
-add_library(Nautilus SHARED ${Nautilus_FILES})
+# Create the Nautilus library
+add_library(Nautilus SHARED ${Nautilus_LIB_FILES})
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
+
+target_compile_options(Nautilus PUBLIC -include ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.h)
 
 # Include the source directory
 target_include_directories(Nautilus PUBLIC
@@ -40,9 +47,7 @@ target_include_directories(Nautilus PUBLIC
 )
 
 # Link any dependencies
-target_link_libraries(Nautilus
-    spdlog::spdlog
-)
+target_link_libraries(Nautilus spdlog::spdlog)
 
 # Set the output directories
 set_target_properties(Nautilus PROPERTIES

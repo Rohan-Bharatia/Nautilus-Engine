@@ -17,7 +17,7 @@
 #ifndef _NT_NAUTILUS_APPLICATION_H_
     #define _NT_NAUTILUS_APPLICATION_H_
 
-#include "Core.h"
+#include "PCH.h"
 
 namespace Nt
 {

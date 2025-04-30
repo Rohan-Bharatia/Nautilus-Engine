@@ -17,8 +17,6 @@
 
 #include "MouseEvent.h"
 
-#include <sstream>
-
 namespace Nt
 {
     MouseMovedEvent::MouseMovedEvent(const float mx, const float my) :

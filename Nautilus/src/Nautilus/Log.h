@@ -17,11 +17,9 @@
 #ifndef _NT_NAUTILUS_LOG_H_
     #define _NT_NAUTILUS_LOG_H_
 
-#include "Core.h"
+#include "PCH.h"
 
 #include <spdlog/spdlog.h>
-
-#include <memory>
 
 namespace Nt
 {

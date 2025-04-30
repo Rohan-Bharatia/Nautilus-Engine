@@ -17,8 +17,6 @@
 
 #include "Event.h"
 
-#include "Nautilus/Log.h"
-
 namespace Nt
 {
     Event::Event() :
