@@ -24,6 +24,8 @@ file(GLOB_RECURSE Nautilus_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
 )
 
 add_library(Nautilus SHARED ${Nautilus_FILES})
@@ -33,6 +35,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
 )
 

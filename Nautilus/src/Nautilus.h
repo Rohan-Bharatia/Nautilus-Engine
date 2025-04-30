@@ -20,6 +20,10 @@
 // Nautilus application usage
 #include "Nautilus/Core.h"
 #include "Nautilus/Log.h"
+#include "Nautilus/Events/Event.h"
+#include "Nautilus/Events/KeyEvent.h"
+#include "Nautilus/Events/MouseEvent.h"
+#include "Nautilus/Events/ApplicationEvent.h"
 #include "Nautilus/Application.h"
 
 // Entry point
