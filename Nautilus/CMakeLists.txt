@@ -30,15 +30,6 @@ file(GLOB Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
 )
-# Gather source files
-file(GLOB Nautilus_LIB_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
-)
 if(WIN32)
     list(APPEND Nautilus_LIB_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsWindow.h
@@ -63,6 +54,7 @@ target_compile_options(Nautilus PUBLIC -fPIC -pthread)
 # Add dependencies
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD)
 find_package(OpenGL REQUIRED)
 
 # Include the source directory
@@ -72,12 +64,14 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include
 )
 
 # Link dependencies
 target_link_libraries(Nautilus PUBLIC
     spdlog::spdlog
     glfw
+    glad
     ${OPENGL_LIBRARIES}
 )
 
