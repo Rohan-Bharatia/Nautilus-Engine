@@ -20,6 +20,7 @@
 #include "PCH.h"
 
 #include "Window.h"
+#include "Events/ApplicationEvent.h"
 
 namespace Nt
 {
@@ -31,9 +32,13 @@ namespace Nt
 
         void Run();
 
+        void OnEvent(Event& e);
+
     private:
         std::unique_ptr<Window> m_window;
         bool m_isRunning;
+
+        bool OnWindowClose(WindowCloseEvent& e);
     };
 
     // *Defined by the client*

@@ -19,11 +19,15 @@
 
 #include "Events/ApplicationEvent.h"
 
+#define NT_BIND_APPLICATION_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
 namespace Nt
 {
     Application::Application() :
         m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true)
-    {}
+    {
+        m_window->SetEventCallback(NT_BIND_APPLICATION_EVENT_FN(OnEvent));
+    }
 
     Application::~Application()
     {
@@ -40,8 +44,20 @@ namespace Nt
 
             m_window->OnUpdate();
         }
+    }
 
-        while (1);
+    void Application::OnEvent(Event& e)
+    {
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_APPLICATION_EVENT_FN(OnWindowClose));
+        
+        NT_CORE_LOG_TRACE(e.ToString());
+    }
+
+    bool Application::OnWindowClose(WindowCloseEvent& e)
+    {
+        m_isRunning = false;
+        return true;
     }
 } // namespace Nt
 
