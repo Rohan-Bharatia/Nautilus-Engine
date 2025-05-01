@@ -38,6 +38,8 @@
 
 // External dependencies
 #include <spdlog/spdlog.h>
+#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include <glfw/glfw3.h>
 
 // Platform dependencies

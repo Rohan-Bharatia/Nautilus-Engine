@@ -101,6 +101,9 @@ namespace Nt
         m_window = glfwCreateWindow((int)props.width, (int)props.height, m_data.title.c_str(), nullptr, nullptr);
         glfwMakeContextCurrent(m_window);
 
+        int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        NT_ASSERT(success, "Could not initialize GLAD!");
+
         glfwSetWindowUserPointer(m_window, &m_data);
         SetVSync(true);
 

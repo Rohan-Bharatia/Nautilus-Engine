@@ -21,8 +21,6 @@
 
 #include "Nautilus/Window.h"
 
-#include <glfw/glfw3.h>
-
 namespace Nt
 {
     class NT_API WindowsWindow :
