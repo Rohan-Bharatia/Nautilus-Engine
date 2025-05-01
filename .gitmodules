@@ -1,3 +1,6 @@
 [submodule "Nautilus/vendor/spdlog"]
 	path = Nautilus/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Nautilus/vendor/GLFW"]
+	path = Nautilus/vendor/GLFW
+	url = https://github.com/glfw/glfw

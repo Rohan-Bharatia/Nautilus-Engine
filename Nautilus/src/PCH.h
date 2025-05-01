@@ -32,9 +32,13 @@
 #include <unordered_map>
 #include <unordered_set>
 
-// Nautilus --
+// Nautilus files
 #include "Nautilus/Core.h"
 #include "Nautilus/Log.h"
+
+// External dependencies
+#include <spdlog/spdlog.h>
+#include <glfw/glfw3.h>
 
 // Platform dependencies
 #if defined(NT_PLATFORM_WINDOWS)

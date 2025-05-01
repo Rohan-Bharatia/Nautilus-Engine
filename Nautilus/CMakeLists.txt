@@ -35,6 +35,7 @@ file(GLOB_RECURSE Nautilus_PCH_FILES
 # Create the Nautilus library
 add_library(Nautilus SHARED ${Nautilus_LIB_FILES})
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW)
 
 target_compile_options(Nautilus PUBLIC -include ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.h)
 
@@ -44,10 +45,14 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
 )
 
 # Link any dependencies
-target_link_libraries(Nautilus spdlog::spdlog)
+target_link_libraries(Nautilus PUBLIC
+    ${SPDLOG_LIBRARIES}
+    ${GLFW_LIBRARIES}
+)
 
 # Set the output directories
 set_target_properties(Nautilus PROPERTIES
