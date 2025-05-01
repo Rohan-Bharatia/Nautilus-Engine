@@ -17,9 +17,12 @@ else()
     message(FATAL_ERROR "Unsupported platform detected: ${CMAKE_SYSTEM_NAME}! Supported platforms: Windows, Linux, macOS")
 endif()
 add_compile_definitions(NT_BUILD_SHARED)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(NT_DEBUG)
+endif()
 
 # Gather source files
-file(GLOB_RECURSE Nautilus_LIB_FILES
+file(GLOB Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.h
@@ -27,17 +30,39 @@ file(GLOB_RECURSE Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
 )
-file(GLOB_RECURSE Nautilus_PCH_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.cpp
+# Gather source files
+file(GLOB Nautilus_LIB_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
 )
+if(WIN32)
+    list(APPEND Nautilus_LIB_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsWindow.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsWindow.cpp
+    )
+elseif(UNIX AND NOT APPLE)
+    list(APPEND Nautilus_LIB_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Linux/LinuxWindow.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Linux/LinuxWindow.cpp
+    )
+elseif(APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "iOS")
+    list(APPEND Nautilus_LIB_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/MacOS/MacOSWindow.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/MacOS/MacOSWindow.cpp
+    )
+endif()
 
 # Create the Nautilus library
 add_library(Nautilus SHARED ${Nautilus_LIB_FILES})
+
+# Add dependencies
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW)
-
-target_compile_options(Nautilus PUBLIC -include ${CMAKE_CURRENT_SOURCE_DIR}/src/PCH.h)
+find_package(OpenGL REQUIRED)
 
 # Include the source directory
 target_include_directories(Nautilus PUBLIC
@@ -48,10 +73,11 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
 )
 
-# Link any dependencies
+# Link dependencies
 target_link_libraries(Nautilus PUBLIC
-    ${SPDLOG_LIBRARIES}
-    ${GLFW_LIBRARIES}
+    spdlog::spdlog
+    glfw
+    ${OPENGL_LIBRARIES}
 )
 
 # Set the output directories

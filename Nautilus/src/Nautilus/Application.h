@@ -19,6 +19,8 @@
 
 #include "PCH.h"
 
+#include "Window.h"
+
 namespace Nt
 {
     class NT_API Application
@@ -28,6 +30,10 @@ namespace Nt
         virtual ~Application();
 
         void Run();
+
+    private:
+        std::unique_ptr<Window> m_window;
+        bool m_isRunning;
     };
 
     // *Defined by the client*

@@ -53,4 +53,16 @@ namespace Nt
 #define NT_CLIENT_LOG_ERROR(...)    Nt::Log::GetClientLogger()->error(__VA_ARGS__)
 #define NT_CLIENT_LOG_CRITICAL(...) Nt::Log::GetClientLogger()->critical(__VA_ARGS__)
 
+#if defined(NT_DEBUG)
+    #if defined(NT_PLATFORM_WINDOWS)
+        #define NT_ASSERT(condition, ...) if (!condition) { NT_CORE_LOG_CRITICAL(__VA_ARGS__); } else { __debugbreak(); }
+    #elif defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_MACOS)
+        #define NT_ASSERT(condition, ...) if (!condition) { NT_CORE_LOG_CRITICAL(__VA_ARGS__); } else { raise(SIGTRAP); }
+    #else // (NOT) defined(NT_PLATFORM_WINDOWS), defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_MACOS)
+        #define NT_ASSERT(condition, ...)
+    #endif // defined(NT_PLATFORM_WINDOWS), defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_MACOS)
+#else // (NOT) defined(NT_DEBUG)
+    #define NT_ASSERT(condition, ...)
+#endif // defined(NT_DEBUG)
+
 #endif // _NT_NAUTILUS_LOG_H_

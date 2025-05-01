@@ -21,15 +21,27 @@
 
 namespace Nt
 {
-    Application::Application()
+    Application::Application() :
+        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true)
     {}
 
     Application::~Application()
-    {}
+    {
+        m_window.reset();
+    }
 
     void Application::Run()
     {
-        while (1); // Infinite loop
+        while (m_isRunning)
+        {
+            // Clear the window with OpenGL
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            m_window->OnUpdate();
+        }
+
+        while (1);
     }
 } // namespace Nt
 
