@@ -81,6 +81,7 @@ namespace Nt
         virtual const char* GetName() const = 0;
         virtual int GetCategoryFlags() const = 0;
         virtual std::string ToString() const;
+        bool IsHandled() const;
 
         bool IsInCategory(EventCategory category) const;
 

@@ -17,20 +17,40 @@
 
 #include <Nautilus.h>
 
-class Sandbox :
+class SandboxLayer : public Nt::Layer
+{
+public:
+    SandboxLayer() :
+        Layer("Sandbox")
+    {}
+
+    void OnUpdate() override
+    {
+        NT_CLIENT_LOG_INFO("Sandbox layer updated!");
+    }
+
+    void OnEvent(Nt::Event& event) override
+    {
+        NT_CLIENT_LOG_TRACE(event.ToString());
+    }
+};
+
+class SandboxApplication :
     public Nt::Application
 {
 public:
-    Sandbox()
-    {}
+    SandboxApplication()
+    {
+        PushLayer(new SandboxLayer());
+    }
 
-    ~Sandbox()
+    ~SandboxApplication()
     {}
 };
 
 Nt::Application* Nt::CreateApplication()
 {
-    return new Sandbox();
+    return new SandboxApplication();
 }
 
 #endif // _SBX_SANDBOX_CPP_

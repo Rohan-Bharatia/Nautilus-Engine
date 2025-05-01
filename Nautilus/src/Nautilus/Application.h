@@ -20,7 +20,9 @@
 #include "PCH.h"
 
 #include "Window.h"
+#include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
+#include "LayerStack.h"
 
 namespace Nt
 {
@@ -30,6 +32,9 @@ namespace Nt
         Application();
         virtual ~Application();
 
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* layer);
+
         void Run();
 
         void OnEvent(Event& e);
@@ -37,6 +42,7 @@ namespace Nt
     private:
         std::unique_ptr<Window> m_window;
         bool m_isRunning;
+        LayerStack m_layerStack;
 
         bool OnWindowClose(WindowCloseEvent& e);
     };

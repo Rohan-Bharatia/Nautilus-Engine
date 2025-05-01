@@ -33,6 +33,11 @@ namespace Nt
         return GetCategoryFlags() & category;
     }
 
+    bool Event::IsHandled() const
+    {
+        return m_handled;
+    }
+
     EventDispatcher::EventDispatcher(Event& event) :
         m_event(event)
     {}

@@ -58,6 +58,7 @@ endif()
 
 # Create the Nautilus library
 add_library(Nautilus SHARED ${Nautilus_LIB_FILES})
+target_compile_options(Nautilus PUBLIC -fPIC -pthread)
 
 # Add dependencies
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)

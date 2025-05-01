@@ -34,6 +34,16 @@ namespace Nt
         m_window.reset();
     }
 
+    void Application::PushLayer(Layer* layer)
+    {
+        m_layerStack.PushLayer(layer);
+    }
+
+    void Application::PushOverlay(Layer* overlay)
+    {
+        m_layerStack.PushOverlay(overlay);
+    }
+
     void Application::Run()
     {
         while (m_isRunning)
@@ -41,6 +51,9 @@ namespace Nt
             // Clear the window with OpenGL
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            for (Layer* layer : m_layerStack)
+                layer->OnUpdate();
 
             m_window->OnUpdate();
         }
@@ -50,8 +63,15 @@ namespace Nt
     {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_APPLICATION_EVENT_FN(OnWindowClose));
-        
+
         NT_CORE_LOG_TRACE(e.ToString());
+
+        for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
+        {
+            (*--it)->OnEvent(e);
+            if (e.IsHandled())
+                break;
+        }
     }
 
     bool Application::OnWindowClose(WindowCloseEvent& e)
