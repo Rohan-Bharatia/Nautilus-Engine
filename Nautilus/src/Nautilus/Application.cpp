@@ -23,9 +23,14 @@
 
 namespace Nt
 {
+    Application* Application::s_instance = nullptr;
+
     Application::Application() :
         m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true)
     {
+        NT_ASSERT(!s_instance, "Application already exists!");
+        s_instance = this;
+
         m_window->SetEventCallback(NT_BIND_APPLICATION_EVENT_FN(OnEvent));
     }
 
@@ -37,11 +42,13 @@ namespace Nt
     void Application::PushLayer(Layer* layer)
     {
         m_layerStack.PushLayer(layer);
+        layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* overlay)
     {
         m_layerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 
     void Application::Run()
@@ -78,6 +85,16 @@ namespace Nt
     {
         m_isRunning = false;
         return true;
+    }
+
+    Application& Application::Get()
+    {
+        return *s_instance;
+    }
+
+    Window& Application::GetWindow()
+    {
+        return *m_window;
     }
 } // namespace Nt
 

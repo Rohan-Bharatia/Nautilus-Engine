@@ -26,6 +26,7 @@
 #include "Nautilus/Events/ApplicationEvent.h"
 #include "Nautilus/Layer.h"
 #include "Nautilus/LayerStack.h"
+#include "Nautilus/ImGui/ImGuiLayer.h"
 #include "Nautilus/Application.h"
 
 // Entry point

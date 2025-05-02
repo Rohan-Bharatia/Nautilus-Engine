@@ -39,10 +39,14 @@ namespace Nt
 
         void OnEvent(Event& e);
 
+        static Application& Get();
+        Window& GetWindow();
+
     private:
         std::unique_ptr<Window> m_window;
         bool m_isRunning;
         LayerStack m_layerStack;
+        static Application* s_instance;
 
         bool OnWindowClose(WindowCloseEvent& e);
     };

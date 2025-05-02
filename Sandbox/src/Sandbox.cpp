@@ -42,6 +42,7 @@ public:
     SandboxApplication()
     {
         PushLayer(new SandboxLayer());
+        PushOverlay(new Nt::ImGuiLayer());
     }
 
     ~SandboxApplication()

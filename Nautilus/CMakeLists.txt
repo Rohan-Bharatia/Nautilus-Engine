@@ -30,6 +30,8 @@ file(GLOB Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/ImGui/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/ImGui/*.cpp
 )
 if(WIN32)
     list(APPEND Nautilus_LIB_FILES
@@ -52,14 +54,12 @@ endif()
 add_library(Nautilus SHARED ${Nautilus_LIB_FILES})
 target_compile_options(Nautilus PUBLIC -fPIC -pthread)
 
-set(IMGUI_BACKEND_OPENGL3 ON)
-
 # Add dependencies
+find_package(OpenGL REQUIRED)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
-find_package(OpenGL REQUIRED)
 
 # Include the source directory
 target_include_directories(Nautilus PUBLIC
@@ -74,11 +74,11 @@ target_include_directories(Nautilus PUBLIC
 
 # Link dependencies
 target_link_libraries(Nautilus PUBLIC
+    ${OPENGL_LIBRARIES}
     spdlog::spdlog
     glfw
     glad
     imgui
-    ${OPENGL_LIBRARIES}
 )
 
 # Set the output directories
