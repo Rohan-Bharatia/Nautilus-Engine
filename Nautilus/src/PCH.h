@@ -41,6 +41,8 @@
 #include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <glfw/glfw3.h>
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 
 // Platform dependencies
 #if defined(NT_PLATFORM_WINDOWS)

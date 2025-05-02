@@ -52,10 +52,13 @@ endif()
 add_library(Nautilus SHARED ${Nautilus_LIB_FILES})
 target_compile_options(Nautilus PUBLIC -fPIC -pthread)
 
+set(IMGUI_BACKEND_OPENGL3 ON)
+
 # Add dependencies
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 find_package(OpenGL REQUIRED)
 
 # Include the source directory
@@ -66,6 +69,7 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/ # ImGui doesn't use a header directory so we need to add this manually
 )
 
 # Link dependencies
@@ -73,6 +77,7 @@ target_link_libraries(Nautilus PUBLIC
     spdlog::spdlog
     glfw
     glad
+    imgui
     ${OPENGL_LIBRARIES}
 )
 

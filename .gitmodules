@@ -4,3 +4,6 @@
 [submodule "Nautilus/vendor/GLFW"]
 	path = Nautilus/vendor/GLFW
 	url = https://github.com/glfw/glfw
+[submodule "Nautilus/vendor/imgui"]
+	path = Nautilus/vendor/imgui
+	url = https://github.com/ocornut/imgui
