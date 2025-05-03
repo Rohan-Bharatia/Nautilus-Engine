@@ -40,6 +40,8 @@ namespace Nt
         void SetVSync(bool enabled) override;
         bool IsVSync() const override;
 
+        virtual void* GetNativeWindow() const override;
+
     private:
         struct WindowData
 		{

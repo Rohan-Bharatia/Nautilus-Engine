@@ -37,16 +37,22 @@ if(WIN32)
     list(APPEND Nautilus_LIB_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsWindow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsWindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsInput.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Windows/WindowsInput.cpp
     )
 elseif(UNIX AND NOT APPLE)
     list(APPEND Nautilus_LIB_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Linux/LinuxWindow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Linux/LinuxWindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Linux/LinusInput.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/Linux/LinusInput.cpp
     )
 elseif(APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "iOS")
     list(APPEND Nautilus_LIB_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/MacOS/MacOSWindow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/MacOS/MacOSWindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/MacOS/MacOsInput.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/MacOS/MacOsInput.cpp
     )
 endif()
 

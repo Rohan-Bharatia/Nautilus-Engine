@@ -18,6 +18,7 @@
 #include "Application.h"
 
 #include "Events/ApplicationEvent.h"
+#include "Input.h"
 
 #define NT_BIND_APPLICATION_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 

@@ -77,6 +77,11 @@ namespace Nt
         return m_data.vsync;
     }
 
+    void* WindowsWindow::GetNativeWindow() const
+    {
+        return static_cast<void*>(m_window);
+    }
+
     void WindowsWindow::Initialize(const WindowProps& props)
     {
         m_data.title  = props.title;

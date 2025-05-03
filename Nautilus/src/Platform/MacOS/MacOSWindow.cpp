@@ -77,6 +77,11 @@ namespace Nt
         return m_data.vsync;
     }
 
+    void* MacOSWindow::GetNativeWindow() const
+    {
+        return static_cast<void*>(m_window);
+    }
+
     void MacOSWindow::Initialize(const WindowProps& props)
     {
         m_data.title  = props.title;
