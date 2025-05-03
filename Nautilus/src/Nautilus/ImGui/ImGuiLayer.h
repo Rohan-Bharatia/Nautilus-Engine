@@ -21,6 +21,10 @@
 
 #include "Nautilus/Layer.h"
 
+#include "Nautilus/Events/KeyEvent.h"
+#include "Nautilus/Events/MouseEvent.h"
+#include "Nautilus/Events/ApplicationEvent.h"
+
 namespace Nt
 {
     class NT_API ImGuiLayer :
@@ -37,6 +41,15 @@ namespace Nt
 
     private:
         float m_time;
+
+        bool OnKeyPressedEvent(KeyPressedEvent& e);
+        bool OnKeyReleasedEvent(KeyReleasedEvent& e);
+        bool OnKeyTypedEvent(KeyTypedEvent& e);
+        bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
+        bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e);
+        bool OnMouseMovedEvent(MouseMovedEvent& e);
+        bool OnMouseScrolledEvent(MouseScrolledEvent& e);
+        bool OnWindowResizeEvent(WindowResizeEvent& e);
     };
 } // namespace Nt
 

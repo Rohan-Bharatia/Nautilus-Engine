@@ -61,6 +61,19 @@ namespace Nt
 
         NT_EVENT_CLASS_TYPE(KeyReleased)
     };
+
+    class NT_API KeyTypedEvent :
+        public KeyEvent
+    {
+    public:
+        KeyTypedEvent(int keycode);
+
+        int GetRepeatCount() const;
+
+        std::string ToString() const override;
+
+        NT_EVENT_CLASS_TYPE(KeyTyped)
+    };
 } // namespace Nt
 
 #endif // _NT_NAUTILUS_EVENTS_KEY_EVENT_H_

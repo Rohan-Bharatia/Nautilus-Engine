@@ -67,7 +67,7 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include  # <--- Added this line
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/ # ImGui doesn't use a header directory so we need to add this manually
 )
@@ -80,6 +80,8 @@ target_link_libraries(Nautilus PUBLIC
     glad
     imgui
 )
+
+option(IMGUI_BACKEND_GLFW "Enable GLFW backend for ImGui" ON)
 
 # Set the output directories
 set_target_properties(Nautilus PROPERTIES

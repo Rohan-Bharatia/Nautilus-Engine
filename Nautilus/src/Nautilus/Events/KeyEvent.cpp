@@ -54,6 +54,17 @@ namespace Nt
         ss << "KeyReleasedEvent: " << GetKeyCode();
         return ss.str();
     }
+
+    KeyTypedEvent::KeyTypedEvent(int keycode) :
+        KeyEvent(keycode)
+    {}
+
+    std::string KeyTypedEvent::ToString() const
+    {
+        std::stringstream ss;
+        ss << "KeyTypedEvent: " << GetKeyCode();
+        return ss.str();
+    }
 } // namespace Nt
 
 #endif // _NT_NAUTILUS_EVENTS_KEY_EVENT_CPP_

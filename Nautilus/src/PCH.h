@@ -43,6 +43,7 @@
 #include <glfw/glfw3.h>
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_glfw.h>
 
 // Platform dependencies
 #if defined(NT_PLATFORM_WINDOWS)
