@@ -42,8 +42,13 @@ namespace Nt
         ImGui::StyleColorsDark();
 
         ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags  |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags  |= ImGuiConfigFlags_NavEnableGamepad;
+        io.ConfigFlags  |= ImGuiConfigFlags_IsSRGB;
         io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+        io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
+        io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
 
         ImGui_ImplOpenGL3_Init("#version 460");
     }
