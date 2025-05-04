@@ -66,6 +66,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm)
 
 # Include the source directory
 target_include_directories(Nautilus PUBLIC
@@ -73,9 +74,10 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include  # <--- Added this line
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/ # ImGui doesn't use a header directory so we need to add this manually
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm
 )
 
 # Link dependencies
@@ -85,6 +87,7 @@ target_link_libraries(Nautilus PUBLIC
     glfw
     glad
     imgui
+    glm
 )
 
 option(IMGUI_BACKEND_GLFW "Enable GLFW backend for ImGui" ON)

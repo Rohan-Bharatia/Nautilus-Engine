@@ -44,6 +44,8 @@
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_glfw.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 // Platform dependencies
 #if defined(NT_PLATFORM_WINDOWS)
