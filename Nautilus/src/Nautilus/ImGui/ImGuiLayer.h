@@ -50,6 +50,11 @@ namespace Nt
         bool OnMouseMovedEvent(MouseMovedEvent& e);
         bool OnMouseScrolledEvent(MouseScrolledEvent& e);
         bool OnWindowResizeEvent(WindowResizeEvent& e);
+
+        static ImGuiKey GetImGuiKey(int keycode);
+        static ImGuiKey GetImGuiMouseButton(int button);
+        static ImGuiKey GetImGuiGamepadButton(int button);
+        static ImGuiKey GetImGuiGamepadAxis(int axis);
     };
 } // namespace Nt
 
