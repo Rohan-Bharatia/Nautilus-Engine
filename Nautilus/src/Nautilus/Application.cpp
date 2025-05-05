@@ -27,7 +27,8 @@ namespace Nt
     Application* Application::s_instance = nullptr;
 
     Application::Application() :
-        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer())
+        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer()),
+        m_VAO(0), m_VBO(0), m_IBO(0)
     {
         NT_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
@@ -57,8 +58,37 @@ namespace Nt
         glGenBuffers(1, &m_IBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
 
-        unsigned int indices[3] = { 0, 1, 2 };
+        GLuint indices[3] = { 0, 1, 2 };
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        std::string vertexSource = R"(
+            #version 330 core
+
+            layout(location = 0) in vec3 aPosition;
+
+            out vec3 vColor;
+
+            void main()
+            {
+                vColor      = aPosition;
+                gl_Position = vec4(vColor, 1.0f);
+            }
+        )";
+
+        std::string fragmentSource = R"(
+            #version 330 core
+
+            layout(location = 0) out vec4 FragColor;
+
+            in vec3 vColor;
+
+            void main()
+            {
+                FragColor = vec4(vColor * 0.5f + 0.5f, 1.0f);
+            }
+        )";
+
+        m_shader.reset(new Shader(vertexSource, fragmentSource));
     }
 
     Application::~Application()
@@ -86,6 +116,7 @@ namespace Nt
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            m_shader->Bind();
             glBindVertexArray(m_VAO);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 

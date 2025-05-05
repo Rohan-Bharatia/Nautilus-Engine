@@ -24,6 +24,7 @@
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Renderer/Shader.h"
 
 namespace Nt
 {
@@ -51,6 +52,7 @@ namespace Nt
         GLuint m_VAO;
         GLuint m_VBO;
         GLuint m_IBO;
+        std::unique_ptr<Shader> m_shader;
 
         static Application* s_instance;
 
