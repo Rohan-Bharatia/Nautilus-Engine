@@ -23,6 +23,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace Nt
 {
@@ -46,6 +47,8 @@ namespace Nt
         std::unique_ptr<Window> m_window;
         bool m_isRunning;
         LayerStack m_layerStack;
+        ImGuiLayer* m_imguiLayer;
+
         static Application* s_instance;
 
         bool OnWindowClose(WindowCloseEvent& e);

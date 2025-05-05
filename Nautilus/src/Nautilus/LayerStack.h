@@ -26,7 +26,7 @@ namespace Nt
     class NT_API LayerStack
     {
         using Iterator = std::vector<Layer*>::iterator;
-        
+
     public:
         LayerStack();
         ~LayerStack();
@@ -41,7 +41,7 @@ namespace Nt
 
     private:
         std::vector<Layer*> m_layers;
-        Iterator m_layerInsertIndex;
+        unsigned int m_layerInsertIndex;
     };
 } // namespace Nt
 

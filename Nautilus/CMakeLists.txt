@@ -20,7 +20,7 @@ add_compile_definitions(NT_BUILD_SHARED)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(NT_DEBUG)
 endif()
-# add_compile_definitions(GLFW_INCLUDE_NONE)
+# add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_IMGL3W)
 
 # Gather source files
 file(GLOB Nautilus_LIB_FILES

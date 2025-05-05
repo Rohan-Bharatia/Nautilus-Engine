@@ -38,6 +38,9 @@ namespace Nt
     void Layer::OnEvent(Event& event)
     {}
 
+    void Layer::OnImGuiRender()
+    {}
+
     const std::string& Layer::GetName() const
     {
         return m_debugName;

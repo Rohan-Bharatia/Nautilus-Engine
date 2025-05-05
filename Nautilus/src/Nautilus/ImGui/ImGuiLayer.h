@@ -35,26 +35,14 @@ namespace Nt
         ~ImGuiLayer();
 
         virtual void OnAttach() override;
-        virtual void OnUpdate() override;
         virtual void OnDetach() override;
-        virtual void OnEvent(Event& event) override;
+        virtual void OnImGuiRender() override;
+
+        void Begin();
+        void End();
 
     private:
         float m_time;
-
-        bool OnKeyPressedEvent(KeyPressedEvent& e);
-        bool OnKeyReleasedEvent(KeyReleasedEvent& e);
-        bool OnKeyTypedEvent(KeyTypedEvent& e);
-        bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
-        bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e);
-        bool OnMouseMovedEvent(MouseMovedEvent& e);
-        bool OnMouseScrolledEvent(MouseScrolledEvent& e);
-        bool OnWindowResizeEvent(WindowResizeEvent& e);
-
-        static ImGuiKey GetImGuiKey(int keycode);
-        static ImGuiKey GetImGuiMouseButton(int button);
-        static ImGuiKey GetImGuiGamepadButton(int button);
-        static ImGuiKey GetImGuiGamepadAxis(int axis);
     };
 } // namespace Nt
 

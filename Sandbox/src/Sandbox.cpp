@@ -17,7 +17,8 @@
 
 #include <Nautilus.h>
 
-class SandboxLayer : public Nt::Layer
+class SandboxLayer :
+    public Nt::Layer
 {
 public:
     SandboxLayer() :
@@ -42,7 +43,6 @@ public:
     SandboxApplication()
     {
         PushLayer(new SandboxLayer());
-        PushOverlay(new Nt::ImGuiLayer());
     }
 
     ~SandboxApplication()

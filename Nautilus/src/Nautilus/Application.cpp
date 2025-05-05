@@ -27,12 +27,14 @@ namespace Nt
     Application* Application::s_instance = nullptr;
 
     Application::Application() :
-        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true)
+        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer())
     {
         NT_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
 
         m_window->SetEventCallback(NT_BIND_APPLICATION_EVENT_FN(OnEvent));
+
+        PushOverlay(m_imguiLayer);
     }
 
     Application::~Application()
@@ -62,6 +64,11 @@ namespace Nt
 
             for (Layer* layer : m_layerStack)
                 layer->OnUpdate();
+
+            m_imguiLayer->Begin();
+            for (Layer* layer : m_layerStack)
+                layer->OnImGuiRender();
+            m_imguiLayer->End();
 
             m_window->OnUpdate();
         }
