@@ -48,6 +48,9 @@ namespace Nt
         bool m_isRunning;
         LayerStack m_layerStack;
         ImGuiLayer* m_imguiLayer;
+        GLuint m_VAO;
+        GLuint m_VBO;
+        GLuint m_IBO;
 
         static Application* s_instance;
 

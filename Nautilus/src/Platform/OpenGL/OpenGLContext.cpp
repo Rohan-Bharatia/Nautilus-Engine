@@ -31,6 +31,11 @@ namespace Nt
 
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         NT_ASSERT(status, "Failed to initialize GLAD!");
+
+        NT_CORE_LOG_INFO("OpenGL info:");
+        NT_CORE_LOG_INFO(" - Vendor: {0}", (const char*)glGetString(GL_VENDOR));
+        NT_CORE_LOG_INFO(" - Renderer: {0}", (const char*)glGetString(GL_RENDERER));
+        NT_CORE_LOG_INFO(" - Version: {0}", (const char*)glGetString(GL_VERSION));
     }
 
     void OpenGLContext::SwapBuffers()

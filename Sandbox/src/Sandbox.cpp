@@ -25,11 +25,6 @@ public:
         Layer("Sandbox")
     {}
 
-    void OnUpdate() override
-    {
-        NT_CLIENT_LOG_INFO("Sandbox layer updated!");
-    }
-
     void OnEvent(Nt::Event& event) override
     {
         NT_CLIENT_LOG_TRACE(event.ToString());

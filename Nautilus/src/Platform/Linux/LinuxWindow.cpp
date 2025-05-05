@@ -89,7 +89,7 @@ namespace Nt
         m_data.width  = props.width;
         m_data.height = props.height;
 
-        NT_CORE_LOG_INFO("Creating window {0} ({1}, {2})", props.title, props.width, props.height);
+        NT_CORE_LOG_INFO("Creating window: \"{0}\" ({1}, {2})", props.title, props.width, props.height);
 
         if (!s_glfwInitialized)
         {
