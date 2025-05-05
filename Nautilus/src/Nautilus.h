@@ -24,9 +24,12 @@
 #include "Nautilus/Events/KeyEvent.h"
 #include "Nautilus/Events/MouseEvent.h"
 #include "Nautilus/Events/ApplicationEvent.h"
+#include "Nautilus/Window.h"
 #include "Nautilus/Layer.h"
 #include "Nautilus/LayerStack.h"
 #include "Nautilus/ImGui/ImGuiLayer.h"
+#include "Nautilus/KeyCodes.h"
+#include "Nautilus/Renderer/GraphicsContext.h"
 #include "Nautilus/Application.h"
 
 // Entry point

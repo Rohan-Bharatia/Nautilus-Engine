@@ -20,6 +20,7 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 #include "Events/ApplicationEvent.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Nt
 {
@@ -43,7 +44,7 @@ namespace Nt
     void WindowsWindow::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_window);
+        m_context->SwapBuffers();
     }
 
     std::string WindowsWindow::GetTitle() const
@@ -104,10 +105,9 @@ namespace Nt
         }
 
         m_window = glfwCreateWindow((int)props.width, (int)props.height, m_data.title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(m_window);
+        m_context = new OpenGLContext(m_window);
 
-        int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        NT_ASSERT(success, "Could not initialize GLAD!");
+        m_context->Initialize();
 
         glfwSetWindowUserPointer(m_window, &m_data);
         SetVSync(true);

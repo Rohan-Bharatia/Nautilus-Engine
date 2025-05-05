@@ -20,7 +20,7 @@ add_compile_definitions(NT_BUILD_SHARED)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(NT_DEBUG)
 endif()
-# add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_IMGL3W)
+add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
 # Gather source files
 file(GLOB Nautilus_LIB_FILES
@@ -32,6 +32,10 @@ file(GLOB Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/ImGui/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/ImGui/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Renderer/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Renderer/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/OpenGL/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform/OpenGL/*.cpp
 )
 if(WIN32)
     list(APPEND Nautilus_LIB_FILES

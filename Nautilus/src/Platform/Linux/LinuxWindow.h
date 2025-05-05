@@ -20,6 +20,7 @@
 #include "PCH.h"
 
 #include "Nautilus/Window.h"
+#include "Nautilus/Renderer/GraphicsContext.h"
 
 namespace Nt
 {
@@ -55,6 +56,7 @@ namespace Nt
 
         GLFWwindow* m_window;
 		WindowData m_data;
+        GraphicsContext* m_context;
 
         void Initialize(const WindowProps& props);
         void Shutdown();
