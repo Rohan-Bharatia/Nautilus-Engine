@@ -28,7 +28,7 @@ namespace Nt
 
     Application::Application() :
         m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer()),
-        m_VAO(0), m_VBO(0), m_IBO(0)
+        m_VAO(0)
     {
         NT_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
@@ -40,9 +40,6 @@ namespace Nt
         glGenVertexArrays(1, &m_VAO);
         glBindVertexArray(m_VAO);
 
-        glGenBuffers(1, &m_VBO);
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-
         float vertices[9] =
         {
             -0.5f, -0.5f, 0.0f,
@@ -50,16 +47,16 @@ namespace Nt
              0.0f,  0.5f, 0.0f,
         };
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        m_VBO.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+        // m_VBO->Bind();
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-        glGenBuffers(1, &m_IBO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-
         GLuint indices[3] = { 0, 1, 2 };
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        m_IBO.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+        // m_IBO->Bind();
 
         std::string vertexSource = R"(
             #version 330 core
@@ -94,6 +91,9 @@ namespace Nt
     Application::~Application()
     {
         m_window.reset();
+        m_VBO.reset();
+        m_IBO.reset();
+        m_shader.reset();
     }
 
     void Application::PushLayer(Layer* layer)
@@ -118,7 +118,7 @@ namespace Nt
 
             m_shader->Bind();
             glBindVertexArray(m_VAO);
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, m_IBO->GetCount(), GL_UNSIGNED_INT, nullptr);
 
             for (Layer* layer : m_layerStack)
                 layer->OnUpdate();

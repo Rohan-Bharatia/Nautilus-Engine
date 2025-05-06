@@ -25,6 +25,7 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace Nt
 {
@@ -50,8 +51,8 @@ namespace Nt
         LayerStack m_layerStack;
         ImGuiLayer* m_imguiLayer;
         GLuint m_VAO;
-        GLuint m_VBO;
-        GLuint m_IBO;
+        std::unique_ptr<VertexBuffer> m_VBO;
+        std::unique_ptr<IndexBuffer> m_IBO;
         std::unique_ptr<Shader> m_shader;
 
         static Application* s_instance;

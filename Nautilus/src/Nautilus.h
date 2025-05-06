@@ -30,6 +30,8 @@
 #include "Nautilus/ImGui/ImGuiLayer.h"
 #include "Nautilus/KeyCodes.h"
 #include "Nautilus/Renderer/GraphicsContext.h"
+#include "Nautilus/Renderer/Shader.h"
+#include "Nautilus/Renderer/Buffer.h"
 #include "Nautilus/Application.h"
 
 // Entry point
