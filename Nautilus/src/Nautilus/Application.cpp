@@ -88,7 +88,7 @@ namespace Nt
             }
         )";
 
-        m_shader.reset(new Shader(vertexSource, fragmentSource));
+        m_shader.reset(Shader::Create(vertexSource, fragmentSource));
     }
 
     Application::~Application()

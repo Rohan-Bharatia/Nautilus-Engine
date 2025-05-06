@@ -12,25 +12,19 @@
 
 #pragma endregion LICENSE
 
-#pragma once
+#ifndef _NT_NAUTILUS_RENDERER_RENDERER_CPP_
+    #define _NT_NAUTILUS_RENDERER_RENDERER_CPP_
 
-#ifndef _NT_NAUTILUS_RENDERER_SHADER_H_
-    #define _NT_NAUTILUS_RENDERER_SHADER_H_
-
-#include "PCH.h"
+#include "Renderer.h"
 
 namespace Nt
 {
-    class NT_API Shader
+    RendererAPI Renderer::s_API = RendererAPI::OpenGL;
+
+    RendererAPI Renderer::GetAPI()
     {
-    public:
-        virtual ~Shader();
-
-        virtual void Bind() const = 0;
-        virtual void Unbind() const = 0;
-
-        static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
-    };
+        return s_API;
+    }
 } // namespace Nt
 
-#endif // _NT_NAUTILUS_RENDERER_SHADER_H_
+#endif // _NT_NAUTILUS_RENDERER_RENDERER_CPP_
