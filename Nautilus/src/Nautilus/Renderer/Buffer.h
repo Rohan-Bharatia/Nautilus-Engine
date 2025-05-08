@@ -21,6 +21,57 @@
 
 namespace Nt
 {
+    enum class ShaderDataType
+    {
+        None = 0,
+        Float,
+        Float2,
+        Float3,
+        Float4,
+        Mat3,
+        Mat4,
+        Int,
+        Int2,
+        Int3,
+        Int4,
+        Bool
+    };
+
+    static uint32_t ShaderDataTypeSize(ShaderDataType type);
+
+    struct NT_API BufferElement
+    {
+        std::string name;
+        ShaderDataType type;
+        uint32_t size;
+        uint32_t offset;
+        bool normalized;
+
+        BufferElement() = default;
+        BufferElement(ShaderDataType type, std::string name, bool normalized=false);
+
+        uint32_t GetComponentCount() const;
+    };
+
+    class NT_API BufferLayout
+    {
+    public:
+        BufferLayout() = default;
+        BufferLayout(const std::initializer_list<BufferElement>& elements);
+
+        const std::vector<BufferElement>& GetElements() const;
+        uint32_t GetStride() const;
+
+        std::vector<BufferElement>::iterator begin();
+        std::vector<BufferElement>::iterator end();
+
+    private:
+        std::vector<BufferElement> m_elements;
+        uint32_t m_stride;
+
+        void Calculate();
+    };
+
     class NT_API VertexBuffer
     {
     public:
@@ -28,6 +79,9 @@ namespace Nt
 
         virtual void Bind() const   = 0;
         virtual void Unbind() const = 0;
+
+        virtual const BufferLayout& GetLayout() const      = 0;
+        virtual void SetLayout(const BufferLayout& layout) = 0;
 
         static VertexBuffer* Create(float* vertices, uint32_t size);
     };

@@ -19,7 +19,8 @@
 
 namespace Nt
 {
-    OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size) :
+        m_layout(BufferLayout{})
     {
         glGenBuffers(1, &m_rendererID);
         Bind();
@@ -40,6 +41,16 @@ namespace Nt
     void OpenGLVertexBuffer::Unbind() const
     {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    const BufferLayout& OpenGLVertexBuffer::GetLayout() const
+    {
+        return m_layout;
+    }
+
+    void OpenGLVertexBuffer::SetLayout(const BufferLayout& layout)
+    {
+        m_layout = layout;
     }
 
     OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count) :
