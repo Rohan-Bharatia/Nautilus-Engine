@@ -52,7 +52,9 @@ namespace Nt
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
-    {}
+    {
+        glDeleteVertexArrays(1, &m_rendererID);
+    }
 
     void OpenGLVertexArray::Bind() const
     {
