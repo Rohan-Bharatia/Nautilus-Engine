@@ -19,6 +19,7 @@
 
 #include "Events/ApplicationEvent.h"
 #include "Input.h"
+#include "Renderer/Renderer.h"
 
 #define NT_BIND_APPLICATION_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -179,19 +180,16 @@ namespace Nt
     {
         while (m_isRunning)
         {
-            // Clear the window with OpenGL
-            glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+            RenderCommand::Clear();
 
-            m_quadShader->Bind();
-            m_quadVAO->Bind();
+            Renderer::BeginScene();
+                m_quadShader->Bind();
+                Renderer::Submit(m_quadVAO);
 
-            glDrawElements(GL_TRIANGLES, m_quadVAO->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-            m_triangleShader->Bind();
-            m_triangleVAO->Bind();
-
-            glDrawElements(GL_TRIANGLES, m_triangleVAO->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+                m_triangleShader->Bind();
+                Renderer::Submit(m_triangleVAO);
+            Renderer::EndScene();
 
             for (Layer* layer : m_layerStack)
                 layer->OnUpdate();

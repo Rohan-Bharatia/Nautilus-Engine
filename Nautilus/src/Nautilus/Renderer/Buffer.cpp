@@ -17,7 +17,7 @@
 
 #include "Buffer.h"
 
-#include "Renderer.h"
+#include "RendererAPI.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace Nt
@@ -139,9 +139,9 @@ namespace Nt
 
     VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererAPI::GetAPI())
         {
-            case RendererAPI::OpenGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLVertexBuffer(vertices, size);
             default:
                 NT_ASSERT(false, "Unknown renderer API!");
@@ -157,9 +157,9 @@ namespace Nt
 
     IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererAPI::GetAPI())
         {
-            case RendererAPI::OpenGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLIndexBuffer(indices, count);
             default:
                 NT_ASSERT(false, "Unknown renderer API!");

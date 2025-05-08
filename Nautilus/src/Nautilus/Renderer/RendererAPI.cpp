@@ -12,27 +12,19 @@
 
 #pragma endregion LICENSE
 
-#pragma once
+#ifndef _NT_NAUTILUS_RENDERER_RENDERER_API_CPP_
+    #define _NT_NAUTILUS_RENDERER_RENDERER_API_CPP_
 
-#ifndef _NT_NAUTILUS_RENDERER_RENDERER_H_
-    #define _NT_NAUTILUS_RENDERER_RENDERER_H_
-
-#include "PCH.h"
-
-#include "RenderCommand.h"
-#include "VertexArray.h"
+#include "RendererAPI.h"
 
 namespace Nt
 {
-    class Renderer
-    {
-    public:
-        static void BeginScene();
-        static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
-        static void EndScene();
+    RendererAPI::API RendererAPI::s_api = RendererAPI::API::OpenGL;
 
-        static RendererAPI::API GetAPI();
-    };
+    RendererAPI::API RendererAPI::GetAPI()
+    {
+        return s_api;
+    }
 } // namespace Nt
 
-#endif // _NT_NAUTILUS_RENDERER_RENDERER_H_
+#endif // _NT_NAUTILUS_RENDERER_RENDERER_API_CPP_

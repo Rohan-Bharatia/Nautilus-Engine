@@ -17,7 +17,7 @@
 
 #include "Shader.h"
 
-#include "Renderer.h"
+#include "RendererAPI.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Nt
@@ -27,9 +27,9 @@ namespace Nt
 
     Shader* Shader::Create(const std::string& vertexSource, const std::string& fragmentSource)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererAPI::GetAPI())
         {
-            case RendererAPI::OpenGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLShader(vertexSource, fragmentSource);
             default:
                 NT_ASSERT(false, "Unknown renderer API!");

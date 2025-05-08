@@ -17,7 +17,7 @@
 
 #include "VertexArray.h"
 
-#include "Renderer.h"
+#include "RendererAPI.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace Nt
@@ -27,9 +27,9 @@ namespace Nt
 
     VertexArray* VertexArray::Create()
     {
-        switch (Renderer::GetAPI())
+        switch (RendererAPI::GetAPI())
         {
-            case RendererAPI::OpenGL:
+            case RendererAPI::API::OpenGL:
                 return new OpenGLVertexArray();
             default:
                 NT_ASSERT(false, "Unknown renderer API!");

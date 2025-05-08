@@ -19,11 +19,21 @@
 
 namespace Nt
 {
-    RendererAPI Renderer::s_API = RendererAPI::OpenGL;
+    void Renderer::BeginScene()
+    {}
 
-    RendererAPI Renderer::GetAPI()
+    void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray)
     {
-        return s_API;
+        vertexArray->Bind();
+        RenderCommand::DrawIndexed(vertexArray);
+    }
+
+    void Renderer::EndScene()
+    {}
+
+    RendererAPI::API Renderer::GetAPI()
+    {
+        return RendererAPI::GetAPI();
     }
 } // namespace Nt
 

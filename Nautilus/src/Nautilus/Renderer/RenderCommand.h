@@ -14,25 +14,26 @@
 
 #pragma once
 
-#ifndef _NT_NAUTILUS_RENDERER_RENDERER_H_
-    #define _NT_NAUTILUS_RENDERER_RENDERER_H_
+#ifndef _NT_NAUTILUS_RENDERER_RENDER_COMMAND_H_
+    #define _NT_NAUTILUS_RENDERER_RENDER_COMMAND_H_
 
 #include "PCH.h"
 
-#include "RenderCommand.h"
+#include "RendererAPI.h"
 #include "VertexArray.h"
 
 namespace Nt
 {
-    class Renderer
+    class RenderCommand
     {
     public:
-        static void BeginScene();
-        static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
-        static void EndScene();
+        static void SetClearColor(const glm::vec4& color);
+        static void Clear();
+        static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray);
 
-        static RendererAPI::API GetAPI();
+    private:
+        static RendererAPI* s_api;
     };
 } // namespace Nt
 
-#endif // _NT_NAUTILUS_RENDERER_RENDERER_H_
+#endif // _NT_NAUTILUS_RENDERER_RENDER_COMMAND_H_
