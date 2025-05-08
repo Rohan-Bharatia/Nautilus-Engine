@@ -21,17 +21,27 @@
 
 #include "RenderCommand.h"
 #include "VertexArray.h"
+#include "Shader.h"
+#include "OrthographicCamera.h"
 
 namespace Nt
 {
     class Renderer
     {
     public:
-        static void BeginScene();
-        static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+        static void BeginScene(const OrthographicCamera& camera);
+        static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
         static void EndScene();
 
         static RendererAPI::API GetAPI();
+
+    private:
+        struct SceneData
+        {
+            glm::mat4 viewProjectionMatrix;
+        };
+
+        static SceneData* s_sceneData;
     };
 } // namespace Nt
 

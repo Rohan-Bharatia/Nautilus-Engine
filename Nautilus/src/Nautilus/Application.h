@@ -27,6 +27,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/OrthographicCamera.h"
 
 namespace Nt
 {
@@ -55,10 +56,12 @@ namespace Nt
         std::shared_ptr<Shader> m_triangleShader;
         std::shared_ptr<VertexArray> m_quadVAO;
         std::shared_ptr<Shader> m_quadShader;
+        OrthographicCamera m_camera;
 
         static Application* s_instance;
 
         bool OnWindowClose(WindowCloseEvent& e);
+        bool OnKeyPressed(KeyPressedEvent& e);
     };
 
     // *Defined by the client*

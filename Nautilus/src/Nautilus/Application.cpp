@@ -20,6 +20,7 @@
 #include "Events/ApplicationEvent.h"
 #include "Input.h"
 #include "Renderer/Renderer.h"
+#include "KeyCodes.h"
 
 #define NT_BIND_APPLICATION_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -28,7 +29,8 @@ namespace Nt
     Application* Application::s_instance = nullptr;
 
     Application::Application() :
-        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer())
+        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer()),
+        m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
     {
         NT_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
@@ -97,6 +99,8 @@ namespace Nt
             layout(location = 0) in vec3 aPosition;
             layout(location = 1) in vec4 aColor;
 
+            uniform mat4 uViewProjection;
+
             out vec3 vPosition;
             out vec4 vColor;
 
@@ -104,7 +108,7 @@ namespace Nt
             {
                 vPosition   = aPosition;
                 vColor      = aColor;
-                gl_Position = vec4(aPosition, 1.0f);
+                gl_Position = uViewProjection * vec4(aPosition, 1.0f);
             }
         )";
 
@@ -130,12 +134,14 @@ namespace Nt
 
             layout(location = 0) in vec3 aPosition;
 
+            uniform mat4 uViewProjection;
+
             out vec3 vPosition;
 
             void main()
             {
                 vPosition   = aPosition;
-                gl_Position = vec4(aPosition, 1.0f);
+                gl_Position = uViewProjection * vec4(aPosition, 1.0f);
             }
         )";
 
@@ -183,12 +189,9 @@ namespace Nt
             RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
             RenderCommand::Clear();
 
-            Renderer::BeginScene();
-                m_quadShader->Bind();
-                Renderer::Submit(m_quadVAO);
-
-                m_triangleShader->Bind();
-                Renderer::Submit(m_triangleVAO);
+            Renderer::BeginScene(m_camera);
+                Renderer::Submit(m_quadShader, m_quadVAO);
+                Renderer::Submit(m_triangleShader, m_triangleVAO);
             Renderer::EndScene();
 
             for (Layer* layer : m_layerStack)
@@ -207,6 +210,7 @@ namespace Nt
     {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_APPLICATION_EVENT_FN(OnWindowClose));
+        dispatcher.Dispatch<KeyPressedEvent>(NT_BIND_APPLICATION_EVENT_FN(OnKeyPressed));
 
         NT_CORE_LOG_TRACE(e.ToString());
 
@@ -222,6 +226,35 @@ namespace Nt
     {
         m_isRunning = false;
         return true;
+    }
+
+    bool Application::OnKeyPressed(KeyPressedEvent& e)
+    {
+        // Control position with WASD and rotation with QE
+        switch (e.GetKeyCode())
+        {
+            case NT_KEY_W:
+                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_UP / 25.0f));
+                break;
+            case NT_KEY_A:
+                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_LEFT / 25.0f));
+                break;
+            case NT_KEY_S:
+                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_DOWN / 25.0f));
+                break;
+            case NT_KEY_D:
+                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_RIGHT / 25.0f));
+                break;
+            case NT_KEY_Q:
+                m_camera.SetRotation(m_camera.GetRotation() - 1.5f);
+                break;
+            case NT_KEY_E:
+                m_camera.SetRotation(m_camera.GetRotation() + 1.5f);
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 
     Application& Application::Get()

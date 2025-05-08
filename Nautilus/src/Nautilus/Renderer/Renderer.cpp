@@ -19,11 +19,17 @@
 
 namespace Nt
 {
-    void Renderer::BeginScene()
-    {}
+    Renderer::SceneData* Renderer::s_sceneData = new Renderer::SceneData;
 
-    void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray)
+    void Renderer::BeginScene(const OrthographicCamera& camera)
     {
+        s_sceneData->viewProjectionMatrix = camera.GetViewProjectionMatrix();
+    }
+
+    void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray)
+    {
+        shader->Bind();
+        shader->UploadUniformMat4("uViewProjection", s_sceneData->viewProjectionMatrix);
         vertexArray->Bind();
         RenderCommand::DrawIndexed(vertexArray);
     }

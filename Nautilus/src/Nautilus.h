@@ -32,6 +32,11 @@
 #include "Nautilus/Renderer/GraphicsContext.h"
 #include "Nautilus/Renderer/Shader.h"
 #include "Nautilus/Renderer/Buffer.h"
+#include "Nautilus/Renderer/VertexArray.h"
+#include "Nautilus/Renderer/Renderer.h"
+#include "Nautilus/Renderer/RendererAPI.h"
+#include "Nautilus/Renderer/RenderCommand.h"
+#include "Nautilus/Renderer/OrthographicCamera.h"
 #include "Nautilus/Application.h"
 
 // Entry point
