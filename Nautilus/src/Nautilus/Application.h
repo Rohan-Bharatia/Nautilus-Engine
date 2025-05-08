@@ -26,6 +26,7 @@
 #include "ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 namespace Nt
 {
@@ -46,14 +47,14 @@ namespace Nt
         Window& GetWindow();
 
     private:
-        std::unique_ptr<Window> m_window;
+        std::shared_ptr<Window> m_window;
         bool m_isRunning;
         LayerStack m_layerStack;
         ImGuiLayer* m_imguiLayer;
-        GLuint m_VAO;
-        std::unique_ptr<VertexBuffer> m_VBO;
-        std::unique_ptr<IndexBuffer> m_IBO;
-        std::unique_ptr<Shader> m_shader;
+        std::shared_ptr<VertexArray> m_triangleVAO;
+        std::shared_ptr<Shader> m_triangleShader;
+        std::shared_ptr<VertexArray> m_quadVAO;
+        std::shared_ptr<Shader> m_quadShader;
 
         static Application* s_instance;
 

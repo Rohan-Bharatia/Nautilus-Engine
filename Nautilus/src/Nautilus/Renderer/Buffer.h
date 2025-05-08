@@ -55,6 +55,7 @@ namespace Nt
 
     class NT_API BufferLayout
     {
+        using Iterator = std::vector<BufferElement>::iterator;
     public:
         BufferLayout() = default;
         BufferLayout(const std::initializer_list<BufferElement>& elements);
@@ -62,8 +63,8 @@ namespace Nt
         const std::vector<BufferElement>& GetElements() const;
         uint32_t GetStride() const;
 
-        std::vector<BufferElement>::iterator begin();
-        std::vector<BufferElement>::iterator end();
+        Iterator begin();
+        Iterator end();
 
     private:
         std::vector<BufferElement> m_elements;

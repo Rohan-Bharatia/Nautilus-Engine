@@ -112,12 +112,12 @@ namespace Nt
         return m_stride;
     }
 
-    std::vector<BufferElement>::iterator BufferLayout::begin()
+    BufferLayout::Iterator BufferLayout::begin()
     {
         return m_elements.begin();
     }
 
-    std::vector<BufferElement>::iterator BufferLayout::end()
+    BufferLayout::Iterator BufferLayout::end()
     {
         return m_elements.end();
     }
