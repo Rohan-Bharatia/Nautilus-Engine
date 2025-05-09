@@ -26,13 +26,15 @@ namespace Nt
     bool LinuxInput::IsKeyPressedImpl(int keycode)
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-        return glfwGetKey(window, keycode) == (GLFW_PRESS | GLFW_REPEAT);
+        int state          = glfwGetKey(window, keycode);
+        return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
     bool LinuxInput::IsMouseButtonPressedImpl(int button)
     {
         GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-        return glfwGetMouseButton(window, button) == GLFW_PRESS;
+        int state          = glfwGetMouseButton(window, button);
+        return state == GLFW_PRESS;
     }
 
     std::pair<float, float> LinuxInput::GetMousePositionImpl()

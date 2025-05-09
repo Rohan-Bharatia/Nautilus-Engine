@@ -21,7 +21,7 @@
 
 namespace Nt
 {
-    class WindowResizeEvent :
+    class NT_API WindowResizeEvent :
         public Event
     {
     public:
@@ -40,7 +40,7 @@ namespace Nt
         unsigned int m_height;
     };
 
-    class WindowCloseEvent :
+    class NT_API WindowCloseEvent :
         public Event
     {
     public:
@@ -50,7 +50,7 @@ namespace Nt
         NT_EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
-    class ApplicationTickEvent :
+    class NT_API ApplicationTickEvent :
         public Event
     {
     public:
@@ -60,7 +60,7 @@ namespace Nt
         NT_EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
-    class ApplicationUpdateEvent :
+    class NT_API ApplicationUpdateEvent :
         public Event
     {
     public:
@@ -70,7 +70,7 @@ namespace Nt
         NT_EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
-    class ApplicationRenderEvent :
+    class NT_API ApplicationRenderEvent :
         public Event
     {
     public:

@@ -23,7 +23,7 @@
 
 namespace Nt
 {
-    class OpenGLRendererAPI :
+    class NT_API OpenGLRendererAPI :
         public RendererAPI
     {
     public:

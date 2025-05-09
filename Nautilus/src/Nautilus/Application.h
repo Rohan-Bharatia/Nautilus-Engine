@@ -29,6 +29,8 @@
 #include "Renderer/VertexArray.h"
 #include "Renderer/OrthographicCamera.h"
 
+#define NT_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
 namespace Nt
 {
     class NT_API Application
@@ -52,16 +54,10 @@ namespace Nt
         bool m_isRunning;
         LayerStack m_layerStack;
         ImGuiLayer* m_imguiLayer;
-        std::shared_ptr<VertexArray> m_triangleVAO;
-        std::shared_ptr<Shader> m_triangleShader;
-        std::shared_ptr<VertexArray> m_quadVAO;
-        std::shared_ptr<Shader> m_quadShader;
-        OrthographicCamera m_camera;
 
         static Application* s_instance;
 
         bool OnWindowClose(WindowCloseEvent& e);
-        bool OnKeyPressed(KeyPressedEvent& e);
     };
 
     // *Defined by the client*

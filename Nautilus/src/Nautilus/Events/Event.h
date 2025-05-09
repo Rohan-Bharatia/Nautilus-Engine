@@ -70,7 +70,7 @@ namespace Nt
 
     class EventDispatcher;
 
-    class Event
+    class NT_API Event
     {
         friend class EventDispatcher;
 
@@ -89,7 +89,7 @@ namespace Nt
         bool m_handled;
     };
 
-    class EventDispatcher
+    class NT_API EventDispatcher
     {
         template<typename T>
         using EventFn = std::function<bool(T&)>;

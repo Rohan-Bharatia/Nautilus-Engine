@@ -23,7 +23,7 @@
 
 namespace Nt
 {
-    class OpenGLVertexArray :
+    class NT_API OpenGLVertexArray :
         public VertexArray
     {
     public:

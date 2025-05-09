@@ -21,7 +21,7 @@
 
 namespace Nt
 {
-    class OpenGLVertexBuffer :
+    class NT_API OpenGLVertexBuffer :
         public VertexBuffer
     {
     public:

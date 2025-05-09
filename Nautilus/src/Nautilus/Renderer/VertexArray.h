@@ -23,7 +23,7 @@
 
 namespace Nt
 {
-    class VertexArray
+    class NT_API VertexArray
     {
     public:
         virtual ~VertexArray();

@@ -24,7 +24,7 @@
 
 namespace Nt
 {
-    class RenderCommand
+    class NT_API RenderCommand
     {
     public:
         static void SetClearColor(const glm::vec4& color);

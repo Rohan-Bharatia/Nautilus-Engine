@@ -29,6 +29,7 @@
 #include "Nautilus/LayerStack.h"
 #include "Nautilus/ImGui/ImGuiLayer.h"
 #include "Nautilus/KeyCodes.h"
+#include "Nautilus/Input.h"
 #include "Nautilus/Renderer/GraphicsContext.h"
 #include "Nautilus/Renderer/Shader.h"
 #include "Nautilus/Renderer/Buffer.h"

@@ -22,152 +22,24 @@
 #include "Renderer/Renderer.h"
 #include "KeyCodes.h"
 
-#define NT_BIND_APPLICATION_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
-
 namespace Nt
 {
     Application* Application::s_instance = nullptr;
 
     Application::Application() :
-        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer()),
-        m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
+        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer())
     {
         NT_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
 
-        m_window->SetEventCallback(NT_BIND_APPLICATION_EVENT_FN(OnEvent));
+        m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
 
         PushOverlay(m_imguiLayer);
-
-        m_triangleVAO.reset(VertexArray::Create());
-
-        float triangleVertices[21] =
-        {
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-             0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-        };
-
-        std::shared_ptr<VertexBuffer> triangleVBO;
-        triangleVBO.reset(VertexBuffer::Create(triangleVertices, sizeof(triangleVertices)));
-
-        BufferLayout layout =
-        {
-            BufferElement{ ShaderDataType::Float3, "aPosition" },
-            BufferElement{ ShaderDataType::Float4, "aColor" },
-        };
-
-        triangleVBO->SetLayout(layout);
-        m_triangleVAO->AddVertexBuffer(triangleVBO);
-
-        GLuint triangleIndices[3] = { 0, 1, 2 };
-
-        std::shared_ptr<IndexBuffer> triangleIBO;
-        triangleIBO.reset(IndexBuffer::Create(triangleIndices, sizeof(triangleIndices) / sizeof(uint32_t)));
-        m_triangleVAO->SetIndexBuffer(triangleIBO);
-
-        m_quadVAO.reset(VertexArray::Create());
-
-        float quadVertices[12] =
-        {
-            -0.75f, -0.75f, 0.0f,
-             0.75f, -0.75f, 0.0f,
-             0.75f,  0.75f, 0.0f,
-            -0.75f,  0.75f, 0.0f,
-        };
-
-        std::shared_ptr<VertexBuffer> quadVBO;
-        quadVBO.reset(VertexBuffer::Create(quadVertices, sizeof(quadVertices)));
-
-        BufferLayout quadLayout =
-        {
-            BufferElement{ ShaderDataType::Float3, "aPosition" },
-        };
-
-        quadVBO->SetLayout(quadLayout);
-        m_quadVAO->AddVertexBuffer(quadVBO);
-
-        uint32_t quadIndices[6] = { 0, 1, 2, 2, 3, 0 };
-
-        std::shared_ptr<IndexBuffer> quadIBO;
-        quadIBO.reset(IndexBuffer::Create(quadIndices, sizeof(quadIndices) / sizeof(uint32_t)));
-        m_quadVAO->SetIndexBuffer(quadIBO);
-
-        std::string vertexSource = R"(
-            #version 330 core
-
-            layout(location = 0) in vec3 aPosition;
-            layout(location = 1) in vec4 aColor;
-
-            uniform mat4 uViewProjection;
-
-            out vec3 vPosition;
-            out vec4 vColor;
-
-            void main()
-            {
-                vPosition   = aPosition;
-                vColor      = aColor;
-                gl_Position = uViewProjection * vec4(aPosition, 1.0f);
-            }
-        )";
-
-        std::string fragmentSource = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 FragColor;
-
-            in vec3 vPosition;
-            in vec4 vColor;
-
-            void main()
-            {
-                FragColor = vec4(vPosition * 0.5f + 0.5f, 1.0f);
-                FragColor = vColor;
-            }
-        )";
-
-        m_triangleShader.reset(Shader::Create(vertexSource, fragmentSource));
-
-        std::string vertexSource2 = R"(
-            #version 330 core
-
-            layout(location = 0) in vec3 aPosition;
-
-            uniform mat4 uViewProjection;
-
-            out vec3 vPosition;
-
-            void main()
-            {
-                vPosition   = aPosition;
-                gl_Position = uViewProjection * vec4(aPosition, 1.0f);
-            }
-        )";
-
-        std::string fragmentSource2 = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 FragColor;
-
-            in vec3 vPosition;
-
-            void main()
-            {
-                FragColor = vec4(0.2f, 0.3f, 0.3f, 1.0f);
-            }
-        )";
-
-        m_quadShader.reset(Shader::Create(vertexSource2, fragmentSource2));
     }
 
     Application::~Application()
     {
         m_window.reset();
-        m_triangleVAO.reset();
-        m_triangleShader.reset();
-        m_quadVAO.reset();
-        m_quadShader.reset();
     }
 
     void Application::PushLayer(Layer* layer)
@@ -186,14 +58,6 @@ namespace Nt
     {
         while (m_isRunning)
         {
-            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-            RenderCommand::Clear();
-
-            Renderer::BeginScene(m_camera);
-                Renderer::Submit(m_quadShader, m_quadVAO);
-                Renderer::Submit(m_triangleShader, m_triangleVAO);
-            Renderer::EndScene();
-
             for (Layer* layer : m_layerStack)
                 layer->OnUpdate();
 
@@ -209,10 +73,9 @@ namespace Nt
     void Application::OnEvent(Event& e)
     {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_APPLICATION_EVENT_FN(OnWindowClose));
-        dispatcher.Dispatch<KeyPressedEvent>(NT_BIND_APPLICATION_EVENT_FN(OnKeyPressed));
+        dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_EVENT_FN(Application::OnWindowClose));
 
-        NT_CORE_LOG_TRACE(e.ToString());
+        // NT_CORE_LOG_TRACE(e.ToString());
 
         for (auto it = m_layerStack.end(); it != m_layerStack.begin();)
         {
@@ -226,35 +89,6 @@ namespace Nt
     {
         m_isRunning = false;
         return true;
-    }
-
-    bool Application::OnKeyPressed(KeyPressedEvent& e)
-    {
-        // Control position with WASD and rotation with QE
-        switch (e.GetKeyCode())
-        {
-            case NT_KEY_W:
-                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_UP / 25.0f));
-                break;
-            case NT_KEY_A:
-                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_LEFT / 25.0f));
-                break;
-            case NT_KEY_S:
-                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_DOWN / 25.0f));
-                break;
-            case NT_KEY_D:
-                m_camera.SetPosition(m_camera.GetPosition() - (NT_VEC3_RIGHT / 25.0f));
-                break;
-            case NT_KEY_Q:
-                m_camera.SetRotation(m_camera.GetRotation() - 1.5f);
-                break;
-            case NT_KEY_E:
-                m_camera.SetRotation(m_camera.GetRotation() + 1.5f);
-                break;
-            default:
-                break;
-        }
-        return false;
     }
 
     Application& Application::Get()

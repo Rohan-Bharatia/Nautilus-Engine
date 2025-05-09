@@ -44,7 +44,7 @@
 
 namespace Nt
 {
-    class OrthographicCamera
+    class NT_API OrthographicCamera
     {
     public:
         OrthographicCamera(float left, float right, float bottom, float top);

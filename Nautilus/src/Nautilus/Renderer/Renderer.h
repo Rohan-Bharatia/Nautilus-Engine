@@ -26,7 +26,7 @@
 
 namespace Nt
 {
-    class Renderer
+    class NT_API Renderer
     {
     public:
         static void BeginScene(const OrthographicCamera& camera);
