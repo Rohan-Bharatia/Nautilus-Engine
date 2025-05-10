@@ -2,8 +2,6 @@
 
 ## Todo
 
-- [ ] Delta time
-- [ ] Matrix transformations
 - [ ] Material system
 - [ ] Shader abstraction + uniforms
 - [ ] Pointer system
@@ -25,7 +23,7 @@
 
 ## In Progress
 
-- [ ] Rendering
+- [ ] Basic rendering
 
 ## Done
 
@@ -41,3 +39,5 @@
 - [x] Math
 - [x] GUI docking system
 - [x] Orthographic camera
+- [x] Delta time
+- [x] Matrix transformations

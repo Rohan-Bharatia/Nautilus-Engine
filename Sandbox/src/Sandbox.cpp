@@ -23,7 +23,7 @@ class SandboxLayer :
 public:
     SandboxLayer() :
         Layer("Sandbox"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_cameraPosition(0.0f), m_cameraRotation(0.0f),
-        m_cameraPositionSpeed(10.0f), m_cameraRotationSpeed(50.0f)
+        m_cameraPositionSpeed(7.5f), m_cameraRotationSpeed(180.0f), m_quadPosition(0.0f)
     {
         m_triangleVAO.reset(Nt::VertexArray::Create());
 
@@ -56,10 +56,10 @@ public:
 
         float quadVertices[12] =
         {
-            -0.75f, -0.75f, 0.0f,
-             0.75f, -0.75f, 0.0f,
-             0.75f,  0.75f, 0.0f,
-            -0.75f,  0.75f, 0.0f,
+            -0.5f, -0.5f, 0.0f,
+             0.5f, -0.5f, 0.0f,
+             0.5f,  0.5f, 0.0f,
+            -0.5f,  0.5f, 0.0f,
         };
 
         std::shared_ptr<Nt::VertexBuffer> quadVBO;
@@ -86,6 +86,7 @@ public:
             layout(location = 1) in vec4 aColor;
 
             uniform mat4 uViewProjection;
+            uniform mat4 uTransform;
 
             out vec3 vPosition;
             out vec4 vColor;
@@ -94,7 +95,7 @@ public:
             {
                 vPosition   = aPosition;
                 vColor      = aColor;
-                gl_Position = uViewProjection * vec4(aPosition, 1.0f);
+                gl_Position = uViewProjection * uTransform * vec4(aPosition, 1.0f);
             }
         )";
 
@@ -121,13 +122,14 @@ public:
             layout(location = 0) in vec3 aPosition;
 
             uniform mat4 uViewProjection;
+            uniform mat4 uTransform;
 
             out vec3 vPosition;
 
             void main()
             {
                 vPosition   = aPosition;
-                gl_Position = uViewProjection * vec4(aPosition, 1.0f);
+                gl_Position = uViewProjection * uTransform * vec4(aPosition, 1.0f);
             }
         )";
 
@@ -157,19 +159,24 @@ public:
 
     void OnUpdate(Nt::Timestep ts) override
     {
-        if (Nt::Input::IsKeyPressed(NT_KEY_W))
-            m_cameraPosition.y -= m_cameraPositionSpeed * ts;
-        else if (Nt::Input::IsKeyPressed(NT_KEY_S))
-            m_cameraPosition.y += m_cameraPositionSpeed * ts;
-        if (Nt::Input::IsKeyPressed(NT_KEY_A))
+        // WASD camera movement
+        if (Nt::Input::IsKeyPressed(NT_KEY_D))
             m_cameraPosition.x += m_cameraPositionSpeed * ts;
-        else if (Nt::Input::IsKeyPressed(NT_KEY_D))
+        else if (Nt::Input::IsKeyPressed(NT_KEY_A))
             m_cameraPosition.x -= m_cameraPositionSpeed * ts;
+        if (Nt::Input::IsKeyPressed(NT_KEY_W))
+            m_cameraPosition.y += m_cameraPositionSpeed * ts;
+        else if (Nt::Input::IsKeyPressed(NT_KEY_S))
+            m_cameraPosition.y -= m_cameraPositionSpeed * ts;
+
+        // QE camera rotation
         if (Nt::Input::IsKeyPressed(NT_KEY_Q))
             m_cameraRotation -= m_cameraRotationSpeed * ts;
         else if (Nt::Input::IsKeyPressed(NT_KEY_E))
             m_cameraRotation += m_cameraRotationSpeed * ts;
-        else if (Nt::Input::IsKeyPressed(NT_KEY_R))
+
+        // R to reset
+        if (Nt::Input::IsKeyPressed(NT_KEY_R))
         {
             m_cameraPosition = { 0.0f, 0.0f, 0.0f };
             m_cameraRotation = 0.0f;
@@ -182,7 +189,19 @@ public:
         m_camera.SetRotation(m_cameraRotation);
 
         Nt::Renderer::BeginScene(m_camera);
-            Nt::Renderer::Submit(m_quadShader, m_quadVAO);
+
+            static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+            for (int x = 0; x < 10; ++x)
+            {
+                for (int y = 0; y < 10; ++y)
+                {
+                    glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+                    Nt::Renderer::Submit(m_quadShader, m_quadVAO, transform);
+                }
+            }
+
             Nt::Renderer::Submit(m_triangleShader, m_triangleVAO);
         Nt::Renderer::EndScene();
     }
@@ -195,6 +214,7 @@ private:
     std::shared_ptr<Nt::Shader> m_triangleShader;
     std::shared_ptr<Nt::VertexArray> m_quadVAO;
     std::shared_ptr<Nt::Shader> m_quadShader;
+    glm::vec3 m_quadPosition;
     Nt::OrthographicCamera m_camera;
     glm::vec3 m_cameraPosition;
     float m_cameraPositionSpeed;
