@@ -27,12 +27,14 @@ namespace Nt
     Application* Application::s_instance = nullptr;
 
     Application::Application() :
-        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer())
+        m_window(std::unique_ptr<Window>(Window::Create(WindowProps{}))), m_isRunning(true), m_imguiLayer(new ImGuiLayer()),
+        m_timestep(0.0f), m_lastFrameTime(0.0f)
     {
         NT_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
 
         m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
+        m_window->SetVSync(true);
 
         PushOverlay(m_imguiLayer);
     }
@@ -58,8 +60,12 @@ namespace Nt
     {
         while (m_isRunning)
         {
+            float time        = (float)glfwGetTime();
+            Timestep timestep = time - m_lastFrameTime;
+            m_lastFrameTime   = time;
+
             for (Layer* layer : m_layerStack)
-                layer->OnUpdate();
+                layer->OnUpdate(timestep);
 
             m_imguiLayer->Begin();
             for (Layer* layer : m_layerStack)

@@ -23,7 +23,7 @@ class SandboxLayer :
 public:
     SandboxLayer() :
         Layer("Sandbox"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_cameraPosition(0.0f), m_cameraRotation(0.0f),
-        m_cameraPositionSpeed(0.01f), m_cameraRotationSpeed(0.5f)
+        m_cameraPositionSpeed(10.0f), m_cameraRotationSpeed(50.0f)
     {
         m_triangleVAO.reset(Nt::VertexArray::Create());
 
@@ -155,20 +155,20 @@ public:
         m_quadShader.reset();
     }
 
-    void OnUpdate() override
+    void OnUpdate(Nt::Timestep ts) override
     {
         if (Nt::Input::IsKeyPressed(NT_KEY_W))
-            m_cameraPosition.y -= m_cameraPositionSpeed;
+            m_cameraPosition.y -= m_cameraPositionSpeed * ts;
         else if (Nt::Input::IsKeyPressed(NT_KEY_S))
-            m_cameraPosition.y += m_cameraPositionSpeed;
+            m_cameraPosition.y += m_cameraPositionSpeed * ts;
         if (Nt::Input::IsKeyPressed(NT_KEY_A))
-            m_cameraPosition.x += m_cameraPositionSpeed;
+            m_cameraPosition.x += m_cameraPositionSpeed * ts;
         else if (Nt::Input::IsKeyPressed(NT_KEY_D))
-            m_cameraPosition.x -= m_cameraPositionSpeed;
+            m_cameraPosition.x -= m_cameraPositionSpeed * ts;
         if (Nt::Input::IsKeyPressed(NT_KEY_Q))
-            m_cameraRotation -= m_cameraRotationSpeed;
+            m_cameraRotation -= m_cameraRotationSpeed * ts;
         else if (Nt::Input::IsKeyPressed(NT_KEY_E))
-            m_cameraRotation += m_cameraRotationSpeed;
+            m_cameraRotation += m_cameraRotationSpeed * ts;
         else if (Nt::Input::IsKeyPressed(NT_KEY_R))
         {
             m_cameraPosition = { 0.0f, 0.0f, 0.0f };

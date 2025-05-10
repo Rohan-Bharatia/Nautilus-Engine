@@ -28,6 +28,8 @@ file(GLOB Nautilus_LIB_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Core/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Core/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/Events/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Nautilus/ImGui/*.h

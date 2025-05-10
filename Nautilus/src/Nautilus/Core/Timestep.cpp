@@ -12,40 +12,31 @@
 
 #pragma endregion LICENSE
 
-#ifndef _NT_NAUTILUS_LAYER_CPP_
-    #define _NT_NAUTILUS_LAYER_CPP_
+#ifndef _NT_NAUTILUS_CORE_TIMESTEP_CPP_
+    #define _NT_NAUTILUS_CORE_TIMESTEP_CPP_
 
-#include "Layer.h"
+#include "Timestep.h"
 
 namespace Nt
 {
-    Layer::Layer(const std::string& name) :
-        m_debugName(name)
+    Timestep::Timestep(float time) :
+        m_time(time)
     {}
 
-    Layer::~Layer()
-    {}
-
-    void Layer::OnAttach()
-    {}
-
-    void Layer::OnDetach()
-    {}
-
-    void Layer::OnUpdate(Timestep ts)
-    {}
-
-    void Layer::OnEvent(Event& event)
-    {}
-
-    void Layer::OnImGuiRender()
-    {}
-
-    const std::string& Layer::GetName() const
+    float Timestep::GetSeconds() const
     {
-        return m_debugName;
+        return m_time;
     }
 
+    float Timestep::GetMilliseconds() const
+    {
+        return m_time * 1000.0f;
+    }
+
+    Timestep::operator float() const
+    {
+        return m_time;
+    }
 } // namespace Nt
 
-#endif // _NT_NAUTILUS_LAYER_CPP_
+#endif // _NT_NAUTILUS_CORE_TIMESTEP_CPP_

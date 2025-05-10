@@ -28,6 +28,7 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/OrthographicCamera.h"
+#include "Core/Timestep.h"
 
 #define NT_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
@@ -54,6 +55,8 @@ namespace Nt
         bool m_isRunning;
         LayerStack m_layerStack;
         ImGuiLayer* m_imguiLayer;
+        Timestep m_timestep;
+        float m_lastFrameTime;
 
         static Application* s_instance;
 

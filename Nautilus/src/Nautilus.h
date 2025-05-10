@@ -30,6 +30,7 @@
 #include "Nautilus/ImGui/ImGuiLayer.h"
 #include "Nautilus/KeyCodes.h"
 #include "Nautilus/Input.h"
+#include "Nautilus/Core/Timestep.h"
 #include "Nautilus/Application.h"
 
 // Renderer

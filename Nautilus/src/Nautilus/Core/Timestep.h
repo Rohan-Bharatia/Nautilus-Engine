@@ -14,33 +14,26 @@
 
 #pragma once
 
-#ifndef _NT_NAUTILUS_LAYER_H_
-    #define _NT_NAUTILUS_LAYER_H_
+#ifndef _NT_NAUTILUS_CORE_TIMESTEP_H_
+    #define _NT_NAUTILUS_CORE_TIMESTEP_H_
 
 #include "PCH.h"
 
-#include "Events/Event.h"
-#include "Core/Timestep.h"
-
 namespace Nt
 {
-    class NT_API Layer
+    class NT_API Timestep
     {
     public:
-        Layer(const std::string& name="Layer");
-        virtual ~Layer();
+        Timestep(float time=0.0f);
 
-        virtual void OnAttach();
-        virtual void OnDetach();
-        virtual void OnUpdate(Timestep ts);
-        virtual void OnEvent(Event& event);
-        virtual void OnImGuiRender();
+        float GetSeconds() const;
+        float GetMilliseconds() const;
 
-        const std::string& GetName() const;
+        operator float() const;
 
-    protected:
-        std::string m_debugName;
+    private:
+        float m_time;
     };
 } // namespace Nt
 
-#endif // _NT_NAUTILUS_LAYER_H_
+#endif // _NT_NAUTILUS_CORE_TIMESTEP_H_
