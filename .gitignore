@@ -1,7 +1,4 @@
 # Nautilus
-Nautilus.log
-imgui.ini
-*.json
 
 # Compiled files
 *.so
@@ -28,7 +25,7 @@ imgui.ini
 *.rej
 
 # CMake
-Build/
+build/
 
 # CLion IDE
 .idea
