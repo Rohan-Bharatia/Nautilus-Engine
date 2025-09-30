@@ -1,0 +1,61 @@
+# Nautilus
+Nautilus.log
+imgui.ini
+*.json
+
+# Compiled files
+*.so
+*.so.*
+*.dll
+*.exe
+*.o
+*.obj
+*.res
+*.lib
+*.a
+*.la
+*.dSYM
+*,e1f
+*,ff8
+*.lnk
+*.err
+*.exp
+*.map
+*.orig
+*~
+*.swp
+*.tmp
+*.rej
+
+# CMake
+Build/
+
+# CLion IDE
+.idea
+cmake-build-*
+
+# Xcode IDE
+*.mode1*
+*.perspective*
+*.pbxuser
+(^|/)build($|/)
+.DS_Store
+xcuserdata
+*.xcworkspace
+Xcode/build.xcconfig
+
+# Visual Studio Code IDE
+.vscode/
+
+# Visual C++ IDE
+.vs
+Debug
+Release
+*.user
+*.ncb
+*.suo
+*.sdf
+
+# Android IDE
+android/local.properties
+android/.gradle/
