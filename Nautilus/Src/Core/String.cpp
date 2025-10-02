@@ -31,7 +31,7 @@
 
 namespace Nt
 {
-    static Scope<std::wstring> s_wdata;
+    static Ref<std::wstring> s_wdata;
 
     static std::string wstr2str(std::wstring str)
     {
@@ -54,33 +54,33 @@ namespace Nt
     }
 
     String::String(void) :
-        m_data(CreateScope<std::string>(""))
+        m_data(CreateRef<std::string>(""))
     {
-        s_wdata = CreateScope<std::wstring>(L"");
+        s_wdata = CreateRef<std::wstring>(L"");
     }
 
     String::String(const char* str) :
-        m_data(CreateScope<std::string>(str))
+        m_data(CreateRef<std::string>(str))
     {
-        s_wdata = CreateScope<std::wstring>(str2wstr(str));
+        s_wdata = CreateRef<std::wstring>(str2wstr(str));
     }
 
     String::String(const std::string& str) :
-        m_data(CreateScope<std::string>(str))
+        m_data(CreateRef<std::string>(str))
     {
-        s_wdata = CreateScope<std::wstring>(str2wstr(str));
+        s_wdata = CreateRef<std::wstring>(str2wstr(str));
     }
 
     String::String(const wchar_t* str) :
-        m_data(CreateScope<std::string>(wstr2str(str)))
+        m_data(CreateRef<std::string>(wstr2str(str)))
     {
-        s_wdata = CreateScope<std::wstring>(str);
+        s_wdata = CreateRef<std::wstring>(str);
     }
 
     String::String(const std::wstring& str) :
-        m_data(CreateScope<std::string>(wstr2str(str)))
+        m_data(CreateRef<std::string>(wstr2str(str)))
     {
-        s_wdata = CreateScope<std::wstring>(str);
+        s_wdata = CreateRef<std::wstring>(str);
     }
 
     String::operator const char*(void) const
@@ -288,6 +288,12 @@ namespace Nt
     {
         std::transform(m_data->begin(), m_data->end(), m_data->begin(), ::toupper);
         return *this;
+    }
+
+    std::ostream& operator<<(std::ostream& stream, const String& str)
+    {
+        stream << (std::string)str;
+        return stream;
     }
 } // namespace Nt
 

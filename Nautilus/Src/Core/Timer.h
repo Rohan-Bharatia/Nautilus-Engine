@@ -29,7 +29,7 @@
 #ifndef _CORE_TIMER_H_
     #define _CORE_TIMER_H_
 
-#include "PCH.h"
+#include "String.h"
 
 namespace Nt
 {
@@ -57,6 +57,12 @@ namespace Nt
     };
 
     NT_API float32 GetSystemTime(void);
+
+    class NT_API DateTime
+    {
+    public:
+        static String Now(String fmt="%Y-%m-%d %H:%M:%S");
+    };
 } // namespace Nt
 
 #endif // _CORE_TIMER_H_

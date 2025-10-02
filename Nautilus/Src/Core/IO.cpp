@@ -33,33 +33,34 @@ namespace Nt
 {
     String ReadConsole(void)
     {
-        std::string data;
-        std::getline(std::cin, data);
-        return String(data);
+        std::string line;
+        std::getline(std::cin, line);
+        return line;
     }
 
     String ReadFile(const char* path)
     {
-        std::ifstream file = std::ifstream(path);
-        std::string data((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
-        file.close();
-        return String(data);
+        std::ifstream file(path);
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        return buffer.str();
     }
 
-    void WriteConsole(const std::string& data, bool newline)
+    void WriteConsole(String data, bool newline)
     {
         std::cout << data;
         if (newline)
             std::cout << std::endl;
-        std::cout.flush();
     }
 
-    void WriteFile(const char* path, const std::string& data)
+    void WriteFile(String path, String data, bool overwrite)
     {
-        std::ofstream file = std::ofstream(path);
-        file << data;
-        file.flush();
-        file.close();
+        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
+        if (file.is_open())
+        {
+            file << data;
+            file.close();
+        }
     }
 } // namespace Nt
 

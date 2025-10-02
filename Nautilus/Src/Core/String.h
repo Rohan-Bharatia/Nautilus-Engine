@@ -77,7 +77,6 @@ namespace Nt
         bool operator!=(const std::wstring& str) const;
         bool operator!=(const String& str) const;
 
-
         uint32 Length(void);
         std::vector<String> Split(void);
         std::vector<String> Split(String delim);
@@ -91,8 +90,10 @@ namespace Nt
         String& ToUpper(void);
 
     private:
-        Scope<std::string> m_data;
+        Ref<std::string> m_data;
     };
+
+    std::ostream& operator<<(std::ostream& stream, const String& str);
 } // namespace Nt
 
 #endif // _CORE_STRING_H_

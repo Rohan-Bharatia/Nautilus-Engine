@@ -1,4 +1,6 @@
 # Nautilus
+*.log
+*.nt*
 
 # Compiled files
 *.so

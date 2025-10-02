@@ -30,10 +30,21 @@
 
 #include "Application.h"
 
+#include "Log.h"
+
 namespace Nt
 {
     Application::Application(int32 argc, char* argv[])
-    {}
+    {
+        Log::Initialize("Nautilus.log");
+
+        NT_CORE_TRACE("Hello, World!");
+        NT_CORE_DEBUG("Hello, World!");
+        NT_CORE_INFO("Hello, World!");
+        NT_CORE_WARN("Hello, World!");
+        NT_CORE_ERROR("Hello, World!");
+        NT_CORE_FATAL("Hello, World!");
+    }
 
     void Application::Run(void)
     {

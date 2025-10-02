@@ -104,6 +104,14 @@ namespace Nt
     {
         return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     }
+
+    String DateTime::Now(String fmt)
+    {
+        time_t now = time(nullptr);
+        char buffer[256];
+        strftime(buffer, sizeof(buffer), ((std::string)fmt).c_str(), gmtime(&now));
+        return String(buffer);
+    }
 } // namespace Nt
 
 #endif // _CORE_TIMER_CPP_
