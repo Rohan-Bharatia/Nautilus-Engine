@@ -24,42 +24,66 @@
 
 #pragma endregion LICENSE
 
-#ifndef _CORE_IO_CPP_
-    #define _CORE_IO_CPP_
+#pragma once
 
-#include "IO.h"
+#ifndef _CORE_KEY_EVENT_H_
+    #define _CORE_KEY_EVENT_H_
+
+#include "Event.h"
 
 namespace Nt
 {
-    String ReadConsole(void)
+    class NT_API KeyEvent :
+        public Event
     {
-        std::string line;
-        std::getline(std::cin, line);
-        return line;
-    }
+    public:
+        uint32 GetKeyCode(void) const;
 
-    String ReadFile(const char* path)
-    {
-        std::ifstream file(path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
-    }
+        EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
-    void WriteConsole(String data, bool newline)
-    {
-        std::cout << data;
-        if (newline)
-            std::cout << std::endl;
-    }
+    protected:
+        KeyEvent(uint32 keyCode);
 
-    void WriteFile(String path, String data, bool overwrite)
+        uint32 m_keyCode;
+    };
+
+    class NT_API KeyPressedEvent :
+        public KeyEvent
     {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
-        file.close();
-    }
+    public:
+        KeyPressedEvent(uint32 keyCode, bool repeat=false);
+
+        bool IsRepeat(void) const;
+
+        String ToString(void) const override;
+
+        EVENT_CLASS_TYPE(KeyPressed)
+
+    private:
+        bool m_repeat;
+    };
+
+    class NT_API KeyReleasedEvent :
+        public KeyEvent
+    {
+    public:
+        KeyReleasedEvent(uint32 keyCode);
+
+        String ToString(void) const override;
+
+        EVENT_CLASS_TYPE(KeyReleased)
+    };
+
+    class NT_API KeyTypedEvent :
+        public KeyEvent
+    {
+    public:
+        KeyTypedEvent(uint32 keyCode);
+
+        String ToString(void) const override;
+
+        EVENT_CLASS_TYPE(KeyTyped)
+    };
 } // namespace Nt
 
-#endif // _CORE_IO_CPP_
+#endif // _CORE_KEY_EVENT_H_

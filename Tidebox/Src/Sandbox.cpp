@@ -4,21 +4,35 @@
 #include <Nautilus.h>
 #include <EntryPoint.h>
 
-class Sandbox :
+class SandboxLayer :
+    public Nt::Layer
+{
+public:
+    SandboxLayer(void) :
+        Layer("SandboxLayer")
+    {}
+
+    ~SandboxLayer(void)
+    {}
+};
+
+class SandboxApplication :
     public Nt::Application
 {
 public:
-    Sandbox(Nt::int32 argc, char* argv[]) :
+    SandboxApplication(Nt::int32 argc, char* argv[]) :
         Application(argc, argv)
-    {}
+    {
+        PushLayer(new SandboxLayer());
+    }
 
-    ~Sandbox(void)
+    ~SandboxApplication(void)
     {}
 };
 
 Nt::Application* Nt::CreateApplication(Nt::int32 argc, char* argv[])
 {
-    return new Sandbox(argc, argv);
+    return new SandboxApplication(argc, argv);
 }
 
 #endif // _SANDBOX_CPP_

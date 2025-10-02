@@ -29,7 +29,7 @@
 #ifndef _CORE_APPLICATION_H_
     #define _CORE_APPLICATION_H_
 
-#include "PCH.h"
+#include "LayerStack.h"
 
 namespace Nt
 {
@@ -38,8 +38,28 @@ namespace Nt
     public:
         NT_CLASS_DEFAULTS(Application)
         Application(int32 argc, char* argv[]);
+        virtual ~Application(void);
+
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* layer);
 
         void Run(void);
+        void Close(void);
+
+        void SubmitToMainThread(const std::function<void()>& func);
+
+        static Application& Get(void);
+
+    private:
+        void ExecuteMainThreadQueue(void);
+
+        bool m_running;
+        bool m_minimized;
+        LayerStack m_layerStack;
+        float32 m_lastFrame;
+        std::vector<std::function<void()>> m_mainThreadQueue;
+        std::mutex m_mainThreadQueueMutex;
+        static Application* s_instance;
     };
 } // namespace Nt
 

@@ -488,6 +488,7 @@
     structure(structure&&)                 = default; \
     structure& operator=(const structure&) = default; \
     structure& operator=(structure&&)      = default;
+#define BIT(n) (1 << n)
 
 // C++ primitive types
 namespace Nt
@@ -564,5 +565,18 @@ namespace Nt
     #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
 // #include <...> // No external library headers yet
+
+// Nautilus library headers
+#include "Core/Log.h"
+
+#ifdef NT_DEBUG
+    #ifdef NT_PLATFORM_FAMILY_MICROSOFT
+        #define NT_ASSERT(x, msg, ...) if (!(x)) { NT_CORE_FATAL(msg, ##__VA_ARGS__); __debugbreak(); }
+    #else // (NOT) NT_PLATFORM_FAMILY_MICROSOFT
+        #define NT_ASSERT(x, msg, ...) if (!(x)) { NT_CORE_FATAL(msg, ##__VA_ARGS__); abort(); }
+    #endif // NT_PLATFORM_FAMILY_MICROSOFT
+#else // (NOT) NT_DEBUG
+    #define NT_ASSERT(x, ...)
+#endif // NT_DEBUG
 
 #endif // _PCH_H_

@@ -24,42 +24,59 @@
 
 #pragma endregion LICENSE
 
-#ifndef _CORE_IO_CPP_
-    #define _CORE_IO_CPP_
+#ifndef _CORE_KEY_EVENT_CPP_
+    #define _CORE_KEY_EVENT_CPP_
 
-#include "IO.h"
+#include "KeyEvent.h"
 
 namespace Nt
 {
-    String ReadConsole(void)
+    uint32 KeyEvent::GetKeyCode(void) const
     {
-        std::string line;
-        std::getline(std::cin, line);
-        return line;
+        return m_keyCode;
     }
 
-    String ReadFile(const char* path)
+    KeyEvent::KeyEvent(uint32 keyCode) :
+        m_keyCode(keyCode)
+    {}
+
+    KeyPressedEvent::KeyPressedEvent(uint32 keyCode, bool repeat) :
+        KeyEvent(keyCode), m_repeat(repeat)
+    {}
+
+    bool KeyPressedEvent::IsRepeat(void) const
     {
-        std::ifstream file(path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
+        return m_repeat;
     }
 
-    void WriteConsole(String data, bool newline)
+    String KeyPressedEvent::ToString(void) const
     {
-        std::cout << data;
-        if (newline)
-            std::cout << std::endl;
+        std::stringstream ss;
+        ss << "KeyPressedEvent: (" << m_keyCode << ", " << m_repeat << ")";
+        return String(ss.str());
     }
 
-    void WriteFile(String path, String data, bool overwrite)
+    KeyReleasedEvent::KeyReleasedEvent(uint32 keyCode) :
+        KeyEvent(keyCode)
+    {}
+
+    String KeyReleasedEvent::ToString(void) const
     {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
-        file.close();
+        std::stringstream ss;
+        ss << "KeyReleasedEvent: (" << m_keyCode << ")";
+        return String(ss.str());
+    }
+
+    KeyTypedEvent::KeyTypedEvent(uint32 keyCode) :
+        KeyEvent(keyCode)
+    {}
+
+    String KeyTypedEvent::ToString(void) const
+    {
+        std::stringstream ss;
+        ss << "KeyTypedEvent: (" << m_keyCode << ")";
+        return String(ss.str());
     }
 } // namespace Nt
 
-#endif // _CORE_IO_CPP_
+#endif // _CORE_KEY_EVENT_CPP_

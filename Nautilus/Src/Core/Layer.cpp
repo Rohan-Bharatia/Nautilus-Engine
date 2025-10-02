@@ -24,42 +24,23 @@
 
 #pragma endregion LICENSE
 
-#ifndef _CORE_IO_CPP_
-    #define _CORE_IO_CPP_
+#ifndef _CORE_LAYER_CPP_
+    #define _CORE_LAYER_CPP_
 
-#include "IO.h"
+#include "Layer.h"
 
 namespace Nt
 {
-    String ReadConsole(void)
+    Layer::Layer(const String& name) :
+        m_name(name)
     {
-        std::string line;
-        std::getline(std::cin, line);
-        return line;
+        NT_ASSERT(m_name.Length() != 0, "Layer name cannot be empty!");
     }
 
-    String ReadFile(const char* path)
+    const String& Layer::GetName(void) const
     {
-        std::ifstream file(path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
-    }
-
-    void WriteConsole(String data, bool newline)
-    {
-        std::cout << data;
-        if (newline)
-            std::cout << std::endl;
-    }
-
-    void WriteFile(String path, String data, bool overwrite)
-    {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
-        file.close();
+        return m_name;
     }
 } // namespace Nt
 
-#endif // _CORE_IO_CPP_
+#endif // _CORE_LAYER_CPP_

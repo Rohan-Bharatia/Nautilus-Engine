@@ -24,42 +24,41 @@
 
 #pragma endregion LICENSE
 
-#ifndef _CORE_IO_CPP_
-    #define _CORE_IO_CPP_
+#pragma once
 
-#include "IO.h"
+#ifndef _CORE_LAYER_STACK_H_
+    #define _CORE_LAYER_STACK_H_
+
+#include "Layer.h"
 
 namespace Nt
 {
-    String ReadConsole(void)
+    class NT_API LayerStack
     {
-        std::string line;
-        std::getline(std::cin, line);
-        return line;
-    }
+    public:
+        NT_CLASS_DEFAULTS(LayerStack)
+        LayerStack(void) = default;
+        ~LayerStack(void);
 
-    String ReadFile(const char* path)
-    {
-        std::ifstream file(path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
-    }
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* overlay);
+        void PopLayer(Layer* layer);
+        void PopOverlay(Layer* overlay);
 
-    void WriteConsole(String data, bool newline)
-    {
-        std::cout << data;
-        if (newline)
-            std::cout << std::endl;
-    }
+        std::vector<Layer*>::iterator begin(void);
+        std::vector<Layer*>::iterator end(void);
+        std::vector<Layer*>::reverse_iterator rbegin(void);
+        std::vector<Layer*>::reverse_iterator rend(void);
 
-    void WriteFile(String path, String data, bool overwrite)
-    {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
-        file.close();
-    }
+        std::vector<Layer*>::const_iterator begin(void) const;
+        std::vector<Layer*>::const_iterator end(void) const;
+        std::vector<Layer*>::const_reverse_iterator rbegin(void) const;
+        std::vector<Layer*>::const_reverse_iterator rend(void) const;
+
+    private:
+        std::vector<Layer*> m_layers;
+        uint32_t m_layerInsertIndex = 0;
+    };
 } // namespace Nt
 
-#endif // _CORE_IO_CPP_
+#endif // _CORE_LAYER_STACK_H_

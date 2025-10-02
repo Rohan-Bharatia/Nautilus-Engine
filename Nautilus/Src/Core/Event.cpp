@@ -24,42 +24,36 @@
 
 #pragma endregion LICENSE
 
-#ifndef _CORE_IO_CPP_
-    #define _CORE_IO_CPP_
+#ifndef _CORE_EVENT_CPP_
+    #define _CORE_EVENT_CPP_
 
-#include "IO.h"
+#include "Event.h"
 
 namespace Nt
 {
-    String ReadConsole(void)
+    String Event::ToString(void) const
     {
-        std::string line;
-        std::getline(std::cin, line);
-        return line;
+        return GetName();
     }
 
-    String ReadFile(const char* path)
+    bool Event::IsHandled(void) const
     {
-        std::ifstream file(path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
+        return m_handled;
     }
 
-    void WriteConsole(String data, bool newline)
+    void Event::SetHandled(bool handled)
     {
-        std::cout << data;
-        if (newline)
-            std::cout << std::endl;
+        m_handled |= handled;
     }
 
-    void WriteFile(String path, String data, bool overwrite)
+    EventDispatcher::EventDispatcher(Event& event) :
+        m_event(event)
+    {}
+
+    std::ostream& operator<<(std::ostream& stream, const Event& event)
     {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
-        file.close();
+        return stream << event.ToString();
     }
 } // namespace Nt
 
-#endif // _CORE_IO_CPP_
+#endif // _CORE_EVENT_CPP_

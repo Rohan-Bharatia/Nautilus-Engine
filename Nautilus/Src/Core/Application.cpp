@@ -30,25 +30,80 @@
 
 #include "Application.h"
 
-#include "Log.h"
+#include "Timer.h"
 
 namespace Nt
 {
-    Application::Application(int32 argc, char* argv[])
-    {
-        Log::Initialize("Nautilus.log");
+    Application* Application::s_instance = nullptr;
 
-        NT_CORE_TRACE("Hello, World!");
-        NT_CORE_DEBUG("Hello, World!");
-        NT_CORE_INFO("Hello, World!");
-        NT_CORE_WARN("Hello, World!");
-        NT_CORE_ERROR("Hello, World!");
-        NT_CORE_FATAL("Hello, World!");
+    Application::Application(int32 argc, char* argv[]) :
+        m_running(true), m_minimized(false), m_lastFrame(0.0f)
+    {
+        NT_ASSERT(s_instance == nullptr, "Application already exists!");
+        s_instance = this;
+
+        Log::Initialize("Nautilus.log");
+    }
+
+    Application::~Application(void)
+    {
+        NT_SAFE_DELETE(s_instance);
+    }
+
+    void Application::PushLayer(Layer* layer)
+    {
+        m_layerStack.PushLayer(layer);
+        layer->OnAttach();
+    }
+
+    void Application::PushOverlay(Layer* overlay)
+    {
+        m_layerStack.PushOverlay(overlay);
+        overlay->OnAttach();
     }
 
     void Application::Run(void)
     {
-        while (true);
+        while (m_running)
+        {
+            float32 time      = GetSystemTime();
+            float32 deltaTime = time - m_lastFrame;
+            m_lastFrame       = time;
+
+            ExecuteMainThreadQueue();
+
+            if (!m_minimized)
+            {
+                for (Layer* layer : m_layerStack)
+                    layer->OnUpdate(deltaTime);
+            }
+        }
+    }
+
+    void Application::Close(void)
+    {
+        m_running = false;
+    }
+
+    void Application::SubmitToMainThread(const std::function<void()>& func)
+    {
+        std::scoped_lock<std::mutex> lock(m_mainThreadQueueMutex);
+        m_mainThreadQueue.emplace_back(func);
+    }
+
+    Application& Application::Get(void)
+    {
+        return *s_instance;
+    }
+
+    void Application::ExecuteMainThreadQueue(void)
+    {
+        std::scoped_lock<std::mutex> lock(m_mainThreadQueueMutex);
+
+        for (auto& func : m_mainThreadQueue)
+            func();
+
+        m_mainThreadQueue.clear();
     }
 } // namespace Nt
 

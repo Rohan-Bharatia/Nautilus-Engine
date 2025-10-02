@@ -35,6 +35,7 @@ namespace Nt
 {
     enum class LogLevel
     {
+        None = 0,
         Trace,
         Debug,
         Info,

@@ -31,6 +31,18 @@
 
 #include "PCH.h"
 #include "Core/Application.h"
+#include "Core/String.h"
+#include "Core/IO.h"
+#include "Core/Timer.h"
+#include "Core/Log.h"
+#include "Core/UUID.h"
+#include "Core/Layer.h"
+#include "Core/LayerStack.h"
+#include "Core/Event.h"
+#include "Core/ApplicationEvent.h"
+#include "Core/KeyEvent.h"
+#include "Core/MouseEvent.h"
+#include "Core/ControllerEvent.h"
 
 #define NT_VERSION_MAJOR 1
 #define NT_VERSION_MINOR 0

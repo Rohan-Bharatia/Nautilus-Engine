@@ -24,42 +24,31 @@
 
 #pragma endregion LICENSE
 
-#ifndef _CORE_IO_CPP_
-    #define _CORE_IO_CPP_
+#pragma once
 
-#include "IO.h"
+#ifndef _CORE_LAYER_H_
+    #define _CORE_LAYER_H_
+
+#include "String.h"
 
 namespace Nt
 {
-    String ReadConsole(void)
+    class NT_API Layer
     {
-        std::string line;
-        std::getline(std::cin, line);
-        return line;
-    }
+    public:
+        NT_CLASS_DEFAULTS(Layer)
+        Layer(const String& name="Layer");
+        virtual ~Layer(void) = default;
 
-    String ReadFile(const char* path)
-    {
-        std::ifstream file(path);
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        return buffer.str();
-    }
+        virtual void OnAttach(void)       {}
+        virtual void OnUpdate(float32 dt) {}
+        virtual void OnDetach(void)       {}
 
-    void WriteConsole(String data, bool newline)
-    {
-        std::cout << data;
-        if (newline)
-            std::cout << std::endl;
-    }
+        const String& GetName(void) const;
 
-    void WriteFile(String path, String data, bool overwrite)
-    {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
-        file.close();
-    }
+    private:
+        String m_name;
+    };
 } // namespace Nt
 
-#endif // _CORE_IO_CPP_
+#endif // _CORE_LAYER_H_
