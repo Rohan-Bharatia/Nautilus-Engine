@@ -30,6 +30,8 @@
     #define _CORE_APPLICATION_H_
 
 #include "LayerStack.h"
+#include "Window.h"
+#include "ApplicationEvent.h"
 
 namespace Nt
 {
@@ -43,6 +45,8 @@ namespace Nt
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* layer);
 
+        void OnEvent(Event& e);
+
         void Run(void);
         void Close(void);
 
@@ -51,8 +55,11 @@ namespace Nt
         static Application& Get(void);
 
     private:
+        bool OnWindowClose(WindowCloseEvent& e);
+        bool OnWindowResize(WindowResizeEvent& e);
         void ExecuteMainThreadQueue(void);
 
+        Scope<Window> m_window;
         bool m_running;
         bool m_minimized;
         LayerStack m_layerStack;

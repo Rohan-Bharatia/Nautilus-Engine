@@ -1,0 +1,3 @@
+[submodule "Nautilus/Vendor/SDL"]
+	path = Nautilus/Vendor/SDL
+	url = https://github.com/libsdl-org/SDL.git

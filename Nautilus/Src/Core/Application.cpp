@@ -43,6 +43,10 @@ namespace Nt
         s_instance = this;
 
         Log::Initialize("Nautilus.log");
+
+        WindowProperties props{};
+        m_window = CreateScope<Window>(props);
+        m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
     }
 
     Application::~Application(void)
@@ -62,6 +66,20 @@ namespace Nt
         overlay->OnAttach();
     }
 
+    void Application::OnEvent(Event& e)
+    {
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_EVENT_FN(Application::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(NT_BIND_EVENT_FN(Application::OnWindowResize));
+
+        for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); ++it)
+        {
+            if (e.IsHandled())
+                break;
+            (*it)->OnEvent(e);
+        }
+    }
+
     void Application::Run(void)
     {
         while (m_running)
@@ -77,6 +95,8 @@ namespace Nt
                 for (Layer* layer : m_layerStack)
                     layer->OnUpdate(deltaTime);
             }
+
+            m_window->OnUpdate(deltaTime);
         }
     }
 
@@ -94,6 +114,24 @@ namespace Nt
     Application& Application::Get(void)
     {
         return *s_instance;
+    }
+
+    bool Application::OnWindowClose(WindowCloseEvent& e)
+    {
+        m_running = false;
+        return true;
+    }
+
+    bool Application::OnWindowResize(WindowResizeEvent& e)
+    {
+        if (e.GetWidth() == 0 || e.GetHeight() == 0)
+        {
+            m_minimized = true;
+            return false;
+        }
+
+        m_minimized = false;
+        return true;
     }
 
     void Application::ExecuteMainThreadQueue(void)

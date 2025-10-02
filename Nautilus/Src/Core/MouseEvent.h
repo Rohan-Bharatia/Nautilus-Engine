@@ -81,6 +81,7 @@ namespace Nt
         String ToString(void) const override;
 
         EVENT_CLASS_TYPE(MouseMoved)
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
     private:
         float32 m_x, m_y;
@@ -98,6 +99,7 @@ namespace Nt
         String ToString(void) const override;
 
         EVENT_CLASS_TYPE(MouseScrolled)
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
     private:
         float32 m_xOffset, m_yOffset;

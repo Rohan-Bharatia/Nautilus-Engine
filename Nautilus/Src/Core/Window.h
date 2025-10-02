@@ -26,31 +26,48 @@
 
 #pragma once
 
-#ifndef _CORE_LAYER_H_
-    #define _CORE_LAYER_H_
+#ifndef _CORE_WINDOW_H_
+    #define _CORE_WINDOW_H_
 
 #include "String.h"
 #include "Event.h"
 
 namespace Nt
 {
-    class NT_API Layer
+    struct NT_API WindowProperties
+    {
+        String title  = "Nautilus Engine";
+        uint32 width  = 1280;
+        uint32 height = 720;
+    };
+
+    class NT_API Window
     {
     public:
-        NT_CLASS_DEFAULTS(Layer)
-        Layer(const String& name="Layer");
-        virtual ~Layer(void) = default;
+        using EventCallbackFn = std::function<void(Event&)>;
 
-        virtual void OnAttach(void)       {}
-        virtual void OnUpdate(float32 dt) {}
-        virtual void OnDetach(void)       {}
-        virtual void OnEvent(Event& e)    {}
+        NT_CLASS_DEFAULTS(Window)
+        Window(const WindowProperties& props);
+        ~Window(void);
 
-        const String& GetName(void) const;
+        void OnUpdate(float32 deltaTime);
+
+        String GetTitle(void) const;
+        uint32 GetWidth(void) const;
+        uint32 GetHeight(void) const;
+
+        void SetEventCallback(const EventCallbackFn& callback);
+        void SetVSync(bool enabled);
+        bool IsVSync(void) const;
+
+        void* GetNativeWindow(void) const;
 
     private:
-        String m_name;
+        SDL_Window* m_window;
+        WindowProperties m_props;
+        bool m_vsync;
+        EventCallbackFn m_eventCallback;
     };
 } // namespace Nt
 
-#endif // _CORE_LAYER_H_
+#endif // _CORE_WINDOW_H_

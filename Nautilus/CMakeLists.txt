@@ -8,6 +8,12 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/runtime.cmake)
 
 project(Nautilus)
 
+function(link_dependency directory target headers)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory})
+    target_link_libraries(Nautilus PRIVATE ${target})
+    target_include_directories(Nautilus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${headers})
+endfunction()
+
 file(GLOB Nautilus_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/**/*.cpp
 )
@@ -19,6 +25,10 @@ target_precompile_headers(Nautilus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Src/PCH.h
 
 find_package(TBB REQUIRED)
 target_link_libraries(Nautilus PRIVATE TBB::tbb)
+
+set(SDL_STATIC ON CACHE BOOL "Build SDL as static library" FORCE)
+set(SDL_SHARED OFF CACHE BOOL "Disable SDL shared library" FORCE)
+link_dependency("SDL" "SDL3::SDL3-static" "include")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

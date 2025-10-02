@@ -564,7 +564,7 @@ namespace Nt
 #ifndef _CRT_SECURE_NO_WARNINGS
     #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
-// #include <...> // No external library headers yet
+#include <SDL3/SDL.h>
 
 // Nautilus library headers
 #include "Core/Log.h"
