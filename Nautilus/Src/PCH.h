@@ -49,7 +49,7 @@
 // C/C++ standard library headers
 #ifndef _GLIBCXX_NO_ASSERT
     #include <cassert>
-#endif
+#endif // _GLIBCXX_NO_ASSERT
 #include <cctype>
 #include <cerrno>
 #include <cfloat>

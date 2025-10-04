@@ -41,6 +41,11 @@ namespace Nt
     Window::Window(const WindowProperties& props) :
         m_props(props), m_window(nullptr)
     {
+    #ifdef NT_PLATFORM_FAMILY_UNIX
+        if (std::getenv("WAYLAND_DISPLAY") != nullptr)
+            SDL_SetHint(SDL_HINT_VIDEO_DRIVER, "wayland");
+    #endif // NT_PLATFORM_FAMILY_UNIX
+
         if (s_windowCount == 0)
         {
             if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD))
@@ -60,6 +65,8 @@ namespace Nt
 
         ++s_windowCount;
         SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        SDL_ShowWindow(m_window);
+        SDL_SyncWindow(m_window);
 
         SDL_GLContext ctx = SDL_GL_CreateContext(m_window);
         if (!ctx)
@@ -93,6 +100,7 @@ namespace Nt
             {
                 // Window Events
                 case SDL_EVENT_QUIT:
+                case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                 {
                     WindowCloseEvent e;
                     if (m_eventCallback)
