@@ -296,19 +296,23 @@
             #define NT_PLATFORM_WINDOWS
             #define NT_PLATFORM_NAME "Windows"
             #define NT_DEVICE_DESKTOP
+            #include <Windows.h>
         #elif WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
             #if defined(_GAMING_XBOX_XBOXONE)
                 #define NT_PLATFORM_XBOX_ONE
                 #define NT_PLATFORM_NAME "Xbox One"
                 #define NT_DEVICE_CONSOLE
+                #include <xdk.h>
             #elif defined(_GAMING_XBOX_XBOX_SCARLETT)
                 #define NT_PLATFORM_XBOX_SERIES
                 #define NT_PLATFORM_NAME "Xbox Series X/S"
                 #define NT_DEVICE_CONSOLE
+                #include <xdk.h>
             #else // (NOT) defined(_GAMING_XBOX_XBOXONE), defined(_GAMING_XBOX_XBOX_SCARLETT)
                 #define NT_PLATFORM_XBOX
                 #define NT_PLATFORM_NAME "Xbox (UWP)"
                 #define NT_DEVICE_CONSOLE
+                #include <IUnknown.h>
             #endif // defined(_GAMING_XBOX_XBOXONE), defined(_GAMING_XBOX_XBOX_SCARLETT)
         #else // (NOT) WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP), WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
             #define NT_PLATFORM_UNKNOWN
@@ -328,22 +332,27 @@
         #define NT_PLATFORM_IOS
         #define NT_PLATFORM_NAME "iOS"
         #define NT_DEVICE_MOBILE
+        #include <UIKit/UIKit.h>
     #elif TARGET_OS_MAC || TARGET_OS_OSX
         #define NT_PLATFORM_MACOS
         #define NT_PLATFORM_NAME "macOS"
         #define NT_DEVICE_DESKTOP
+        #include <AppKit/AppKit.h>
     #elif TARGET_OS_WATCH
         #define NT_PLATFORM_WATCHOS
         #define NT_PLATFORM_NAME "watchOS"
         #define NT_DEVICE_EMBEDDED
+        #include <WatchKit/WatchKit.h>
     #elif TARGET_OS_TV
         #define NT_PLATFORM_TVOS
         #define NT_PLATFORM_NAME "tvOS"
         #define NT_DEVICE_EMBEDDED
+        #include <TVMLKit/TVMLKit.h>
     #elif TARGET_OS_EMBEDDED
         #define NT_PLATFORM_EMBEDDED
         #define NT_PLATFORM_NAME "embeddedOS"
         #define NT_DEVICE_EMBEDDED
+        #include <CoreFoundation/CoreFoundation.h>
     #else // (NOT) TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR, TARGET_OS_MAC || TARGET_OS_OSX, TARGET_OS_WATCH, TARGET_OS_TV, TARGET_OS_EMBEDDED
         #define NT_PLATFORM_UNKNOWN
         #define NT_PLATFORM_NAME "Unknown Apple Platform"
@@ -354,6 +363,8 @@
     #define NT_PLATFORM_ANDROID
     #define NT_PLATFORM_NAME "Android"
     #define NT_DEVICE_MOBILE
+    #include <android/native_activity.h>
+    #include <android/native_window.h>
 #elif defined(__ORBIS__)
     #define NT_PLATFORM_PS4
     #define NT_PLATFORM_NAME "PlayStation 4"
@@ -419,6 +430,13 @@
     #define NT_PLATFORM_FAMILY_APPLE
 #elif defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_FREEBSD) || defined(NT_PLATFORM_NETBSD) || defined(NT_PLATFORM_OPENBSD) || defined(NT_PLATFORM_DRAGONFLY) || defined(NT_PLATFORM_HAIKU) || defined(NT_PLATFORM_SOLARIS)
     #define NT_PLATFORM_FAMILY_UNIX
+    #include <X11/Xlib.h>
+    #ifdef None
+        #undef None
+    #endif // None
+    #if __has_include(<wayland-client.h>)
+        #include <wayland-client.h>
+    #endif // __has_include(<wayland-client.h>)
 #else // (NOT) defined(NT_PLATFORM_WINDOWS) || defined(NT_PLATFORM_XBOX_ONE) || defined(NT_PLATFORM_XBOX_SERIES) || defined(NT_PLATFORM_XBOX), defined(NT_PLATFORM_MACOS) || defined(NT_PLATFORM_IOS) || defined(NT_PLATFORM_WATCHOS) || defined(NT_PLATFORM_TVOS) || defined(NT_PLATFORM_EMBEDDED), defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_FREEBSD) || defined(NT_PLATFORM_NETBSD) || defined(NT_PLATFORM_OPENBSD) || defined(NT_PLATFORM_DRAGONFLY) || defined(NT_PLATFORM_HAIKU) || defined(NT_PLATFORM_SOLARIS)
     #define NT_PLATFORM_FAMILY_UNKNOWN
 #endif // defined(NT_PLATFORM_WINDOWS) || defined(NT_PLATFORM_XBOX_ONE) || defined(NT_PLATFORM_XBOX_SERIES) || defined(NT_PLATFORM_XBOX), defined(NT_PLATFORM_MACOS) || defined(NT_PLATFORM_IOS) || defined(NT_PLATFORM_WATCHOS) || defined(NT_PLATFORM_TVOS) || defined(NT_PLATFORM_EMBEDDED), defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_FREEBSD) || defined(NT_PLATFORM_NETBSD) || defined(NT_PLATFORM_OPENBSD) || defined(NT_PLATFORM_DRAGONFLY) || defined(NT_PLATFORM_HAIKU) || defined(NT_PLATFORM_SOLARIS)
@@ -565,6 +583,7 @@ namespace Nt
     #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
 #include <SDL3/SDL.h>
+#include <bgfx/bgfx.h>
 
 // Nautilus library headers
 #include "Core/Log.h"

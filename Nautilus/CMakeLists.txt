@@ -10,8 +10,8 @@ project(Nautilus)
 
 function(link_dependency directory target headers)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory})
-    target_link_libraries(Nautilus PRIVATE ${target})
-    target_include_directories(Nautilus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${headers})
+    target_link_libraries(Nautilus PUBLIC ${target})
+    target_include_directories(Nautilus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${headers})
 endfunction()
 
 file(GLOB Nautilus_SOURCES
@@ -28,7 +28,13 @@ target_link_libraries(Nautilus PRIVATE TBB::tbb)
 
 set(SDL_STATIC ON CACHE BOOL "Build SDL as static library" FORCE)
 set(SDL_SHARED OFF CACHE BOOL "Disable SDL shared library" FORCE)
+set(BGFX_BUILD_TOOLS OFF CACHE BOOL "Disable bgfx tools" FORCE)
+set(BGFX_BUILD_EXAMPLES OFF CACHE BOOL "Disable bgfx examples" FORCE)
+set(BX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bx")
+set(BIMG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bimg")
+set(BGFX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bgfx")
 link_dependency("SDL" "SDL3::SDL3-static" "include")
+link_dependency("BGFX" "bgfx" "bgfx/include")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

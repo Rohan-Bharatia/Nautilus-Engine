@@ -26,51 +26,30 @@
 
 #pragma once
 
-#ifndef _CORE_WINDOW_H_
-    #define _CORE_WINDOW_H_
+#ifndef _RENDERER_GRAPHICS_CONTEXT_H_
+    #define _RENDERER_GRAPHICS_CONTEXT_H_
 
-#include "String.h"
-#include "Event.h"
+#include "Core/Window.h"
 
 namespace Nt
 {
-    struct NT_API WindowProperties
-    {
-        String title  = "Nautilus Engine";
-        uint32 width  = 1280;
-        uint32 height = 720;
-    };
-
-    class GraphicsContext;
-
-    class NT_API Window
+    class NT_API GraphicsContext
     {
     public:
-        using EventCallbackFn = std::function<void(Event&)>;
+        NT_CLASS_DEFAULTS(GraphicsContext)
+        GraphicsContext(Window* window);
+        ~GraphicsContext(void);
 
-        NT_CLASS_DEFAULTS(Window)
-        Window(const WindowProperties& props);
-        ~Window(void);
-
-        void OnUpdate(float32 deltaTime);
-
-        String GetTitle(void) const;
-        uint32 GetWidth(void) const;
-        uint32 GetHeight(void) const;
-
-        void SetEventCallback(const EventCallbackFn& callback);
-        void SetVSync(bool enabled);
-        bool IsVSync(void) const;
-
-        void* GetNativeWindow(void) const;
+        void SwapBuffers(void) const;
+        void SetVSync(bool enabled) const;
 
     private:
-        SDL_Window* m_window;
-        WindowProperties m_props;
-        Scope<GraphicsContext> m_context;
-        bool m_vsync;
-        EventCallbackFn m_eventCallback;
+        bgfx::RendererType::Enum GetRendererType(void) const;
+        std::vector<bgfx::RendererType::Enum> GetSupportedRenderers(void) const;
+
+        Window* m_window;
+        SDL_Window* m_native;
     };
 } // namespace Nt
 
-#endif // _CORE_WINDOW_H_
+#endif // _RENDERER_GRAPHICS_CONTEXT_H_

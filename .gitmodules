@@ -1,3 +1,6 @@
 [submodule "Nautilus/Vendor/SDL"]
 	path = Nautilus/Vendor/SDL
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "Nautilus/Vendor/BGFX"]
+	path = Nautilus/Vendor/BGFX
+	url = https://github.com/bkaradzic/bgfx.cmake.git

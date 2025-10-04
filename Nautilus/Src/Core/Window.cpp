@@ -33,13 +33,14 @@
 #include "KeyEvent.h"
 #include "MouseEvent.h"
 #include "ControllerEvent.h"
+#include "Renderer/GraphicsContext.h"
 
 namespace Nt
 {
     static uint8 s_windowCount = 0;
 
     Window::Window(const WindowProperties& props) :
-        m_props(props), m_window(nullptr)
+        m_props(props), m_window(nullptr), m_vsync(true)
     {
     #ifdef NT_PLATFORM_FAMILY_UNIX
         if (std::getenv("WAYLAND_DISPLAY") != nullptr)
@@ -68,14 +69,7 @@ namespace Nt
         SDL_ShowWindow(m_window);
         SDL_SyncWindow(m_window);
 
-        SDL_GLContext ctx = SDL_GL_CreateContext(m_window);
-        if (!ctx)
-        {
-            NT_CORE_ERROR("SDL_GL_CreateContext failed: %s!", SDL_GetError());
-            return;
-        }
-
-        SDL_GL_MakeCurrent(m_window, ctx);
+        m_context = CreateScope<GraphicsContext>(this);
     }
 
     Window::~Window(void)
@@ -207,7 +201,7 @@ namespace Nt
             }
         }
 
-        SDL_GL_SwapWindow(m_window);
+        m_context->SwapBuffers();
     }
 
     String Window::GetTitle(void) const
@@ -236,7 +230,7 @@ namespace Nt
 
     void Window::SetVSync(bool enabled)
     {
-        SDL_GL_SetSwapInterval(enabled ? 1 : 0);
+        m_context->SetVSync(enabled);
         m_vsync = enabled;
     }
 
