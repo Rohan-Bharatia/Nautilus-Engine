@@ -113,8 +113,6 @@ namespace Nt
 
     void GraphicsContext::SwapBuffers(void) const
     {
-        bgfx::setViewRect(0, 0, 0, (uint16)m_window->GetWidth(), (uint16)m_window->GetHeight());
-        bgfx::touch(0);
         bgfx::dbgTextClear();
         bgfx::frame();
     }

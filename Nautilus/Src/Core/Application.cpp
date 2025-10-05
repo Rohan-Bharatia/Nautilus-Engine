@@ -31,6 +31,7 @@
 #include "Application.h"
 
 #include "Timer.h"
+#include "Input.h"
 
 namespace Nt
 {
@@ -47,6 +48,8 @@ namespace Nt
         WindowProperties props{};
         m_window = CreateScope<Window>(props);
         m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
+
+        PushLayer(new InputLayer());
     }
 
     Application::~Application(void)
@@ -90,16 +93,18 @@ namespace Nt
 
             ExecuteMainThreadQueue();
 
-            bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+            if (Input::IsKeyPressed(SDL_SCANCODE_ESCAPE))
+                Close();
+
+            bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x0b0f8eff, 1.0f, 0);
+            bgfx::setViewRect(0, 0, 0, (uint16)m_window->GetWidth(), (uint16)m_window->GetHeight());
+            bgfx::touch(0);
 
             if (!m_minimized)
             {
                 for (Layer* layer : m_layerStack)
                     layer->OnUpdate(deltaTime);
             }
-
-            bgfx::setViewRect(0, 0, 0, (uint16)m_window->GetWidth(), (uint16)m_window->GetHeight());
-        bgfx::touch(0);
 
             m_window->OnUpdate(deltaTime);
         }
