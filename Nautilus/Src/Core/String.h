@@ -96,4 +96,19 @@ namespace Nt
     std::ostream& operator<<(std::ostream& stream, const String& str);
 } // namespace Nt
 
+namespace std
+{
+    template<typename T>
+    struct hash;
+
+    template<>
+    struct hash<Nt::String>
+    {
+        size_t operator()(const Nt::String& str) const
+        {
+            return std::hash<std::string>()(((std::string)str).c_str());
+        }
+    };
+}
+
 #endif // _CORE_STRING_H_

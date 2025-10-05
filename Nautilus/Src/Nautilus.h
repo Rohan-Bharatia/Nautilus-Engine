@@ -43,6 +43,12 @@
 #include "Core/KeyEvent.h"
 #include "Core/MouseEvent.h"
 #include "Core/ControllerEvent.h"
+#include "Core/Window.h"
+#include "Core/Input.h"
+#include "Core/Dialogs.h"
+#include "Core/Filesystem.h"
+
+#include "Renderer/GraphicsContext.h"
 
 #define NT_VERSION_MAJOR 1
 #define NT_VERSION_MINOR 0

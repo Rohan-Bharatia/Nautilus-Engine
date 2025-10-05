@@ -94,7 +94,7 @@ namespace Nt
             ExecuteMainThreadQueue();
 
             if (Input::IsKeyPressed(SDL_SCANCODE_ESCAPE))
-                Close();
+                m_running = false;
 
             bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x0b0f8eff, 1.0f, 0);
             bgfx::setViewRect(0, 0, 0, (uint16)m_window->GetWidth(), (uint16)m_window->GetHeight());
