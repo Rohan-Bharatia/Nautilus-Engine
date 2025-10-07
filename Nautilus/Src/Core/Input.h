@@ -31,6 +31,8 @@
 
 #include "Layer.h"
 
+#include "Codes.h"
+
 namespace Nt
 {
     class NT_API Input :
@@ -43,17 +45,17 @@ namespace Nt
         void OnUpdate(float32 deltaTime) override;
         void OnDetach(void) override;
 
-        static bool IsKeyPressed(int32 key);
-        static bool IsKeyReleased(int32 key);
+        static bool IsKeyPressed(Keycode key);
+        static bool IsKeyReleased(Keycode key);
 
-        static bool IsMouseButtonPressed(int32 button);
-        static bool IsMouseButtonReleased(int32 button);
+        static bool IsMouseButtonPressed(MouseButton button);
+        static bool IsMouseButtonReleased(MouseButton button);
 
         static float32 GetMousePositionX(void);
         static float32 GetMousePositionY(void);
 
-        static bool IsGamepadButtonPressed(int32 button);
-        static bool IsGamepadButtonReleased(int32 button);
+        static bool IsGamepadButtonPressed(GamepadButton button);
+        static bool IsGamepadButtonReleased(GamepadButton button);
         static float32 GetJoystickAxisPosition(int32 axis);
 
     private:

@@ -35,6 +35,7 @@ set(BIMG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bimg")
 set(BGFX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bgfx")
 link_dependency("SDL" "SDL3::SDL3-static" "include")
 link_dependency("BGFX" "bgfx" "bgfx/include")
+link_dependency("glm" "glm" "")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

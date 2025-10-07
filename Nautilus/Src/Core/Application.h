@@ -32,6 +32,7 @@
 #include "LayerStack.h"
 #include "Window.h"
 #include "ApplicationEvent.h"
+#include "KeyEvent.h"
 
 namespace Nt
 {
@@ -57,6 +58,7 @@ namespace Nt
     private:
         bool OnWindowClose(WindowCloseEvent& e);
         bool OnWindowResize(WindowResizeEvent& e);
+        bool OnKeyPressed(KeyPressedEvent& e);
         void ExecuteMainThreadQueue(void);
 
         Scope<Window> m_window;

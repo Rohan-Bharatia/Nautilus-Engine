@@ -31,9 +31,9 @@
 
 namespace Nt
 {
-    uint32 MouseButtonEvent::GetMouseButton(void) const
+    MouseButton MouseButtonEvent::GetMouseButton(void) const
     {
-        return m_button;
+        return (MouseButton)m_button;
     }
 
     MouseButtonEvent::MouseButtonEvent(uint32 button) :

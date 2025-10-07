@@ -31,9 +31,9 @@
 
 namespace Nt
 {
-    uint32 KeyEvent::GetKeyCode(void) const
+    Keycode KeyEvent::GetKeyCode(void) const
     {
-        return m_keyCode;
+        return (Keycode)m_keyCode;
     }
 
     KeyEvent::KeyEvent(uint32 keyCode) :

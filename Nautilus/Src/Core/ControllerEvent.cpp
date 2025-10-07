@@ -31,9 +31,9 @@
 
 namespace Nt
 {
-    uint32 GamepadButtonEvent::GetGamepadButton(void) const
+    GamepadButton GamepadButtonEvent::GetGamepadButton(void) const
     {
-        return m_button;
+        return (GamepadButton)m_button;
     }
 
     GamepadButtonEvent::GamepadButtonEvent(uint32 button) :

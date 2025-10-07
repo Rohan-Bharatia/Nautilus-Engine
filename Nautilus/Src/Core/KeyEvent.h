@@ -31,13 +31,15 @@
 
 #include "Event.h"
 
+#include "Codes.h"
+
 namespace Nt
 {
     class NT_API KeyEvent :
         public Event
     {
     public:
-        uint32 GetKeyCode(void) const;
+        Keycode GetKeyCode(void) const;
 
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 

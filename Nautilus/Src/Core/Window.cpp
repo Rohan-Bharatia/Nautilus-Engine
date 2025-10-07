@@ -239,6 +239,18 @@ namespace Nt
         return m_vsync;
     }
 
+    void Window::SetFullscreen(bool fullscreen)
+    {
+        SDL_SetWindowFullscreen(m_window, fullscreen);
+        m_context->Resize(GetWidth(), GetHeight());
+        m_fullscreen = fullscreen;
+    }
+
+    bool Window::IsFullscreen(void) const
+    {
+        return m_fullscreen;
+    }
+
     void* Window::GetNativeWindow(void) const
     {
         return (void*)m_window;

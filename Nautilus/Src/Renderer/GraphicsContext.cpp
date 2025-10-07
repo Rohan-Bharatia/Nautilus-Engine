@@ -76,7 +76,7 @@ namespace Nt
         pd.backBufferDS = nullptr;
 
         bgfx::Init init;
-        init.type              = GetRendererType();
+        init.type              = bgfx::RendererType::Count;
         init.vendorId          = BGFX_PCI_ID_NONE;
         init.platformData      = pd;
         init.resolution.width  = window->GetWidth();
@@ -122,19 +122,9 @@ namespace Nt
         bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), enabled ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
     }
 
-    bgfx::RendererType::Enum GraphicsContext::GetRendererType(void) const
+    void GraphicsContext::Resize(uint32 width, uint32 height) const
     {
-    #if defined(NT_PLATFORM_FAMILY_MICROSOFT)
-        return bgfx::RendererType::Direct3D12;
-    #elif defined(NT_PLATFORM_FAMILY_APPLE)
-        return bgfx::RendererType::Metal;
-    #elif defined(NT_PLATFORM_FAMILY_UNIX) || defined(NT_PLATFORM_FAMILY_ANDROID)
-        return bgfx::RendererType::Vulkan;
-    #elif defined(NT_PLATFORM_FAMILY_WASM)
-        return bgfx::RendererType::OpenGLES;
-    #else // (NOT) defined(NT_PLATFORM_FAMILY_MICROSOFT), defined(NT_PLATFORM_FAMILY_APPLE), defined(NT_PLATFORM_FAMILY_UNIX), defined(NT_PLATFORM_FAMILY_ANDROID), defined(NT_PLATFORM_FAMILY_WASM)
-        return bgfx::RendererType::OpenGL;
-    #endif // defined(NT_PLATFORM_FAMILY_MICROSOFT), defined(NT_PLATFORM_FAMILY_APPLE), defined(NT_PLATFORM_FAMILY_UNIX), defined(NT_PLATFORM_FAMILY_ANDROID), defined(NT_PLATFORM_FAMILY_WASM)
+        bgfx::reset(width, height, m_window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
     }
 
     std::vector<bgfx::RendererType::Enum> GraphicsContext::GetSupportedRenderers(void) const

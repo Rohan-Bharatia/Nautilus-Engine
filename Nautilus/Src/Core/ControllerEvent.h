@@ -31,13 +31,15 @@
 
 #include "Event.h"
 
+#include "Codes.h"
+
 namespace Nt
 {
     class NT_API GamepadButtonEvent :
         public Event
     {
     public:
-        uint32 GetGamepadButton(void) const;
+        GamepadButton GetGamepadButton(void) const;
 
         EVENT_CLASS_CATEGORY(EventCategoryGamepad | EventCategoryInput)
 

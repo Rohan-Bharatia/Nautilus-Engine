@@ -61,6 +61,8 @@ namespace Nt
         void SetEventCallback(const EventCallbackFn& callback);
         void SetVSync(bool enabled);
         bool IsVSync(void) const;
+        void SetFullscreen(bool fullscreen);
+        bool IsFullscreen(void) const;
 
         void* GetNativeWindow(void) const;
 
@@ -69,6 +71,7 @@ namespace Nt
         WindowProperties m_props;
         Scope<GraphicsContext> m_context;
         bool m_vsync;
+        bool m_fullscreen;
         EventCallbackFn m_eventCallback;
     };
 } // namespace Nt

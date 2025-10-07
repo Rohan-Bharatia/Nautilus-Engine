@@ -74,24 +74,26 @@ namespace Nt
             SDL_CloseGamepad(s_gamepad);
     }
 
-    bool Input::IsKeyPressed(int32 key)
+    bool Input::IsKeyPressed(Keycode key)
     {
-        if (key < 0 || key >= s_keyboardStateLength)
+        SDL_Keymod mods       = SDL_GetModState();
+        SDL_Scancode scancode = SDL_GetScancodeFromKey((SDL_Keycode)key, &mods);
+        if (scancode < 0 || scancode >= s_keyboardStateLength)
             return false;
-        return s_keyboardState[key] != 0;
+        return s_keyboardState[scancode] != 0;
     }
 
-    bool Input::IsKeyReleased(int32 key)
+    bool Input::IsKeyReleased(Keycode key)
     {
         return !IsKeyPressed(key);
     }
 
-    bool Input::IsMouseButtonPressed(int32 button)
+    bool Input::IsMouseButtonPressed(MouseButton button)
     {
-        return (s_mouseState & (1 << ((button) - 1))) != 0;
+        return (s_mouseState & (1 << (((int32)button) - 1))) != 0;
     }
 
-    bool Input::IsMouseButtonReleased(int32 button)
+    bool Input::IsMouseButtonReleased(MouseButton button)
     {
         return !IsMouseButtonPressed(button);
     }
@@ -106,14 +108,14 @@ namespace Nt
         return s_mouseY;
     }
 
-    bool Input::IsGamepadButtonPressed(int32 button)
+    bool Input::IsGamepadButtonPressed(GamepadButton button)
     {
         if (!s_gamepad)
             return false;
         return SDL_GetGamepadButton(s_gamepad, (SDL_GamepadButton)button) != 0;
     }
 
-    bool Input::IsGamepadButtonReleased(int32 button)
+    bool Input::IsGamepadButtonReleased(GamepadButton button)
     {
         return !IsGamepadButtonPressed(button);
     }

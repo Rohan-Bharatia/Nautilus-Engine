@@ -30,6 +30,7 @@
     #define _NAUTILUS_H_
 
 #include "PCH.h"
+
 #include "Core/Application.h"
 #include "Core/String.h"
 #include "Core/IO.h"
@@ -45,8 +46,11 @@
 #include "Core/ControllerEvent.h"
 #include "Core/Window.h"
 #include "Core/Input.h"
+#include "Core/Codes.h"
 #include "Core/Dialogs.h"
 #include "Core/Filesystem.h"
+
+#include "Math/Vector.h"
 
 #include "Renderer/GraphicsContext.h"
 

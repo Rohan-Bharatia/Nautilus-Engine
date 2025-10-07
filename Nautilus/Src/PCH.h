@@ -547,6 +547,13 @@ namespace Nt
     #define NT_DISCRETE_GPU_REFERENCE
 #endif // NT_PLATFORM_FAMILY_MICROSOFT
 
+// Math constants
+#define NT_PI     3.1415926535897932384626433832795
+#define NT_TAU    6.283185307179586476925286766559
+#define NT_EULER  2.7182818284590452353602874713527
+#define NT_PHI    1.6180339887498948482045868343656
+#define NT_SQRT_2 1.4142135623730950488016887242097
+
 // Smart pointers
 namespace Nt
 {
@@ -584,6 +591,8 @@ namespace Nt
 #endif // _CRT_SECURE_NO_WARNINGS
 #include <SDL3/SDL.h>
 #include <bgfx/bgfx.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 // Nautilus library headers
 #include "Core/Log.h"

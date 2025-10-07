@@ -31,13 +31,15 @@
 
 #include "Event.h"
 
+#include "Codes.h"
+
 namespace Nt
 {
     class NT_API MouseButtonEvent :
         public Event
     {
     public:
-        uint32 GetMouseButton(void) const;
+        MouseButton GetMouseButton(void) const;
 
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput | EventCategoryMouseButton)
 
