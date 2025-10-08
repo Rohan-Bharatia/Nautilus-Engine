@@ -33,6 +33,8 @@
 
 namespace Nt
 {
+    class Angle;
+
     class NT_API Vector2
     {
     public:
@@ -42,6 +44,7 @@ namespace Nt
         Vector2(float32 value);
         Vector2(float32* values);
         Vector2(const glm::vec2& value);
+        Vector2(float32 magnitude, const Angle& angle);
 
         // Typecast operators
         operator float32*(void);
@@ -120,6 +123,7 @@ namespace Nt
         float32 Dot(const Vector2& other) const;
         Vector2 Cross(const Vector2& other) const;
         float32 Distance(const Vector2& other) const;
+        Angle AngleBetween(const Vector2& other) const;
 
         float32 x;
         float32 y;
@@ -134,6 +138,7 @@ namespace Nt
         Vector3(float32 value);
         Vector3(float32* values);
         Vector3(const glm::vec3& value);
+        Vector3(float32 magnitude, const Angle& angle);
 
         // Typecast operators
         operator float32*(void);
@@ -212,6 +217,7 @@ namespace Nt
         float32 Dot(const Vector3& other) const;
         Vector3 Cross(const Vector3& other) const;
         float32 Distance(const Vector3& other) const;
+        Angle AngleBetween(const Vector3& other) const;
 
         float32 x;
         float32 y;
@@ -227,10 +233,12 @@ namespace Nt
         Vector4(float32 value);
         Vector4(float32* values);
         Vector4(const glm::vec4& value);
+        Vector4(float32 magnitude, const Angle& angle);
 
         // Typecast operators
         operator float32*(void);
         operator glm::vec4(void) const;
+        operator glm::quat(void) const;
 
         // Sign operators
         Vector4 operator+(void) const;
@@ -305,12 +313,50 @@ namespace Nt
         float32 Dot(const Vector4& other) const;
         Vector4 Cross(const Vector4& other) const;
         float32 Distance(const Vector4& other) const;
+        Angle AngleBetween(const Vector4& other) const;
 
         float32 x;
         float32 y;
         float32 z;
         float32 w;
     };
+
+    std::ostream& operator<<(std::ostream& stream, const Vector2& vector);
+    std::ostream& operator<<(std::ostream& stream, const Vector3& vector);
+    std::ostream& operator<<(std::ostream& stream, const Vector4& vector);
 } // namespace Nt
+
+namespace std
+{
+    template<typename T>
+    struct hash;
+
+    template<>
+    struct hash<Nt::Vector2>
+    {
+        size_t operator()(const Nt::Vector2& vector) const
+        {
+            return std::hash<Nt::float32>()(vector.x) ^ std::hash<Nt::float32>()(vector.y);
+        }
+    };
+
+    template<>
+    struct hash<Nt::Vector3>
+    {
+        size_t operator()(const Nt::Vector3& vector) const
+        {
+            return std::hash<Nt::float32>()(vector.x) ^ std::hash<Nt::float32>()(vector.y) ^ std::hash<Nt::float32>()(vector.z);
+        }
+    };
+
+    template<>
+    struct hash<Nt::Vector4>
+    {
+        size_t operator()(const Nt::Vector4& vector) const
+        {
+            return std::hash<Nt::float32>()(vector.x) ^ std::hash<Nt::float32>()(vector.y) ^ std::hash<Nt::float32>()(vector.z) ^ std::hash<Nt::float32>()(vector.w);
+        }
+    };
+} // namespace std
 
 #endif // _MATH_VECTOR_H_

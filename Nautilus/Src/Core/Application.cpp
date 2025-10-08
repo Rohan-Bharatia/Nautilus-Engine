@@ -100,6 +100,8 @@ namespace Nt
 
             if (!m_minimized)
             {
+                bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), m_window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
+
                 for (Layer* layer : m_layerStack)
                     layer->OnUpdate(deltaTime);
             }

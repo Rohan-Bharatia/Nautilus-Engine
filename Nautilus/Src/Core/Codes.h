@@ -331,6 +331,16 @@ namespace Nt
         Misc5         = SDL_GAMEPAD_BUTTON_MISC5,
         Misc6         = SDL_GAMEPAD_BUTTON_MISC6,
     };
+
+    enum class NT_API JoystickAxis
+    {
+        LeftX        = SDL_GAMEPAD_AXIS_LEFTX,
+        LeftY        = SDL_GAMEPAD_AXIS_LEFTY,
+        RightX       = SDL_GAMEPAD_AXIS_RIGHTX,
+        RightY       = SDL_GAMEPAD_AXIS_RIGHTY,
+        TriggerLeft  = SDL_GAMEPAD_AXIS_LEFT_TRIGGER,
+        TriggerRight = SDL_GAMEPAD_AXIS_RIGHT_TRIGGER,
+    };
 } // namespace Nt
 
 #endif // _CORE_CODES_H_

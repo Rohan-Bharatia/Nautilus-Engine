@@ -476,6 +476,11 @@
     #define NT_DEBUG
 #endif // defined(NDEBUG) || defined(_NDEBUG)
 
+// Class literal operation allowance
+#if !defined(NT_COMPILER_MSVC) || _MSC_VER > 1800
+    #define NT_ALLOW_LITERALS
+#endif // !defined(NT_COMPILER_MSVC) || _MSC_VER > 1800
+
 // Miscellaneous macros
 #define NT_EXPAND(x) x
 #define __NT_PREFIX__(a, prefix) prefix##a
@@ -523,6 +528,7 @@ namespace Nt
     using uint64  = unsigned long long int;
     using float32 = float;
     using float64 = double;
+    using float80 = long double;
 } // namespace Nt
 
 // Type casting macros

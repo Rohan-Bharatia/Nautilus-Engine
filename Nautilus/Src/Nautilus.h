@@ -51,8 +51,13 @@
 #include "Core/Filesystem.h"
 
 #include "Math/Vector.h"
+#include "Math/Angle.h"
 
 #include "Renderer/GraphicsContext.h"
+
+#ifdef NT_ALLOW_LITERALS
+using namespace Nt::Literals;
+#endif // NT_ALLOW_LITERALS
 
 #define NT_VERSION_MAJOR 1
 #define NT_VERSION_MINOR 0

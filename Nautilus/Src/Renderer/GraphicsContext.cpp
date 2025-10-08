@@ -122,11 +122,6 @@ namespace Nt
         bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), enabled ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
     }
 
-    void GraphicsContext::Resize(uint32 width, uint32 height) const
-    {
-        bgfx::reset(width, height, m_window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
-    }
-
     std::vector<bgfx::RendererType::Enum> GraphicsContext::GetSupportedRenderers(void) const
     {
         std::vector<bgfx::RendererType::Enum> result;

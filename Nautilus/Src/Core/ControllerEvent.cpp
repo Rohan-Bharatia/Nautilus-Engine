@@ -66,9 +66,9 @@ namespace Nt
         m_axis(axis), m_value(value)
     {}
 
-    int32 JoystickAxisMovedEvent::GetAxis(void) const
+    JoystickAxis JoystickAxisMovedEvent::GetAxis(void) const
     {
-        return m_axis;
+        return (JoystickAxis)m_axis;
     }
 
     float32 JoystickAxisMovedEvent::GetValue(void) const

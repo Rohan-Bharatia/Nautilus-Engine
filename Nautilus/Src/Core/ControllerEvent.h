@@ -77,7 +77,7 @@ namespace Nt
     public:
         JoystickAxisMovedEvent(int32 axis, float32 value);
 
-        int32 GetAxis(void) const;
+        JoystickAxis GetAxis(void) const;
         float32 GetValue(void) const;
 
         String ToString(void) const override;

@@ -29,6 +29,8 @@
 
 #include "Vector.h"
 
+#include "Angle.h"
+
 namespace Nt
 {
     Vector2::Vector2(void) :
@@ -49,6 +51,10 @@ namespace Nt
 
     Vector2::Vector2(const glm::vec2& value) :
         x(value.x), y(value.y)
+    {}
+
+    Vector2::Vector2(float32 magnitude, const Angle& angle) :
+        x(magnitude * std::cosf(angle.Radians())), y(magnitude * std::sinf(angle.Radians()))
     {}
 
     Vector2::operator float32*(void)
@@ -392,6 +398,11 @@ namespace Nt
         return (*this - other).Magnitude();
     }
 
+    Angle Vector2::AngleBetween(const Vector2& other) const
+    {
+        return Angle(std::acosf(Dot(other) / (Magnitude() * other.Magnitude())));
+    }
+
     Vector3::Vector3(void) :
         x(0.0f), y(0.0f), z(0.0f)
     {}
@@ -410,6 +421,10 @@ namespace Nt
 
     Vector3::Vector3(const glm::vec3& value) :
         x(value.x), y(value.y), z(value.z)
+    {}
+
+    Vector3::Vector3(float32 magnitude, const Angle& angle) :
+        x(magnitude * std::cosf(angle.Radians())), y(magnitude * std::sinf(angle.Radians())), z(0.0f)
     {}
 
     Vector3::operator float32*(void)
@@ -757,6 +772,11 @@ namespace Nt
         return (*this - other).Magnitude();
     }
 
+    Angle Vector3::AngleBetween(const Vector3& other) const
+    {
+        return Angle(std::acosf(Dot(other) / (Magnitude() * other.Magnitude())));
+    }
+
     Vector4::Vector4(void) :
         x(0.0f), y(0.0f), z(0.0f), w(0.0f)
     {}
@@ -777,6 +797,10 @@ namespace Nt
         x(value.x), y(value.y), z(value.z), w(value.w)
     {}
 
+    Vector4::Vector4(float32 magnitude, const Angle& angle) :
+        x(magnitude * std::cosf(angle.Radians())), y(magnitude * std::sinf(angle.Radians())), z(0.0f), w(0.0f)
+    {}
+
     Vector4::operator float32*(void)
     {
         float32* result = new float32[4];
@@ -790,6 +814,11 @@ namespace Nt
     Vector4::operator glm::vec4(void) const
     {
         return glm::vec4(x, y, z, w);
+    }
+
+    Vector4::operator glm::quat(void) const
+    {
+        return glm::quat(w, x, y, z);
     }
 
     Vector4 Vector4::operator+(void) const
@@ -1122,6 +1151,29 @@ namespace Nt
     float32 Vector4::Distance(const Vector4& other) const
     {
         return (*this - other).Magnitude();
+    }
+
+    Angle Vector4::AngleBetween(const Vector4& other) const
+    {
+        return Angle(std::acosf(Dot(other) / (Magnitude() * other.Magnitude())));
+    }
+
+    std::ostream& operator<<(std::ostream& stream, const Vector2& vector)
+    {
+        stream << "(" << vector.x << ", " << vector.y << ")";
+        return stream;
+    }
+
+    std::ostream& operator<<(std::ostream& stream, const Vector3& vector)
+    {
+        stream << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
+        return stream;
+    }
+
+    std::ostream& operator<<(std::ostream& stream, const Vector4& vector)
+    {
+        stream << "(" << vector.x << ", " << vector.y << ", " << vector.z << ", " << vector.w << ")";
+        return stream;
     }
 } // namespace Nt
 

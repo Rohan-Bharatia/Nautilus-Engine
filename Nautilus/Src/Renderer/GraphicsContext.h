@@ -42,7 +42,6 @@ namespace Nt
 
         void SwapBuffers(void) const;
         void SetVSync(bool enabled) const;
-        void Resize(uint32 width, uint32 height) const;
 
     private:
         std::vector<bgfx::RendererType::Enum> GetSupportedRenderers(void) const;
