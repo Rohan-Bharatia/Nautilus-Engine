@@ -52,6 +52,7 @@
 
 #include "Math/Vector.h"
 #include "Math/Angle.h"
+#include "Math/Matrix.h"
 
 #include "Renderer/GraphicsContext.h"
 

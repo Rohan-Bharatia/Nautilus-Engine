@@ -321,6 +321,8 @@ namespace Nt
         float32 w;
     };
 
+    using Quaternion = Vector4;
+
     std::ostream& operator<<(std::ostream& stream, const Vector2& vector);
     std::ostream& operator<<(std::ostream& stream, const Vector3& vector);
     std::ostream& operator<<(std::ostream& stream, const Vector4& vector);
