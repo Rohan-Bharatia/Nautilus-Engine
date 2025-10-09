@@ -54,6 +54,7 @@
 #include "Math/Angle.h"
 #include "Math/Matrix.h"
 #include "Math/Camera.h"
+#include "Math/Color.h"
 
 #include "Renderer/GraphicsContext.h"
 
