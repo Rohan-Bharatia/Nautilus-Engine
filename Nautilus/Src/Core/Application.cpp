@@ -94,14 +94,8 @@ namespace Nt
 
             ExecuteMainThreadQueue();
 
-            bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x0b0f8eff, 1.0f, 0);
-            bgfx::setViewRect(0, 0, 0, (uint16)m_window->GetWidth(), (uint16)m_window->GetHeight());
-            bgfx::touch(0);
-
             if (!m_minimized)
             {
-                bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), m_window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
-
                 for (Layer* layer : m_layerStack)
                     layer->OnUpdate(deltaTime);
             }
@@ -119,6 +113,11 @@ namespace Nt
     {
         std::scoped_lock<std::mutex> lock(m_mainThreadQueueMutex);
         m_mainThreadQueue.emplace_back(func);
+    }
+
+    Window& Application::GetWindow(void)
+    {
+        return *m_window;
     }
 
     Application& Application::Get(void)

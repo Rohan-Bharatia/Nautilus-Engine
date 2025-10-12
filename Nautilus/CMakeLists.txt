@@ -8,10 +8,12 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/runtime.cmake)
 
 project(Nautilus)
 
-function(link_dependency directory target headers)
+function(link_dependency directory target)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory})
     target_link_libraries(Nautilus PUBLIC ${target})
-    target_include_directories(Nautilus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${headers})
+    foreach(header IN LISTS ARGN)
+        target_include_directories(Nautilus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${header})
+    endforeach()
 endfunction()
 
 file(GLOB Nautilus_SOURCES
@@ -30,12 +32,13 @@ set(SDL_STATIC ON CACHE BOOL "Build SDL as static library" FORCE)
 set(SDL_SHARED OFF CACHE BOOL "Disable SDL shared library" FORCE)
 set(BGFX_BUILD_TOOLS OFF CACHE BOOL "Disable bgfx tools" FORCE)
 set(BGFX_BUILD_EXAMPLES OFF CACHE BOOL "Disable bgfx examples" FORCE)
+set(BGFX_BUILD_TOOLS_SHADER ON CACHE BOOL "Enable bgfx shader tools" FORCE)
 set(BX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bx")
 set(BIMG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bimg")
 set(BGFX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bgfx")
 link_dependency("SDL" "SDL3::SDL3-static" "include")
-link_dependency("BGFX" "bgfx" "bgfx/include")
-link_dependency("glm" "glm" "")
+link_dependency("BGFX" "bgfx" "bx/include" "bimg/include" "bgfx/include" "bgfx/tools")
+link_dependency("glm" "glm")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

@@ -74,6 +74,7 @@ namespace Nt
         pd.context      = nullptr;
         pd.backBuffer   = nullptr;
         pd.backBufferDS = nullptr;
+        bgfx::setPlatformData(pd);
 
         bgfx::Init init;
         init.type              = bgfx::RendererType::Count;

@@ -53,6 +53,7 @@ namespace Nt
 
         void SubmitToMainThread(const std::function<void()>& func);
 
+        Window& GetWindow(void);
         static Application& Get(void);
 
     private:

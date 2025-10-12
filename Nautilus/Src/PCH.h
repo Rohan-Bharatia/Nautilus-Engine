@@ -597,6 +597,7 @@ namespace Nt
 #endif // _CRT_SECURE_NO_WARNINGS
 #include <SDL3/SDL.h>
 #include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
