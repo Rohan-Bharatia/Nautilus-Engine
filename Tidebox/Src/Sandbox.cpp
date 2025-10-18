@@ -22,14 +22,13 @@ public:
 
     virtual void OnUpdate(Nt::float32 deltaTime) override
     {
-        float identity[16]{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-
-        bgfx::setViewTransform(0, identity, identity);
-        bgfx::setViewRect(0, 0, 0, m_window.GetWidth(), m_window.GetHeight());
-        bgfx::setViewScissor(0, 0, 0, m_window.GetWidth(), m_window.GetHeight());
-        bgfx::touch(0);
-
         bgfx::Encoder* encoder = bgfx::begin();
+
+        bgfx::setViewRect(0, 0, 0, m_window.GetWidth(), m_window.GetHeight());
+
+        encoder->touch(0);
+        encoder->setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
+
         bgfx::end(encoder);
     }
 

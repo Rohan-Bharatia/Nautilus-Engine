@@ -31,8 +31,8 @@
 
 namespace Nt
 {
-    GraphicsContext::GraphicsContext(Window* window, int32 preset) :
-        m_window(window), m_native((SDL_Window*)window->GetNativeWindow())
+    GraphicsContext::GraphicsContext(Window* window, uint32 preset) :
+        m_window(window), m_native((SDL_Window*)window->GetNativeWindow()), m_flags(preset)
     {
         SDL_PropertiesID propsId = SDL_GetWindowProperties(m_native);
 
@@ -142,7 +142,7 @@ namespace Nt
 
     void GraphicsContext::SetVSync(bool enabled) const
     {
-        bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), enabled ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
+        bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), m_flags | (enabled ? BGFX_RESET_VSYNC : BGFX_RESET_NONE));
     }
 
     std::vector<bgfx::RendererType::Enum> GraphicsContext::GetSupportedRenderers(void) const

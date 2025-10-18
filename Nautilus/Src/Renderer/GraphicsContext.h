@@ -42,7 +42,7 @@ namespace Nt
     {
     public:
         NT_CLASS_DEFAULTS(GraphicsContext)
-        GraphicsContext(Window* window, int32 preset=NT_BALANCED_PRESET);
+        GraphicsContext(Window* window, uint32 preset=NT_BALANCED_PRESET);
         ~GraphicsContext(void);
 
         void SwapBuffers(void) const;
@@ -53,6 +53,7 @@ namespace Nt
 
         Window* m_window;
         SDL_Window* m_native;
+        uint32 m_flags;
     };
 } // namespace Nt
 

@@ -71,6 +71,8 @@ namespace Nt
         SDL_SyncWindow(m_window);
 
         m_context = CreateScope<GraphicsContext>(this);
+
+        SetVSync(true);
     }
 
     Window::~Window(void)

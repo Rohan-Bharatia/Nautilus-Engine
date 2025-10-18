@@ -57,6 +57,7 @@
 #include "Math/Color.h"
 
 #include "Renderer/GraphicsContext.h"
+#include "Renderer/Buffer.h"
 
 #ifdef NT_ALLOW_LITERALS
 using namespace Nt::Literals;
