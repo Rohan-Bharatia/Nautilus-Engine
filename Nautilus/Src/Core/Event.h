@@ -54,6 +54,10 @@ namespace Nt
         GamepadButtonPressed,
         GamepadButtonReleased,
         JoystickAxisMoved,
+        TouchPressed,
+        TouchReleased,
+        TouchMoved,
+        TouchScrolled,
     };
 
     enum EventCategory
@@ -66,6 +70,7 @@ namespace Nt
         EventCategoryMouseButton = BIT(4),
         EventCategoryGamepad     = BIT(5),
         EventCategoryJoystick    = BIT(6),
+        EventCategoryTouch       = BIT(7),
     };
 
     class NT_API Event

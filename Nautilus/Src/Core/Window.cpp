@@ -33,6 +33,7 @@
 #include "KeyEvent.h"
 #include "MouseEvent.h"
 #include "ControllerEvent.h"
+#include "TouchEvent.h"
 #include "Renderer/GraphicsContext.h"
 
 namespace Nt
@@ -49,7 +50,7 @@ namespace Nt
 
         if (s_windowCount == 0)
         {
-            if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD))
+            if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD | SDL_INIT_HAPTIC))
             {
                 NT_CORE_ERROR("SDL_Init failed: %s!", SDL_GetError());
                 return;
@@ -198,6 +199,32 @@ namespace Nt
                         m_eventCallback(e);
                     break;
                 }
+
+                // Touch events
+                case SDL_EVENT_FINGER_DOWN:
+                {
+                    TouchPressedEvent e;
+                    if (m_eventCallback)
+                        m_eventCallback(e);
+                    break;
+                }
+                case SDL_EVENT_FINGER_UP:
+                {
+                    TouchReleasedEvent e;
+                    if (m_eventCallback)
+                        m_eventCallback(e);
+                    break;
+                }
+                case SDL_EVENT_FINGER_MOTION:
+                {
+                    TouchMovedEvent e((float32)event.tfinger.x, (float32)event.tfinger.y);
+                    if (m_eventCallback)
+                        m_eventCallback(e);
+                    break;
+                }
+
+                default:
+                    break;
             }
         }
 
