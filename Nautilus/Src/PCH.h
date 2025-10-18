@@ -596,6 +596,8 @@ namespace Nt
     #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
 #include <SDL3/SDL.h>
+#include <bx/bx.h>
+#include <bx/readerwriter.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <glm/glm.hpp>

@@ -31,13 +31,18 @@
 
 #include "Core/Window.h"
 
+#define NT_HIGH_QUAILITY_PRESET BGFX_RESET_MSAA_X8 | BGFX_RESET_MAXANISOTROPY | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_HIDPI
+#define NT_BALANCED_PRESET BGFX_RESET_MSAA_X4 | BGFX_RESET_MAXANISOTROPY | BGFX_RESET_SRGB_BACKBUFFER
+#define NT_PERFORMANCE_PRESET BGFX_RESET_MSAA_X2
+#define NT_DEBUG_PRESET BGFX_RESET_NONE
+
 namespace Nt
 {
     class NT_API GraphicsContext
     {
     public:
         NT_CLASS_DEFAULTS(GraphicsContext)
-        GraphicsContext(Window* window);
+        GraphicsContext(Window* window, int32 preset=NT_BALANCED_PRESET);
         ~GraphicsContext(void);
 
         void SwapBuffers(void) const;

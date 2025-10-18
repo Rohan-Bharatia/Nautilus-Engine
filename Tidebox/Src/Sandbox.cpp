@@ -17,7 +17,7 @@ public:
 
     virtual void OnAttach(void) override
     {
-        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x0b0f8eff, 1.0f, 0);
+        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x030303ff, 1.0f, 0);
     }
 
     virtual void OnUpdate(Nt::float32 deltaTime) override
@@ -28,6 +28,9 @@ public:
         bgfx::setViewRect(0, 0, 0, m_window.GetWidth(), m_window.GetHeight());
         bgfx::setViewScissor(0, 0, 0, m_window.GetWidth(), m_window.GetHeight());
         bgfx::touch(0);
+
+        bgfx::Encoder* encoder = bgfx::begin();
+        bgfx::end(encoder);
     }
 
 private:

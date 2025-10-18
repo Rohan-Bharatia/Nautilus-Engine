@@ -31,7 +31,7 @@
 
 namespace Nt
 {
-    GraphicsContext::GraphicsContext(Window* window) :
+    GraphicsContext::GraphicsContext(Window* window, int32 preset) :
         m_window(window), m_native((SDL_Window*)window->GetNativeWindow())
     {
         SDL_PropertiesID propsId = SDL_GetWindowProperties(m_native);
@@ -46,7 +46,7 @@ namespace Nt
         pd.ndt          = nullptr;
         pd.type         = bgfx::NativeWindowHandleType::Default;
     #elif defined(NT_PLATFORM_FAMILY_UNIX)
-        if (SDL_strcmp( SDL_GetCurrentVideoDriver(), "wayland" ) == 0)
+        if (SDL_strcmp(SDL_GetCurrentVideoDriver(), "wayland") == 0)
         {
             pd.nwh      = (struct wl_surface*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER, nullptr);
             pd.ndt      = (struct wl_display*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER, nullptr);
@@ -76,13 +76,35 @@ namespace Nt
         pd.backBufferDS = nullptr;
         bgfx::setPlatformData(pd);
 
+        bgfx::Resolution res{};
+        res.width           = window->GetWidth();
+        res.height          = window->GetHeight();
+        res.reset           = preset | (window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
+        res.numBackBuffers  = 3;
+        res.maxFrameLatency = 2;
+        res.debugTextScale  = 1;
+
+        bgfx::Init::Limits lims{};
+        lims.maxEncoders       = 512; // 512 bytes
+        lims.minResourceCbSize = 4  * 1024 * 1024; // 4 MB
+        lims.transientVbSize   = 32 * 1024 * 1024; // 32 MB
+        lims.transientIbSize   = 16 * 1024 * 1024; // 16 MB
+
         bgfx::Init init;
-        init.type              = bgfx::RendererType::Count;
-        init.vendorId          = BGFX_PCI_ID_NONE;
-        init.platformData      = pd;
-        init.resolution.width  = window->GetWidth();
-        init.resolution.height = window->GetHeight();
-        init.resolution.reset  = window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE;
+        init.type         = bgfx::RendererType::Count;
+        init.vendorId     = BGFX_PCI_ID_NONE;
+    #ifdef NT_DEBUG
+        init.debug        = true;
+        init.profile      = true;
+    #else // (NOT) NT_DEBUG
+        init.debug        = false;
+        init.profile      = false;
+    #endif // NT_DEBUG
+        init.platformData = pd;
+        init.resolution   = res;
+        init.limits       = lims;
+
+        bgfx::renderFrame();
 
         bool initialized = false;
         for (auto backend : GetSupportedRenderers())
