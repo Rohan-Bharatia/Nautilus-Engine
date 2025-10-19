@@ -603,6 +603,14 @@ namespace Nt
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#ifdef NT_PLATFORM_FAMILY_MICROSOFT
+    #define NT_SHADERC_PATH "build/release/Nautilus/Vendor/BGFX/cmake/bgfx/shaderc.exe"
+    #define NT_GEOMETRYC_PATH "build/release/Nautilus/Vendor/BGFX/cmake/bgfx/geometryc.exe"
+#else // (NOT) NT_PLATFORM_FAMILY_MICROSOFT
+    #define NT_SHADERC_PATH "build/debug/Nautilus/Vendor/BGFX/cmake/bgfx/shaderc"
+    #define NT_GEOMETRYC_PATH "build/debug/Nautilus/Vendor/BGFX/cmake/bgfx/geometryc"
+#endif // NT_PLATFORM_FAMILY_MICROSOFT
+
 // Nautilus library headers
 #include "Core/Log.h"
 

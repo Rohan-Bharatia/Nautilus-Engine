@@ -76,6 +76,21 @@ namespace Nt
         String m_name;
         std::unordered_map<String, bgfx::UniformHandle> m_uniforms;
     };
+
+    class NT_API ShaderLibrary
+    {
+    public:
+        NT_CLASS_DEFAULTS(ShaderLibrary)
+        ~ShaderLibrary(void);
+
+        void Add(const Ref<Shader>& shader);
+        Ref<Shader> Load(const String& name, const String& vertexPath, const String& fragmentPath);
+        Ref<Shader> Get(const String& name);
+        bool Exists(const String& name) const;
+
+    private:
+        std::unordered_map<String, Ref<Shader>> m_shaders;
+    };
 } // namespace Nt
 
 #endif // _RENDERER_SHADER_H_

@@ -187,6 +187,37 @@ namespace Nt
         m_uniforms[name]           = handle;
         return handle;
     }
+
+    void ShaderLibrary::Add(const Ref<Shader>& shader)
+    {
+        if (!Exists(shader->GetName()))
+            m_shaders[shader->GetName()] = shader;
+        else
+            NT_CORE_WARN("Shader with name %d already exists", shader->GetName());
+    }
+
+    Ref<Shader> ShaderLibrary::Load(const String& name, const String& vertexPath, const String& fragmentPath)
+    {
+        Ref<Shader> shader = CreateRef<Shader>(name, vertexPath, fragmentPath);
+        Add(shader);
+        return shader;
+    }
+
+    Ref<Shader> ShaderLibrary::Get(const String& name)
+    {
+        if (Exists(name))
+            return m_shaders[name];
+        else
+        {
+            NT_CORE_WARN("Shader with name %d does not exist", name);
+            return nullptr;
+        }
+    }
+
+    bool ShaderLibrary::Exists(const String& name) const
+    {
+        return m_shaders.find(name) != m_shaders.end();
+    }
 } // namespace Nt
 
 #endif // _RENDERER_SHADER_CPP_
