@@ -37,31 +37,31 @@ namespace Nt
     VertexArray::~VertexArray(void)
     {}
 
-    void VertexArray::Bind(void)
+    void VertexArray::Bind(bgfx::Encoder* encoder)
     {
         for (uint32 i = 0; i < m_vertexBuffers.size(); ++i)
-            m_vertexBuffers[i]->Bind();
-        m_indexBuffer->Bind();
+            m_vertexBuffers[i]->Bind(encoder);
+        m_indexBuffer->Bind(encoder);
     }
 
-    void VertexArray::Unbind(void)
+    void VertexArray::Unbind(bgfx::Encoder* encoder)
     {
         for (uint32 i = 0; i < m_vertexBuffers.size(); ++i)
-            m_vertexBuffers[i]->Unbind();
-        m_indexBuffer->Unbind();
+            m_vertexBuffers[i]->Unbind(encoder);
+        m_indexBuffer->Unbind(encoder);
     }
 
     void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
-        Bind();
-        vertexBuffer->Bind();
+        // Bind();
+        // vertexBuffer->Bind();
         m_vertexBuffers.push_back(vertexBuffer);
     }
 
     void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
-        Bind();
-        indexBuffer->Bind();
+        // Bind();
+        // indexBuffer->Bind();
         m_indexBuffer = indexBuffer;
     }
 

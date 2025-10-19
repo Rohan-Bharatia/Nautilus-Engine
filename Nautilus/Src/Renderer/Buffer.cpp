@@ -94,38 +94,17 @@ namespace Nt
         {
             switch (element.type)
             {
-                case ShaderDataType::Float:
-                    layout.add(bgfx::Attrib::Position, 1, bgfx::AttribType::Float);
-                    break;
                 case ShaderDataType::Float2:
-                    layout.add(bgfx::Attrib::Position, 2, bgfx::AttribType::Float);
+                case ShaderDataType::Int2:
+                    layout.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float);
                     break;
                 case ShaderDataType::Float3:
+                case ShaderDataType::Int3:
                     layout.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float);
                     break;
                 case ShaderDataType::Float4:
-                    layout.add(bgfx::Attrib::Position, 4, bgfx::AttribType::Float);
-                    break;
-                case ShaderDataType::Mat3:
-                    layout.add(bgfx::Attrib::Position, 3 * 3, bgfx::AttribType::Float);
-                    break;
-                case ShaderDataType::Mat4:
-                    layout.add(bgfx::Attrib::Position, 4 * 4, bgfx::AttribType::Float);
-                    break;
-                case ShaderDataType::Int:
-                    layout.add(bgfx::Attrib::Position, 1, bgfx::AttribType::Int16);
-                    break;
-                case ShaderDataType::Int2:
-                    layout.add(bgfx::Attrib::Position, 2, bgfx::AttribType::Int16);
-                    break;
-                case ShaderDataType::Int3:
-                    layout.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Int16);
-                    break;
                 case ShaderDataType::Int4:
-                    layout.add(bgfx::Attrib::Position, 4, bgfx::AttribType::Int16);
-                    break;
-                case ShaderDataType::Boolean:
-                    layout.add(bgfx::Attrib::Position, 1, bgfx::AttribType::Uint8);
+                    layout.add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Float);
                     break;
                 default:
                     break;
@@ -169,14 +148,14 @@ namespace Nt
     VertexBuffer::VertexBuffer(BufferLayout layout, uint32 size) :
         m_layout(layout)
     {
-        m_vbh = bgfx::createDynamicVertexBuffer(size, layout.GetLayout(),  BGFX_BUFFER_COMPUTE_READ_WRITE | BGFX_BUFFER_ALLOW_RESIZE);
+        m_vbh = bgfx::createDynamicVertexBuffer(size, layout.GetLayout(),  BGFX_BUFFER_COMPUTE_READ | BGFX_BUFFER_ALLOW_RESIZE);
     }
 
     VertexBuffer::VertexBuffer(BufferLayout layout, float32* vertices, uint32 size) :
         m_layout(layout)
     {
         const bgfx::Memory* mem = bgfx::copy(vertices, size);
-        m_vbh = bgfx::createDynamicVertexBuffer(mem, layout.GetLayout(), BGFX_BUFFER_COMPUTE_READ_WRITE | BGFX_BUFFER_ALLOW_RESIZE);
+        m_vbh = bgfx::createDynamicVertexBuffer(mem, layout.GetLayout(), BGFX_BUFFER_COMPUTE_READ | BGFX_BUFFER_ALLOW_RESIZE);
     }
 
     VertexBuffer::~VertexBuffer(void)
@@ -185,14 +164,20 @@ namespace Nt
             bgfx::destroy(m_vbh);
     }
 
-    void VertexBuffer::Bind(void) const
+    void VertexBuffer::Bind(bgfx::Encoder* encoder) const
     {
-        bgfx::setVertexBuffer(0, m_vbh);
+        if (encoder != nullptr)
+            encoder->setVertexBuffer(0, m_vbh);
+        else
+            bgfx::setVertexBuffer(0, m_vbh);
     }
 
-    void VertexBuffer::Unbind(void) const
+    void VertexBuffer::Unbind(bgfx::Encoder* encoder) const
     {
-        bgfx::setVertexBuffer(0, nullptr);
+        if (encoder != nullptr)
+            encoder->setVertexBuffer(0, nullptr);
+        else
+            bgfx::setVertexBuffer(0, nullptr);
     }
 
     void VertexBuffer::SetData(const void* data, uint32 size)
@@ -220,7 +205,7 @@ namespace Nt
         m_count(count)
     {
         const bgfx::Memory* mem = bgfx::copy(indices, count * sizeof(uint32));
-        m_ibh                   = bgfx::createDynamicIndexBuffer(mem, BGFX_BUFFER_COMPUTE_READ_WRITE | BGFX_BUFFER_ALLOW_RESIZE);
+        m_ibh                   = bgfx::createDynamicIndexBuffer(mem, BGFX_BUFFER_COMPUTE_READ | BGFX_BUFFER_ALLOW_RESIZE);
     }
 
     IndexBuffer::~IndexBuffer(void)
@@ -229,14 +214,20 @@ namespace Nt
             bgfx::destroy(m_ibh);
     }
 
-    void IndexBuffer::Bind(void) const
+    void IndexBuffer::Bind(bgfx::Encoder* encoder) const
     {
-        bgfx::setIndexBuffer(m_ibh);
+        if (encoder != nullptr)
+            encoder->setIndexBuffer(m_ibh);
+        else
+            bgfx::setIndexBuffer(m_ibh);
     }
 
-    void IndexBuffer::Unbind(void) const
+    void IndexBuffer::Unbind(bgfx::Encoder* encoder) const
     {
-        bgfx::setIndexBuffer(nullptr);
+        if (encoder != nullptr)
+            encoder->setIndexBuffer(nullptr);
+        else
+            bgfx::setIndexBuffer(nullptr);
     }
 
     uint32 IndexBuffer::GetCount(void) const

@@ -1,6 +1,7 @@
 # Nautilus
 *.log
 *.nt*
+Assets/**/*.bin
 
 # Compiled files
 *.so

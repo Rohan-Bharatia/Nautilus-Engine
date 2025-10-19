@@ -99,8 +99,8 @@ namespace Nt
         VertexBuffer(BufferLayout layout, float32* data, uint32 size);
         ~VertexBuffer(void);
 
-        void Bind(void) const;
-        void Unbind(void) const;
+        void Bind(bgfx::Encoder* encoder=nullptr) const;
+        void Unbind(bgfx::Encoder* encoder=nullptr) const;
 
         void SetData(const void* data, uint32 size);
 
@@ -121,8 +121,8 @@ namespace Nt
         IndexBuffer(uint32* data, uint32 count);
         ~IndexBuffer(void);
 
-        void Bind(void) const;
-        void Unbind(void) const;
+        void Bind(bgfx::Encoder* encoder=nullptr) const;
+        void Unbind(bgfx::Encoder* encoder=nullptr) const;
 
         uint32 GetCount(void) const;
         bgfx::DynamicIndexBufferHandle GetHandle(void) const;

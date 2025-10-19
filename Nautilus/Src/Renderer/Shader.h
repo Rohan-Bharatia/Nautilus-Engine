@@ -50,8 +50,8 @@ namespace Nt
         Shader(const String& name, const String& vertexPath, const String& fragmentPath);
         ~Shader(void);
 
-        void Bind(void);
-        void Unbind(void);
+        void Bind(bgfx::Encoder* encoder=nullptr);
+        void Unbind(bgfx::Encoder* encoder=nullptr);
 
         void SetFloat(const String& name, float32 value);
         void SetFloat2(const String& name, const Vector2& value);

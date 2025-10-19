@@ -36,8 +36,8 @@ namespace Nt
     Shader::Shader(const String& name, const String& vertexPath, const String& fragmentPath) :
         m_name(name)
     {
-        bgfx::ShaderHandle vsh = CreateShader(ReadFile(vertexPath));
-        bgfx::ShaderHandle fsh = CreateShader(ReadFile(fragmentPath));
+        bgfx::ShaderHandle vsh = CreateShader(vertexPath);
+        bgfx::ShaderHandle fsh = CreateShader(fragmentPath);
         m_program              = bgfx::createProgram(vsh, fsh, true);
     }
 
@@ -53,14 +53,20 @@ namespace Nt
             bgfx::destroy(m_program);
     }
 
-    void Shader::Bind(void)
+    void Shader::Bind(bgfx::Encoder* encoder)
     {
-        bgfx::submit(0, m_program);
+        if (encoder != nullptr)
+            encoder->submit(0, m_program);
+        else
+            bgfx::submit(0, m_program);
     }
 
-    void Shader::Unbind(void)
+    void Shader::Unbind(bgfx::Encoder* encoder)
     {
-        bgfx::submit(0, BGFX_INVALID_HANDLE);
+        if (encoder != nullptr)
+            encoder->submit(0, BGFX_INVALID_HANDLE);
+        else
+            bgfx::submit(0, BGFX_INVALID_HANDLE);
     }
 
     void Shader::SetFloat(const String& name, float32 value)
@@ -146,10 +152,10 @@ namespace Nt
 
     bgfx::ShaderHandle Shader::CreateShader(const String& filepath)
     {
-        std::ifstream file(((std::string)filepath).c_str(), std::ios::binary | std::ios::ate);
+        std::ifstream file(((std::string)filepath).c_str(), std::ios::in | std::ios::binary);
         if (!file.is_open())
         {
-            NT_CORE_ERROR("Failed to open shader file: %s", filepath);
+            NT_CORE_ERROR("Failed to open shader file: %s", ((std::string)filepath).c_str());
             return BGFX_INVALID_HANDLE;
         }
 
@@ -159,7 +165,7 @@ namespace Nt
         const bgfx::Memory* mem = bgfx::alloc((uint32)(size + 1));
         if (!file.read((char*)mem->data, size))
         {
-            NT_CORE_ERROR("Failed to read shader binary: %s", filepath);
+            NT_CORE_ERROR("Failed to read shader binary: %s", ((std::string)filepath).c_str());
             file.close();
             return BGFX_INVALID_HANDLE;
         }
@@ -170,7 +176,7 @@ namespace Nt
         bgfx::ShaderHandle shader = bgfx::createShader(mem);
         if (!bgfx::isValid(shader))
         {
-            NT_CORE_ERROR("Failed to create shader from binary: %s", filepath);
+            NT_CORE_ERROR("Failed to create shader from binary: %s", ((std::string)filepath).c_str());
             return BGFX_INVALID_HANDLE;
         }
 
