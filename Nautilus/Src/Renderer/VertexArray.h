@@ -40,8 +40,8 @@ namespace Nt
         VertexArray(void);
         ~VertexArray(void);
 
-        void Bind(bgfx::Encoder* encoder=nullptr);
-        void Unbind(bgfx::Encoder* encoder=nullptr);
+        void Bind(void);
+        void Unbind(void);
 
         void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
         void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer);

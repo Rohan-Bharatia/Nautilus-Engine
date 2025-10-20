@@ -50,8 +50,8 @@ namespace Nt
         Shader(const String& name, const String& vertexPath, const String& fragmentPath);
         ~Shader(void);
 
-        void Bind(bgfx::Encoder* encoder=nullptr);
-        void Unbind(bgfx::Encoder* encoder=nullptr);
+        void Bind(void);
+        void Unbind(void);
 
         void SetFloat(const String& name, float32 value);
         void SetFloat2(const String& name, const Vector2& value);
@@ -66,15 +66,9 @@ namespace Nt
         void SetBoolean(const String& name, bool value);
 
         const String& GetName(void) const;
-        bgfx::ProgramHandle GetHandle(void) const;
 
     private:
-        bgfx::ShaderHandle CreateShader(const String& filepath);
-        bgfx::UniformHandle GetUniform(const String& name, bgfx::UniformType::Enum type);
-
-        bgfx::ProgramHandle m_program;
         String m_name;
-        std::unordered_map<String, bgfx::UniformHandle> m_uniforms;
     };
 
     class NT_API ShaderLibrary

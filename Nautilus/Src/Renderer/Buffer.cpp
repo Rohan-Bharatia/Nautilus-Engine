@@ -85,36 +85,6 @@ namespace Nt
         }
     }
 
-    bgfx::VertexLayout BufferLayout::GetLayout(void) const
-    {
-        bgfx::VertexLayout layout;
-        layout.begin();
-
-        for (auto& element : m_elements)
-        {
-            switch (element.type)
-            {
-                case ShaderDataType::Float2:
-                case ShaderDataType::Int2:
-                    layout.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float);
-                    break;
-                case ShaderDataType::Float3:
-                case ShaderDataType::Int3:
-                    layout.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float);
-                    break;
-                case ShaderDataType::Float4:
-                case ShaderDataType::Int4:
-                    layout.add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Float);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        layout.end();
-        return layout;
-    }
-
     uint32 BufferLayout::GetStride(void) const
     {
         return m_stride;
@@ -147,44 +117,23 @@ namespace Nt
 
     VertexBuffer::VertexBuffer(BufferLayout layout, uint32 size) :
         m_layout(layout)
-    {
-        m_vbh = bgfx::createDynamicVertexBuffer(size, layout.GetLayout(),  BGFX_BUFFER_COMPUTE_READ | BGFX_BUFFER_ALLOW_RESIZE);
-    }
+    {}
 
     VertexBuffer::VertexBuffer(BufferLayout layout, float32* vertices, uint32 size) :
         m_layout(layout)
-    {
-        const bgfx::Memory* mem = bgfx::copy(vertices, size);
-        m_vbh = bgfx::createDynamicVertexBuffer(mem, layout.GetLayout(), BGFX_BUFFER_COMPUTE_READ | BGFX_BUFFER_ALLOW_RESIZE);
-    }
+    {}
 
     VertexBuffer::~VertexBuffer(void)
-    {
-        if (bgfx::isValid(m_vbh))
-            bgfx::destroy(m_vbh);
-    }
+    {}
 
-    void VertexBuffer::Bind(bgfx::Encoder* encoder) const
-    {
-        if (encoder != nullptr)
-            encoder->setVertexBuffer(0, m_vbh);
-        else
-            bgfx::setVertexBuffer(0, m_vbh);
-    }
+    void VertexBuffer::Bind(void)
+    {}
 
-    void VertexBuffer::Unbind(bgfx::Encoder* encoder) const
-    {
-        if (encoder != nullptr)
-            encoder->setVertexBuffer(0, nullptr);
-        else
-            bgfx::setVertexBuffer(0, nullptr);
-    }
+    void VertexBuffer::Unbind(void)
+    {}
 
     void VertexBuffer::SetData(const void* data, uint32 size)
-    {
-        const bgfx::Memory* mem = bgfx::copy(data, size);
-        bgfx::update(m_vbh, 0, mem);
-    }
+    {}
 
     const BufferLayout& VertexBuffer::GetLayout(void) const
     {
@@ -196,48 +145,22 @@ namespace Nt
         m_layout = layout;
     }
 
-    bgfx::DynamicVertexBufferHandle VertexBuffer::GetHandle(void) const
-    {
-        return m_vbh;
-    }
-
     IndexBuffer::IndexBuffer(uint32* indices, uint32 count) :
         m_count(count)
-    {
-        const bgfx::Memory* mem = bgfx::copy(indices, count * sizeof(uint32));
-        m_ibh                   = bgfx::createDynamicIndexBuffer(mem, BGFX_BUFFER_COMPUTE_READ | BGFX_BUFFER_ALLOW_RESIZE);
-    }
+    {}
 
     IndexBuffer::~IndexBuffer(void)
-    {
-        if (bgfx::isValid(m_ibh))
-            bgfx::destroy(m_ibh);
-    }
+    {}
 
-    void IndexBuffer::Bind(bgfx::Encoder* encoder) const
-    {
-        if (encoder != nullptr)
-            encoder->setIndexBuffer(m_ibh);
-        else
-            bgfx::setIndexBuffer(m_ibh);
-    }
+    void IndexBuffer::Bind(void)
+    {}
 
-    void IndexBuffer::Unbind(bgfx::Encoder* encoder) const
-    {
-        if (encoder != nullptr)
-            encoder->setIndexBuffer(nullptr);
-        else
-            bgfx::setIndexBuffer(nullptr);
-    }
+    void IndexBuffer::Unbind(void)
+    {}
 
     uint32 IndexBuffer::GetCount(void) const
     {
         return m_count;
-    }
-
-    bgfx::DynamicIndexBufferHandle IndexBuffer::GetHandle(void) const
-    {
-        return m_ibh;
     }
 } // namespace Nt
 

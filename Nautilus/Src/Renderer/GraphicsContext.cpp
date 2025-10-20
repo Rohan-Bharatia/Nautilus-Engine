@@ -35,144 +35,16 @@ namespace Nt
         m_window(window), m_native((SDL_Window*)window->GetNativeWindow()), m_flags(preset)
     {
         SDL_PropertiesID propsId = SDL_GetWindowProperties(m_native);
-
-        bgfx::PlatformData pd{};
-    #if defined(NT_PLATFORM_WINDOWS)
-        pd.nwh          = (HWND)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr);
-        pd.ndt          = nullptr;
-        pd.type         = bgfx::NativeWindowHandleType::Default;
-    #elif defined(NT_PLATFORM_MACOS)
-        pd.nwh          = (__bridge NSWindow*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_COCOA_WINDOW_POINTER, nullptr);
-        pd.ndt          = nullptr;
-        pd.type         = bgfx::NativeWindowHandleType::Default;
-    #elif defined(NT_PLATFORM_FAMILY_UNIX)
-        if (SDL_strcmp(SDL_GetCurrentVideoDriver(), "wayland") == 0)
-        {
-            pd.nwh      = (struct wl_surface*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_WAYLAND_SURFACE_POINTER, nullptr);
-            pd.ndt      = (struct wl_display*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_WAYLAND_DISPLAY_POINTER, nullptr);
-            pd.type     = bgfx::NativeWindowHandleType::Wayland;
-        }
-        else
-        {
-            pd.nwh      = (::Window*)SDL_GetNumberProperty(propsId, SDL_PROP_WINDOW_X11_WINDOW_NUMBER, (Sint64)0);
-            pd.ndt      = (Display*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_X11_DISPLAY_POINTER, nullptr);
-            pd.type     = bgfx::NativeWindowHandleType::Default;
-        }
-    #elif defined(NT_PLATFORM_IOS)
-        pd.nwh          = (__bridge UIWindow*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_UIKIT_WINDOW_POINTER, nullptr);
-        pd.ndt          = nullptr;
-        pd.type         = bgfx::NativeWindowHandleType::Default;
-    #elif defined(NT_PLATFORM_ANDROID)
-        pd.nwh          = (ANativeWindow*)SDL_GetPointerProperty(propsId, SDL_PROP_WINDOW_ANDROID_WINDOW_POINTER, nullptr);
-        pd.ndt          = nullptr;
-        pd.type         = bgfx::NativeWindowHandleType::Default;
-    #else
-        pd.nwh          = nullptr;
-        pd.ndt          = nullptr;
-        pd.type         = bgfx::NativeWindowHandleType::Default;
-    #endif
-        pd.context      = nullptr;
-        pd.backBuffer   = nullptr;
-        pd.backBufferDS = nullptr;
-        bgfx::setPlatformData(pd);
-
-        bgfx::Resolution res{};
-        res.width           = window->GetWidth();
-        res.height          = window->GetHeight();
-        res.reset           = preset | (window->IsVSync() ? BGFX_RESET_VSYNC : BGFX_RESET_NONE);
-        res.numBackBuffers  = 3;
-        res.maxFrameLatency = 2;
-        res.debugTextScale  = 1;
-
-        bgfx::Init::Limits lims{};
-        lims.maxEncoders       = 512; // 512 bytes
-        lims.minResourceCbSize = 4  * 1024 * 1024; // 4 MB
-        lims.transientVbSize   = 32 * 1024 * 1024; // 32 MB
-        lims.transientIbSize   = 16 * 1024 * 1024; // 16 MB
-
-        bgfx::Init init;
-        init.type         = bgfx::RendererType::Count;
-        init.vendorId     = BGFX_PCI_ID_NONE;
-    #ifdef NT_DEBUG
-        init.debug        = true;
-        init.profile      = true;
-    #else // (NOT) NT_DEBUG
-        init.debug        = false;
-        init.profile      = false;
-    #endif // NT_DEBUG
-        init.platformData = pd;
-        init.resolution   = res;
-        init.limits       = lims;
-
-        bgfx::renderFrame();
-
-        bool initialized = false;
-        for (auto backend : GetSupportedRenderers())
-        {
-            init.type = backend;
-            if (bgfx::init(init))
-            {
-                initialized = true;
-                break;
-            }
-            else
-                NT_CORE_WARN("Failed to initialize bgfx with renderer %d", backend);
-        }
-
-        if (!initialized)
-        {
-            NT_CORE_ERROR("Failed to initialize bgfx!");
-            return;
-        }
-
-        bgfx::setDebug(BGFX_DEBUG_TEXT);
-        bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
     }
 
     GraphicsContext::~GraphicsContext(void)
-    {
-        bgfx::shutdown();
-    }
+    {}
 
     void GraphicsContext::SwapBuffers(void) const
-    {
-        bgfx::dbgTextClear();
-        bgfx::frame();
-    }
+    {}
 
     void GraphicsContext::SetVSync(bool enabled) const
-    {
-        bgfx::reset(m_window->GetWidth(), m_window->GetHeight(), m_flags | (enabled ? BGFX_RESET_VSYNC : BGFX_RESET_NONE));
-    }
-
-    std::vector<bgfx::RendererType::Enum> GraphicsContext::GetSupportedRenderers(void) const
-    {
-        std::vector<bgfx::RendererType::Enum> result;
-
-    #if defined(NT_PLATFORM_FAMILY_MICROSOFT)
-        result.push_back(bgfx::RendererType::Direct3D12);
-        result.push_back(bgfx::RendererType::Direct3D11);
-        result.push_back(bgfx::RendererType::Vulkan);
-        result.push_back(bgfx::RendererType::OpenGL);
-        result.push_back(bgfx::RendererType::OpenGLES);
-    #elif defined(NT_PLATFORM_FAMILY_APPLE)
-        result.push_back(bgfx::RendererType::Metal);
-        result.push_back(bgfx::RendererType::Vulkan);
-        result.push_back(bgfx::RendererType::OpenGL);
-        result.push_back(bgfx::RendererType::OpenGLES);
-    #elif defined(NT_PLATFORM_FAMILY_UNIX) || defined(NT_PLATFORM_FAMILY_ANDROID)
-        result.push_back(bgfx::RendererType::Vulkan);
-        result.push_back(bgfx::RendererType::OpenGL);
-        result.push_back(bgfx::RendererType::OpenGLES);
-    #elif defined(NT_PLATFORM_FAMILY_WASM)
-        result.push_back(bgfx::RendererType::OpenGLES);
-    #else // (NOT) defined(NT_PLATFORM_FAMILY_MICROSOFT), defined(NT_PLATFORM_FAMILY_APPLE), defined(NT_PLATFORM_FAMILY_UNIX), defined(NT_PLATFORM_FAMILY_ANDROID), defined(NT_PLATFORM_FAMILY_WASM)
-        result.push_back(bgfx::RendererType::OpenGL);
-        result.push_back(bgfx::RendererType::OpenGLES);
-    #endif // defined(NT_PLATFORM_FAMILY_MICROSOFT), defined(NT_PLATFORM_FAMILY_APPLE), defined(NT_PLATFORM_FAMILY_UNIX), defined(NT_PLATFORM_FAMILY_ANDROID), defined(NT_PLATFORM_FAMILY_WASM)
-
-        return result;
-    }
+    {}
 } // namespace Nt
 
 #endif // _RENDERER_GRAPHICS_CONTEXT_CPP_

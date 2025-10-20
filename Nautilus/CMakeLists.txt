@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS ON)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/runtime.cmake)
 
@@ -30,14 +30,10 @@ target_link_libraries(Nautilus PRIVATE TBB::tbb)
 
 set(SDL_STATIC ON CACHE BOOL "Build SDL as static library" FORCE)
 set(SDL_SHARED OFF CACHE BOOL "Disable SDL shared library" FORCE)
-set(BGFX_BUILD_TOOLS OFF CACHE BOOL "Disable bgfx tools" FORCE)
-set(BGFX_BUILD_EXAMPLES OFF CACHE BOOL "Disable bgfx examples" FORCE)
-set(BGFX_BUILD_TOOLS ON CACHE BOOL "Enable bgfx tools" FORCE)
-set(BX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bx")
-set(BIMG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bimg")
-set(BGFX_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Vendor/BGFX/bgfx")
+set(LLGL_BUILD_STATIC_LIB ON CACHE BOOL "Build LLGL as static library" FORCE)
+set(LLGL_LINUX_ENABLE_WAYLAND ON CACHE BOOL "Build LLGL with wayland support" FORCE)
 link_dependency("SDL" "SDL3::SDL3-static" "include")
-link_dependency("BGFX" "bgfx" "bx/include" "bimg/include" "bgfx/include" "bgfx/tools")
+link_dependency("LLGL" "LLGL" "include")
 link_dependency("glm" "glm")
 
 target_include_directories(Nautilus PUBLIC

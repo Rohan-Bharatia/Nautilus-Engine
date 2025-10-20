@@ -37,18 +37,18 @@ namespace Nt
     VertexArray::~VertexArray(void)
     {}
 
-    void VertexArray::Bind(bgfx::Encoder* encoder)
+    void VertexArray::Bind(void)
     {
         for (uint32 i = 0; i < m_vertexBuffers.size(); ++i)
-            m_vertexBuffers[i]->Bind(encoder);
-        m_indexBuffer->Bind(encoder);
+            m_vertexBuffers[i]->Bind();
+        m_indexBuffer->Bind();
     }
 
-    void VertexArray::Unbind(bgfx::Encoder* encoder)
+    void VertexArray::Unbind(void)
     {
         for (uint32 i = 0; i < m_vertexBuffers.size(); ++i)
-            m_vertexBuffers[i]->Unbind(encoder);
-        m_indexBuffer->Unbind(encoder);
+            m_vertexBuffers[i]->Unbind();
+        m_indexBuffer->Unbind();
     }
 
     void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)

@@ -596,20 +596,9 @@ namespace Nt
     #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
 #include <SDL3/SDL.h>
-#include <bx/bx.h>
-#include <bimg/bimg.h>
-#include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
+#include <LLGL/LLGL.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
-
-#ifdef NT_PLATFORM_FAMILY_MICROSOFT
-    #define NT_SHADERC_PATH "build/release/Nautilus/Vendor/BGFX/cmake/bgfx/shaderc.exe"
-    #define NT_GEOMETRYC_PATH "build/release/Nautilus/Vendor/BGFX/cmake/bgfx/geometryc.exe"
-#else // (NOT) NT_PLATFORM_FAMILY_MICROSOFT
-    #define NT_SHADERC_PATH "build/debug/Nautilus/Vendor/BGFX/cmake/bgfx/shaderc"
-    #define NT_GEOMETRYC_PATH "build/debug/Nautilus/Vendor/BGFX/cmake/bgfx/geometryc"
-#endif // NT_PLATFORM_FAMILY_MICROSOFT
 
 // Nautilus library headers
 #include "Core/Log.h"

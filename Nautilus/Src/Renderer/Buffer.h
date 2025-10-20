@@ -73,8 +73,6 @@ namespace Nt
         BufferLayout(void) = default;
         BufferLayout(std::initializer_list<BufferElement> elements);
 
-        bgfx::VertexLayout GetLayout(void) const;
-
         uint32 GetStride(void) const;
         const std::vector<BufferElement>& GetElements(void) const;
 
@@ -84,8 +82,6 @@ namespace Nt
         std::vector<BufferElement>::const_iterator end(void) const;
 
     private:
-        bgfx::AttribType ShaderDataTypeToBgfxType(ShaderDataType type);
-
         std::vector<BufferElement> m_elements;
         uint32 m_stride;
     };
@@ -99,17 +95,15 @@ namespace Nt
         VertexBuffer(BufferLayout layout, float32* data, uint32 size);
         ~VertexBuffer(void);
 
-        void Bind(bgfx::Encoder* encoder=nullptr) const;
-        void Unbind(bgfx::Encoder* encoder=nullptr) const;
+        void Bind(void);
+        void Unbind(void);
 
         void SetData(const void* data, uint32 size);
 
         const BufferLayout& GetLayout(void) const;
         void SetLayout(const BufferLayout& layout);
-        bgfx::DynamicVertexBufferHandle GetHandle(void) const;
 
     private:
-        bgfx::DynamicVertexBufferHandle m_vbh;
         BufferLayout m_layout;
     };
 
@@ -121,14 +115,12 @@ namespace Nt
         IndexBuffer(uint32* data, uint32 count);
         ~IndexBuffer(void);
 
-        void Bind(bgfx::Encoder* encoder=nullptr) const;
-        void Unbind(bgfx::Encoder* encoder=nullptr) const;
+        void Bind(void);
+        void Unbind(void);
 
         uint32 GetCount(void) const;
-        bgfx::DynamicIndexBufferHandle GetHandle(void) const;
 
     private:
-        bgfx::DynamicIndexBufferHandle m_ibh;
         uint32 m_count;
     };
 } // namespace Nt

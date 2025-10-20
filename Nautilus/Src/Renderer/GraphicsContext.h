@@ -31,10 +31,10 @@
 
 #include "Core/Window.h"
 
-#define NT_HIGH_QUAILITY_PRESET BGFX_RESET_MSAA_X8 | BGFX_RESET_MAXANISOTROPY | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_HIDPI
-#define NT_BALANCED_PRESET BGFX_RESET_MSAA_X4 | BGFX_RESET_MAXANISOTROPY | BGFX_RESET_SRGB_BACKBUFFER
-#define NT_PERFORMANCE_PRESET BGFX_RESET_MSAA_X2
-#define NT_DEBUG_PRESET BGFX_RESET_NONE
+#define NT_HIGH_QUAILITY_PRESET (0)
+#define NT_BALANCED_PRESET      (0)
+#define NT_PERFORMANCE_PRESET   (0)
+#define NT_DEBUG_PRESET         (0)
 
 namespace Nt
 {
@@ -49,8 +49,6 @@ namespace Nt
         void SetVSync(bool enabled) const;
 
     private:
-        std::vector<bgfx::RendererType::Enum> GetSupportedRenderers(void) const;
-
         Window* m_window;
         SDL_Window* m_native;
         uint32 m_flags;
