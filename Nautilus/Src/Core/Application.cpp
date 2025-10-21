@@ -76,7 +76,7 @@ SOFTWARE.)");
 
     Application::~Application(void)
     {
-        NT_SAFE_DELETE(s_instance);
+        s_instance = nullptr;
     }
 
     void Application::PushLayer(Layer* layer)

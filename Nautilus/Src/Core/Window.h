@@ -53,6 +53,7 @@ namespace Nt
         ~Window(void);
 
         void OnUpdate(float32 deltaTime);
+        void OnQuit(void);
 
         String GetTitle(void) const;
         uint32 GetWidth(void) const;

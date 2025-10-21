@@ -64,6 +64,7 @@ namespace Nt
         if (m_device)
         {
             SDL_ReleaseWindowFromGPUDevice(m_device, m_native);
+            m_window->OnQuit();
             SDL_DestroyGPUDevice(m_device);
         }
     }

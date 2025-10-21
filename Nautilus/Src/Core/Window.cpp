@@ -77,13 +77,6 @@ namespace Nt
 
     Window::~Window(void)
     {
-        if (m_window)
-        {
-            SDL_DestroyWindow(m_window);
-            m_window = nullptr;
-            --s_windowCount;
-        }
-
         if (s_windowCount == 0)
             SDL_Quit();
     }
@@ -231,6 +224,16 @@ namespace Nt
         }
 
         m_context->SwapBuffers();
+    }
+
+    void Window::OnQuit(void)
+    {
+        if (m_window)
+        {
+            SDL_DestroyWindow(m_window);
+            m_window = nullptr;
+            --s_windowCount;
+        }
     }
 
     String Window::GetTitle(void) const
