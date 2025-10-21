@@ -78,8 +78,8 @@ namespace Nt
 
         va_list args;
         va_start(args, message);
-        char* buffer = new char[1024];
-        std::vsnprintf(buffer, 1024, message, args);
+        char* buffer = new char[2048];
+        std::vsnprintf(buffer, 2048, message, args);
         va_end(args);
         message      = String(buffer);
         delete[] buffer;

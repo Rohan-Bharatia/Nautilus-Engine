@@ -31,10 +31,10 @@
 
 #include "Core/Window.h"
 
-#define NT_HIGH_QUAILITY_PRESET (0)
-#define NT_BALANCED_PRESET      (0)
-#define NT_PERFORMANCE_PRESET   (0)
 #define NT_DEBUG_PRESET         (0)
+#define NT_PERFORMANCE_PRESET   (1)
+#define NT_BALANCED_PRESET      (2)
+#define NT_HIGH_QUAILITY_PRESET (3)
 
 namespace Nt
 {
@@ -51,12 +51,12 @@ namespace Nt
 
         void SwapBuffers(void) const;
         void SetVSync(bool enabled) const;
-        void SetFullscreen(bool fullscreen) const;
 
     private:
+        SDL_GPUDevice* m_device;
+        SDL_GPUGraphicsPipeline* m_pipeline;
         Window* m_window;
         SDL_Window* m_native;
-        uint32 m_flags;
 
         friend class VertexBuffer;
         friend class IndexBuffer;

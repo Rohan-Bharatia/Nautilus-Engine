@@ -271,7 +271,6 @@ namespace Nt
     void Window::SetFullscreen(bool fullscreen)
     {
         SDL_SetWindowFullscreen(m_window, fullscreen);
-        m_context->SetFullscreen(fullscreen);
         m_fullscreen = fullscreen;
     }
 
