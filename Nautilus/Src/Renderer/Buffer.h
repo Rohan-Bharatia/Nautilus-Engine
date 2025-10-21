@@ -29,7 +29,7 @@
 #ifndef _RENDERER_BUFFER_H_
     #define _RENDERER_BUFFER_H_
 
-#include "PCH.h"
+#include "GraphicsContext.h"
 
 namespace Nt
 {
@@ -105,6 +105,8 @@ namespace Nt
 
     private:
         BufferLayout m_layout;
+
+        friend class GraphicsContext;
     };
 
     class NT_API IndexBuffer
@@ -122,6 +124,8 @@ namespace Nt
 
     private:
         uint32 m_count;
+
+        friend class GraphicsContext;
     };
 } // namespace Nt
 

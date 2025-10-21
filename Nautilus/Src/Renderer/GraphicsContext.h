@@ -38,6 +38,10 @@
 
 namespace Nt
 {
+    class VertexBuffer;
+    class IndexBuffer;
+    class Shader;
+
     class NT_API GraphicsContext
     {
     public:
@@ -47,11 +51,16 @@ namespace Nt
 
         void SwapBuffers(void) const;
         void SetVSync(bool enabled) const;
+        void SetFullscreen(bool fullscreen) const;
 
     private:
         Window* m_window;
         SDL_Window* m_native;
         uint32 m_flags;
+
+        friend class VertexBuffer;
+        friend class IndexBuffer;
+        friend class Shader;
     };
 } // namespace Nt
 

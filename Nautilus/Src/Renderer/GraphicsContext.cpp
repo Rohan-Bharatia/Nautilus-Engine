@@ -45,6 +45,9 @@ namespace Nt
 
     void GraphicsContext::SetVSync(bool enabled) const
     {}
+
+    void GraphicsContext::SetFullscreen(bool fullscreen) const
+    {}
 } // namespace Nt
 
 #endif // _RENDERER_GRAPHICS_CONTEXT_CPP_

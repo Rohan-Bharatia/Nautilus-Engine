@@ -14,6 +14,13 @@ function(link_dependency directory target)
     foreach(header IN LISTS ARGN)
         target_include_directories(Nautilus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${header})
     endforeach()
+    if(NOT ${target} STREQUAL "SDL3")
+        set_target_properties(${target} PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+            ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        )
+    endif()
 endfunction()
 
 file(GLOB Nautilus_SOURCES
@@ -29,11 +36,11 @@ find_package(TBB REQUIRED)
 target_link_libraries(Nautilus PRIVATE TBB::tbb)
 
 set(SDL_STATIC ON CACHE BOOL "Build SDL as static library" FORCE)
-set(SDL_SHARED OFF CACHE BOOL "Disable SDL shared library" FORCE)
-set(LLGL_BUILD_STATIC_LIB ON CACHE BOOL "Build LLGL as static library" FORCE)
-set(LLGL_LINUX_ENABLE_WAYLAND ON CACHE BOOL "Build LLGL with wayland support" FORCE)
-link_dependency("SDL" "SDL3::SDL3-static" "include")
-link_dependency("LLGL" "LLGL" "include")
+set(SDL_SHARED OFF CACHE BOOL "Build SDL as shared library" FORCE)
+set(SDL_TESTS OFF CACHE BOOL "Disable SDL tests" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "Disable SDL examples" FORCE)
+set(GLM_BUILD_TESTS OFF CACHE BOOL "Disable GLM tests" FORCE)
+link_dependency("SDL" "SDL3" "include")
 link_dependency("glm" "glm")
 
 target_include_directories(Nautilus PUBLIC

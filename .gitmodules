@@ -4,6 +4,3 @@
 [submodule "Nautilus/Vendor/glm"]
 	path = Nautilus/Vendor/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "Nautilus/Vendor/LLGL"]
-	path = Nautilus/Vendor/LLGL
-	url = https://github.com/LukasBanana/LLGL.git

@@ -29,7 +29,7 @@
 #ifndef _RENDERER_SHADER_H_
     #define _RENDERER_SHADER_H_
 
-#include "Core/String.h"
+#include "GraphicsContext.h"
 #include "Math/Vector.h"
 #include "Math/Matrix.h"
 
@@ -69,6 +69,8 @@ namespace Nt
 
     private:
         String m_name;
+
+        friend class GraphicsContext;
     };
 
     class NT_API ShaderLibrary

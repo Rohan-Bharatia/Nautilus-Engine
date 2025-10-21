@@ -595,8 +595,10 @@ namespace Nt
 #ifndef _CRT_SECURE_NO_WARNINGS
     #define _CRT_SECURE_NO_WARNINGS
 #endif // _CRT_SECURE_NO_WARNINGS
+#ifndef GLM_ENABLE_EXPERIMENTAL
+    #define GLM_ENABLE_EXPERIMENTAL
+#endif // GLM_ENABLE_EXPERIMENTAL
 #include <SDL3/SDL.h>
-#include <LLGL/LLGL.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
