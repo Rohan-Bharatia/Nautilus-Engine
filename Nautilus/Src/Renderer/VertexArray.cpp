@@ -53,15 +53,15 @@ namespace Nt
 
     void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
-        // Bind();
-        // vertexBuffer->Bind();
+        Bind();
+        vertexBuffer->Bind();
         m_vertexBuffers.push_back(vertexBuffer);
     }
 
     void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
-        // Bind();
-        // indexBuffer->Bind();
+        Bind();
+        indexBuffer->Bind();
         m_indexBuffer = indexBuffer;
     }
 

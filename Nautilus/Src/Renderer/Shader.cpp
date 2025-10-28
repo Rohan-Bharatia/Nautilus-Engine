@@ -70,24 +70,16 @@ namespace Nt
     }
 
     void Shader::SetInt2(const String& name, const Vector2& value)
-    {
-        SetFloat2(name, value);
-    }
+    {}
 
     void Shader::SetInt3(const String& name, const Vector3& value)
-    {
-        SetFloat3(name, value);
-    }
+    {}
 
     void Shader::SetInt4(const String& name, const Vector4& value)
-    {
-        SetFloat4(name, value);
-    }
+    {}
 
     void Shader::SetBoolean(const String& name, bool value)
-    {
-        SetInt(name, value);
-    }
+    {}
 
     const String& Shader::GetName(void) const
     {

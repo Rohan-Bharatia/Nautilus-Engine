@@ -55,6 +55,16 @@ namespace Nt
                 NT_CORE_ERROR("SDL_Init failed: %s!", SDL_GetError());
                 return;
             }
+
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+            SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+            SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+            SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        #ifdef NT_DEBUG
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+        #endif // NT_DEBUG
         }
 
         m_window = SDL_CreateWindow((const char*)props.title, (int32)props.width, (int32)props.height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -77,6 +87,16 @@ namespace Nt
 
     Window::~Window(void)
     {
+        if (m_window)
+        {
+            SDL_DestroyWindow(m_window);
+            m_window = nullptr;
+            --s_windowCount;
+        }
+
+        if (m_context)
+            m_context.reset();
+
         if (s_windowCount == 0)
             SDL_Quit();
     }
@@ -224,16 +244,6 @@ namespace Nt
         }
 
         m_context->SwapBuffers();
-    }
-
-    void Window::OnQuit(void)
-    {
-        if (m_window)
-        {
-            SDL_DestroyWindow(m_window);
-            m_window = nullptr;
-            --s_windowCount;
-        }
     }
 
     String Window::GetTitle(void) const

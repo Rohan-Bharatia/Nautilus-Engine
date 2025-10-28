@@ -40,8 +40,11 @@ set(SDL_SHARED OFF CACHE BOOL "Build SDL as shared library" FORCE)
 set(SDL_TESTS OFF CACHE BOOL "Disable SDL tests" FORCE)
 set(SDL_EXAMPLES OFF CACHE BOOL "Disable SDL examples" FORCE)
 set(GLM_BUILD_TESTS OFF CACHE BOOL "Disable GLM tests" FORCE)
+set(GLAD_BUILD_STATIC_LIBRARY ON CACHE BOOL "Build GLAD as static library" FORCE)
+set(GLAD_BUILD_SHARED_LIBRARY OFF CACHE BOOL "Build GLAD as shared library" FORCE)
 link_dependency("SDL" "SDL3" "include")
 link_dependency("glm" "glm")
+link_dependency("glad" "glad" "include")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

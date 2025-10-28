@@ -53,9 +53,7 @@ namespace Nt
         void SetVSync(bool enabled) const;
 
     private:
-        SDL_GPUDevice* m_device;
-        SDL_GPUGraphicsPipeline* m_pipeline;
-        Window* m_window;
+        SDL_GLContext m_context;
         SDL_Window* m_native;
 
         friend class VertexBuffer;

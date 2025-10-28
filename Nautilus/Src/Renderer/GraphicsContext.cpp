@@ -32,85 +32,33 @@
 namespace Nt
 {
     GraphicsContext::GraphicsContext(Window* window, uint32 preset) :
-        m_window(window), m_native((SDL_Window*)window->GetNativeWindow())
+        m_native((SDL_Window*)window->GetNativeWindow())
     {
-    #ifdef NT_DEBUG
-        m_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXBC | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL | SDL_GPU_SHADERFORMAT_METALLIB, true, nullptr);
-    #else // (NOT) NT_DEBUG
-        m_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXBC | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL | SDL_GPU_SHADERFORMAT_METALLIB, false, nullptr);
-    #endif // NT_DEBUG
-        if (!m_device)
+        m_context = SDL_GL_CreateContext(m_native);
+
+        if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
         {
-            NT_CORE_ERROR("SDL_CreateGPUDevice failed: %s!", SDL_GetError());
+            NT_CORE_ERROR("Failed to initialize GLAD!");
             return;
         }
 
-        if (!SDL_ClaimWindowForGPUDevice(m_device, m_native))
-        {
-            NT_CORE_ERROR("SDL_ClaimWindowForGPUDevice failed: %s!", SDL_GetError());
-            return;
-        }
-
-        /* SDL_GPUGraphicsPipelineCreateInfo pipelineInfo{};
-        // ...
-
-        m_pipeline = SDL_CreateGPUGraphicsPipeline(m_device, &pipelineInfo);
-        if (!m_pipeline)
-            NT_CORE_ERROR("SDL_CreateGPUGraphicsPipeline failed: %s!", SDL_GetError()); */
+        SDL_GL_MakeCurrent(m_native, m_context);
+        SDL_GL_SetSwapInterval(1);
     }
 
     GraphicsContext::~GraphicsContext(void)
     {
-        if (m_device)
-        {
-            SDL_ReleaseWindowFromGPUDevice(m_device, m_native);
-            m_window->OnQuit();
-            SDL_DestroyGPUDevice(m_device);
-        }
+        SDL_GL_DestroyContext(m_context);
     }
 
     void GraphicsContext::SwapBuffers(void) const
     {
-        SDL_GPUCommandBuffer* cmdbuf = SDL_AcquireGPUCommandBuffer(m_device);
-        if (!cmdbuf)
-        {
-            NT_CORE_ERROR("SDL_AcquireGPUCommandBuffer failed: %s!", SDL_GetError());
-            return;
-        }
-
-        SDL_GPUTexture* swapchainTexture;
-        if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdbuf, m_native, &swapchainTexture, nullptr, nullptr))
-        {
-            NT_CORE_ERROR("SDL_WaitAndAcquireGPUSwapchainTexture failed: %s!", SDL_GetError());
-            return;
-        }
-
-        if (swapchainTexture)
-        {
-            SDL_GPUColorTargetInfo colorInfo{};
-            colorInfo.texture     = swapchainTexture;
-            colorInfo.clear_color = { 11 / 255.0f, 15 / 255.0f, 142 / 255.0f, 1.0f };
-            colorInfo.load_op     = SDL_GPU_LOADOP_CLEAR;
-            colorInfo.store_op    = SDL_GPU_STOREOP_STORE;
-
-            SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdbuf, &colorInfo, 1, nullptr);
-            SDL_BindGPUGraphicsPipeline(renderPass, m_pipeline);
-
-            SDL_GPUViewport viewport{ 0, 0, (float32)m_window->GetWidth(), (float32)m_window->GetHeight(), 0.01f, 1000.0f };
-            SDL_Rect scissor{ 0, 0, (int32)m_window->GetWidth(), (int32)m_window->GetHeight() };
-
-            SDL_SetGPUViewport(renderPass, &viewport);
-            SDL_SetGPUScissor(renderPass, &scissor);
-
-            SDL_EndGPURenderPass(renderPass);
-        }
-
-        SDL_SubmitGPUCommandBuffer(cmdbuf);
+        SDL_GL_SwapWindow(m_native);
     }
 
     void GraphicsContext::SetVSync(bool enabled) const
     {
-        SDL_SetGPUAllowedFramesInFlight(m_device, enabled ? 1 : 0);
+        SDL_GL_SetSwapInterval(enabled ? 1 : 0);
     }
 } // namespace Nt
 

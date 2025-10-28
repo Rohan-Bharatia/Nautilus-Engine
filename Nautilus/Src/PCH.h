@@ -601,6 +601,7 @@ namespace Nt
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <glad/gl.h>
 
 // Nautilus library headers
 #include "Core/Log.h"
