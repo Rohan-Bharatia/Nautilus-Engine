@@ -115,25 +115,40 @@ namespace Nt
         return m_elements.end();
     }
 
-    VertexBuffer::VertexBuffer(BufferLayout layout, uint32 size) :
-        m_layout(layout)
-    {}
+    VertexBuffer::VertexBuffer(uint32 size)
+    {
+        glCreateBuffers(1, &m_id);
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
+        glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+    }
 
-    VertexBuffer::VertexBuffer(BufferLayout layout, float32* vertices, uint32 size) :
-        m_layout(layout)
-    {}
+    VertexBuffer::VertexBuffer(float32* vertices, uint32 size)
+    {
+        glCreateBuffers(1, &m_id);
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
+        glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+    }
 
     VertexBuffer::~VertexBuffer(void)
-    {}
+    {
+        glDeleteBuffers(1, &m_id);
+    }
 
     void VertexBuffer::Bind(void)
-    {}
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
+    }
 
     void VertexBuffer::Unbind(void)
-    {}
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
 
     void VertexBuffer::SetData(const void* data, uint32 size)
-    {}
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_id);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+    }
 
     const BufferLayout& VertexBuffer::GetLayout(void) const
     {
@@ -145,22 +160,42 @@ namespace Nt
         m_layout = layout;
     }
 
+    uint32 VertexBuffer::GetRenderId(void) const
+    {
+        return m_id;
+    }
+
     IndexBuffer::IndexBuffer(uint32* indices, uint32 count) :
         m_count(count)
-    {}
+    {
+        glCreateBuffers(1, &m_id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32), indices, GL_STATIC_DRAW);
+    }
 
     IndexBuffer::~IndexBuffer(void)
-    {}
+    {
+        glDeleteBuffers(1, &m_id);
+    }
 
     void IndexBuffer::Bind(void)
-    {}
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+    }
 
     void IndexBuffer::Unbind(void)
-    {}
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
 
     uint32 IndexBuffer::GetCount(void) const
     {
         return m_count;
+    }
+
+    uint32 IndexBuffer::GetRenderId(void) const
+    {
+        return m_id;
     }
 } // namespace Nt
 

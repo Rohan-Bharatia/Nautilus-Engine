@@ -47,7 +47,7 @@ namespace Nt
     {
     public:
         NT_CLASS_DEFAULTS(Shader)
-        Shader(const String& name, const String& vertexPath, const String& fragmentPath);
+        Shader(const String& name, const String& vertexSource, const String& fragmentSource);
         ~Shader(void);
 
         void Bind(void);
@@ -63,11 +63,15 @@ namespace Nt
         void SetInt2(const String& name, const Vector2& value);
         void SetInt3(const String& name, const Vector3& value);
         void SetInt4(const String& name, const Vector4& value);
+        void SetIntArray(const String& name, int32* values, uint32 count);
         void SetBoolean(const String& name, bool value);
 
         const String& GetName(void) const;
 
+        uint32 GetRenderId(void) const;
+
     private:
+        uint32 m_id;
         String m_name;
 
         friend class GraphicsContext;

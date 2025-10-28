@@ -44,6 +44,8 @@ namespace Nt
 
         SDL_GL_MakeCurrent(m_native, m_context);
         SDL_GL_SetSwapInterval(1);
+
+        NT_CORE_INFO("OpenGL Info:\n  Vendor: %s\n  Renderer: %s\n  Version: %s\n", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
     }
 
     GraphicsContext::~GraphicsContext(void)

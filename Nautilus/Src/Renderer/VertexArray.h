@@ -49,7 +49,11 @@ namespace Nt
         const std::vector<Ref<VertexBuffer>>& GetVertexBuffers(void) const;
         const Ref<IndexBuffer>& GetIndexBuffer(void) const;
 
+        uint32 GetRenderId(void) const;
+
     private:
+        uint32 m_id;
+        uint32 m_vertexBufferIndex;
         std::vector<Ref<VertexBuffer>> m_vertexBuffers;
         Ref<IndexBuffer> m_indexBuffer;
     };

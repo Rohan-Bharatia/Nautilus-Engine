@@ -33,57 +33,156 @@
 
 namespace Nt
 {
-    Shader::Shader(const String& name, const String& vertexPath, const String& fragmentPath) :
+    Shader::Shader(const String& name, const String& vertexSource, const String& fragmentSource) :
         m_name(name)
-    {}
+    {
+        const char* vsSource = (const char*)vertexSource;
+        const char* fsSource = (const char*)fragmentSource;;
+
+        GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vs, 1, &vsSource, nullptr);
+        glCompileShader(vs);
+
+        GLint success;
+        glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+        if (!success)
+        {
+            GLchar infoLog[512];
+            glGetShaderInfoLog(vs, 512, nullptr, infoLog);
+            NT_CORE_ERROR("Vertex Shader Compilation Failed: %s", infoLog);
+
+            glDeleteShader(vs);
+            return;
+        }
+
+        GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fs, 1, &fsSource, nullptr);
+        glCompileShader(fs);
+
+        glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
+        if (!success)
+        {
+            GLchar infoLog[512];
+            glGetShaderInfoLog(fs, 512, nullptr, infoLog);
+            NT_CORE_ERROR("Fragment Shader Compilation Failed: %s", infoLog);
+
+            glDeleteShader(vs);
+            glDeleteShader(fs);
+            return;
+        }
+
+        m_id = glCreateProgram();
+        glAttachShader(m_id, vs);
+        glAttachShader(m_id, fs);
+        glLinkProgram(m_id);
+
+        glGetProgramiv(m_id, GL_LINK_STATUS, &success);
+        if (!success)
+        {
+            GLchar infoLog[512];
+            glGetProgramInfoLog(m_id, 512, nullptr, infoLog);
+            NT_CORE_ERROR("Shader Program Linking Failed: %s", infoLog);
+        }
+
+        glDeleteShader(vs);
+        glDeleteShader(fs);
+    }
 
     Shader::~Shader(void)
-    {}
+    {
+        glDeleteProgram(m_id);
+    }
 
     void Shader::Bind(void)
-    {}
+    {
+        glUseProgram(m_id);
+    }
 
     void Shader::Unbind(void)
-    {}
+    {
+        glUseProgram(0);
+    }
 
     void Shader::SetFloat(const String& name, float32 value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform1f(location, value);
+    }
 
     void Shader::SetFloat2(const String& name, const Vector2& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform2f(location, value.x, value.y);
+    }
 
     void Shader::SetFloat3(const String& name, const Vector3& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform3f(location, value.x, value.y, value.z);
+    }
 
     void Shader::SetFloat4(const String& name, const Vector4& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform4f(location, value.x, value.y, value.z, value.w);
+    }
 
     void Shader::SetMatrix3(const String& name, const Matrix3& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniformMatrix3fv(location, 1, GL_FALSE, value.mat);
+    }
 
     void Shader::SetMatrix4(const String& name, const Matrix4& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniformMatrix4fv(location, 1, GL_FALSE, value.mat);
+    }
 
     void Shader::SetInt(const String& name, int32 value)
     {
-        SetFloat(name, (float32)value);
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform1i(location, value);
     }
 
     void Shader::SetInt2(const String& name, const Vector2& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform2i(location, value.x, value.y);
+    }
 
     void Shader::SetInt3(const String& name, const Vector3& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform3i(location, value.x, value.y, value.z);
+    }
 
     void Shader::SetInt4(const String& name, const Vector4& value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform4i(location, value.x, value.y, value.z, value.w);
+    }
+
+    void Shader::SetIntArray(const String& name, int32* values, uint32 count)
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform1iv(location, count, values);
+    }
 
     void Shader::SetBoolean(const String& name, bool value)
-    {}
+    {
+        GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
+        glUniform1i(location, value);
+    }
 
     const String& Shader::GetName(void) const
     {
         return m_name;
+    }
+
+    uint32 Shader::GetRenderId(void) const
+    {
+        return m_id;
     }
 
     void ShaderLibrary::Add(const Ref<Shader>& shader)

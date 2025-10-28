@@ -91,8 +91,8 @@ namespace Nt
     public:
         NT_CLASS_DEFAULTS(VertexBuffer)
         VertexBuffer(void) = default;
-        VertexBuffer(BufferLayout layout, uint32 size);
-        VertexBuffer(BufferLayout layout, float32* data, uint32 size);
+        VertexBuffer(uint32 size);
+        VertexBuffer(float32* data, uint32 size);
         ~VertexBuffer(void);
 
         void Bind(void);
@@ -103,7 +103,10 @@ namespace Nt
         const BufferLayout& GetLayout(void) const;
         void SetLayout(const BufferLayout& layout);
 
+        uint32 GetRenderId(void) const;
+
     private:
+        uint32 m_id;
         BufferLayout m_layout;
 
         friend class GraphicsContext;
@@ -122,7 +125,10 @@ namespace Nt
 
         uint32 GetCount(void) const;
 
+        uint32 GetRenderId(void) const;
+
     private:
+        uint32 m_id;
         uint32 m_count;
 
         friend class GraphicsContext;

@@ -31,37 +31,102 @@
 
 namespace Nt
 {
-    VertexArray::VertexArray(void)
-    {}
+    static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
+    {
+        switch (type)
+        {
+            case ShaderDataType::Float:   return GL_FLOAT;
+            case ShaderDataType::Float2:  return GL_FLOAT;
+            case ShaderDataType::Float3:  return GL_FLOAT;
+            case ShaderDataType::Float4:  return GL_FLOAT;
+            case ShaderDataType::Mat3:    return GL_FLOAT;
+            case ShaderDataType::Mat4:    return GL_FLOAT;
+            case ShaderDataType::Int:     return GL_INT;
+            case ShaderDataType::Int2:    return GL_INT;
+            case ShaderDataType::Int3:    return GL_INT;
+            case ShaderDataType::Int4:    return GL_INT;
+            case ShaderDataType::Boolean: return GL_BOOL;
+            default:                      return 0;
+        }
+    }
+
+    VertexArray::VertexArray(void) :
+        m_vertexBufferIndex(0)
+    {
+        glCreateVertexArrays(1, &m_id);
+    }
 
     VertexArray::~VertexArray(void)
-    {}
+    {
+        glDeleteVertexArrays(1, &m_id);
+    }
 
     void VertexArray::Bind(void)
     {
-        for (uint32 i = 0; i < m_vertexBuffers.size(); ++i)
-            m_vertexBuffers[i]->Bind();
-        m_indexBuffer->Bind();
+        glBindVertexArray(m_id);
     }
 
     void VertexArray::Unbind(void)
     {
-        for (uint32 i = 0; i < m_vertexBuffers.size(); ++i)
-            m_vertexBuffers[i]->Unbind();
-        m_indexBuffer->Unbind();
+        glBindVertexArray(0);
     }
 
     void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
-        Bind();
+        glBindVertexArray(m_id);
         vertexBuffer->Bind();
+
+        const BufferLayout& layout = vertexBuffer->GetLayout();
+        for (const auto& element : layout)
+        {
+            switch (element.type)
+            {
+                case ShaderDataType::Float:
+                case ShaderDataType::Float2:
+                case ShaderDataType::Float3:
+                case ShaderDataType::Float4:
+                {
+                    glEnableVertexAttribArray(m_vertexBufferIndex);
+                    glVertexAttribPointer(m_vertexBufferIndex, element.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, layout.GetStride(), (const void*)(uintptr_t)element.offset);
+                    ++m_vertexBufferIndex;
+                    break;
+                }
+                case ShaderDataType::Mat3:
+                case ShaderDataType::Mat4:
+                {
+                    uint8 count = element.GetComponentCount();
+                    for (uint8 i = 0; i < count; ++i)
+                    {
+                        glEnableVertexAttribArray(m_vertexBufferIndex);
+                        glVertexAttribPointer(m_vertexBufferIndex, count, ShaderDataTypeToOpenGLBaseType(element.type), element.normalized, layout.GetStride(), (const void*)(element.offset + sizeof(float) * count * i));
+                        glVertexAttribDivisor(m_vertexBufferIndex, 1);
+                        ++m_vertexBufferIndex;
+                    }
+                    break;
+                }
+                case ShaderDataType::Int:
+                case ShaderDataType::Int2:
+                case ShaderDataType::Int3:
+                case ShaderDataType::Int4:
+                case ShaderDataType::Boolean:
+                {
+                    glEnableVertexAttribArray(m_vertexBufferIndex);
+                    glVertexAttribIPointer(m_vertexBufferIndex, element.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(element.type), layout.GetStride(), (const void*)(uintptr_t)element.offset);
+                    break;
+                }
+                default:
+                    NT_CORE_ERROR("Unknown shader data type (%d)!", element.type);
+            }
+        }
+
         m_vertexBuffers.push_back(vertexBuffer);
     }
 
     void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
-        Bind();
+        glBindVertexArray(m_id);
         indexBuffer->Bind();
+
         m_indexBuffer = indexBuffer;
     }
 
@@ -73,6 +138,11 @@ namespace Nt
     const Ref<IndexBuffer>& VertexArray::GetIndexBuffer(void) const
     {
         return m_indexBuffer;
+    }
+
+    uint32 VertexArray::GetRenderId(void) const
+    {
+        return m_id;
     }
 } // namespace Nt
 
