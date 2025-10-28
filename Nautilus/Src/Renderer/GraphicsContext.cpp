@@ -36,11 +36,19 @@ namespace Nt
     {
         m_context = SDL_GL_CreateContext(m_native);
 
+    #ifdef NT_DEVICE_DESKTOP
         if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
         {
-            NT_CORE_ERROR("Failed to initialize GLAD!");
+            NT_CORE_ERROR("Failed to initialize OpenGL (GLAD)!");
             return;
         }
+    #else // (NOT) NT_DEVICE_DESKTOP
+        if (!gladLoadGLES((GLADloadfunc)SDL_GL_GetProcAddress))
+        {
+            NT_CORE_ERROR("Failed to initialize OpenGL ES (GLAD)!");
+            return;
+        }
+    #endif // NT_DEVICE_DESKTOP
 
         SDL_GL_MakeCurrent(m_native, m_context);
         SDL_GL_SetSwapInterval(1);

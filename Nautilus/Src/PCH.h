@@ -598,10 +598,18 @@ namespace Nt
 #ifndef GLM_ENABLE_EXPERIMENTAL
     #define GLM_ENABLE_EXPERIMENTAL
 #endif // GLM_ENABLE_EXPERIMENTAL
+/*#ifndef STB_IMAGE_IMPLEMENTATION
+    #define STB_IMAGE_IMPLEMENTATION
+#endif // STB_IMAGE_IMPLEMENTATION*/
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
-#include <glad/gl.h>
+#ifdef NT_DEVICE_DESKTOP
+    #include <glad/gl.h>
+#else // (NOT) NT_DEVICE_DESKTOP
+    #include <glad/gles2.h>
+#endif // NT_DEVICE_DESKTOP
+#include <stb_image.h>
 
 // Nautilus library headers
 #include "Core/Log.h"

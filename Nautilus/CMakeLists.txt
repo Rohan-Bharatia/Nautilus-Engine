@@ -9,7 +9,9 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/runtime.cmake)
 project(Nautilus)
 
 function(link_dependency directory target)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory})
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/CMakeLists.txt)
+        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory})
+    endif()
     target_link_libraries(Nautilus PUBLIC ${target})
     foreach(header IN LISTS ARGN)
         target_include_directories(Nautilus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${header})
@@ -43,12 +45,14 @@ set(GLM_BUILD_TESTS OFF CACHE BOOL "Disable GLM tests" FORCE)
 set(GLAD_BUILD_STATIC_LIBRARY ON CACHE BOOL "Build GLAD as static library" FORCE)
 set(GLAD_BUILD_SHARED_LIBRARY OFF CACHE BOOL "Build GLAD as shared library" FORCE)
 link_dependency("SDL" "SDL3" "include")
-link_dependency("glm" "glm")
+link_dependency("glm" "glm" "")
 link_dependency("glad" "glad" "include")
+link_dependency("stb" "stb" "")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Vendor
     ${CMAKE_CURRENT_SOURCE_DIR}/Src
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Core
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Math
