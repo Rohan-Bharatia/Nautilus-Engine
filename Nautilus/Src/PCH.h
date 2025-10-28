@@ -610,6 +610,7 @@ namespace Nt
     #include <glad/gles2.h>
 #endif // NT_DEVICE_DESKTOP
 #include <stb_image.h>
+#include <msdf-atlas-gen.h>
 
 // Nautilus library headers
 #include "Core/Log.h"

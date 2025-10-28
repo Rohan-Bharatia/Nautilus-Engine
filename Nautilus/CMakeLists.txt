@@ -44,10 +44,13 @@ set(SDL_EXAMPLES OFF CACHE BOOL "Disable SDL examples" FORCE)
 set(GLM_BUILD_TESTS OFF CACHE BOOL "Disable GLM tests" FORCE)
 set(GLAD_BUILD_STATIC_LIBRARY ON CACHE BOOL "Build GLAD as static library" FORCE)
 set(GLAD_BUILD_SHARED_LIBRARY OFF CACHE BOOL "Build GLAD as shared library" FORCE)
+set(MSDF_ATLAS_USE_VCPKG OFF CACHE BOOL "Disable MSDF-Atlas-Gen VCPKG support" FORCE)
+set(MSDF_ATLAS_USE_SKIA OFF CACHE BOOL "Disable MSDF-Atlas-Gen Skia support" FORCE)
 link_dependency("SDL" "SDL3" "include")
 link_dependency("glm" "glm" "")
 link_dependency("glad" "glad" "include")
 link_dependency("stb" "stb" "")
+link_dependency("msdf-atlas-gen" "msdf-atlas-gen" "msdf-atlas-gen")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..
