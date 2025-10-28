@@ -24,44 +24,32 @@
 
 #pragma endregion LICENSE
 
-#ifndef _RENDERER_GRAPHICS_CONTEXT_CPP_
-    #define _RENDERER_GRAPHICS_CONTEXT_CPP_
+#pragma once
 
-#include "GraphicsContext.h"
+#ifndef _RENDERER_RENDER_COMMAND_H_
+    #define _RENDERER_RENDER_COMMAND_H_
+
+#include "VertexArray.h"
+#include "Math/Color.h"
 
 namespace Nt
 {
-    GraphicsContext::GraphicsContext(Window* window, uint32 preset) :
-        m_native((SDL_Window*)window->GetNativeWindow())
+    class NT_API RenderCommand
     {
-        m_context = SDL_GL_CreateContext(m_native);
+    public:
+        static void Initialize(void);
 
-        if (!gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress))
-        {
-            NT_CORE_ERROR("Failed to initialize GLAD!");
-            return;
-        }
+        static void SetViewport(uint32 x, uint32 y, uint32 width, uint32 height);
+        static void SetScissor(uint32 x, uint32 y, uint32 width, uint32 height);
 
-        SDL_GL_MakeCurrent(m_native, m_context);
-        SDL_GL_SetSwapInterval(1);
+        static void SetClearColor(const Color& color);
+        static void Clear(void);
 
-        NT_CORE_INFO("OpenGL Info:\n  Vendor: %s\n  Renderer: %s\n  Version: %s", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
-    }
+        static void DrawFillIndexed(const Ref<VertexArray>& vertexArray, uint32 indexCount=0);
+        static void DrawWireframeIndexed(const Ref<VertexArray>& vertexArray, uint32 vertexCount);
 
-    GraphicsContext::~GraphicsContext(void)
-    {
-        SDL_GL_DestroyContext(m_context);
-    }
-
-    void GraphicsContext::SwapBuffers(void) const
-    {
-        SDL_GL_SwapWindow(m_native);
-    }
-
-    void GraphicsContext::SetVSync(bool enabled) const
-    {
-        SDL_GL_SetSwapInterval(enabled ? 1 : 0);
-    }
+        static void SetLineWidth(float32 width);
+    };
 } // namespace Nt
 
-#endif // _RENDERER_GRAPHICS_CONTEXT_CPP_
+#endif // _RENDERER_RENDER_COMMAND_H_

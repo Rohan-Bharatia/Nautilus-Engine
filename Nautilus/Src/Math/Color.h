@@ -135,4 +135,20 @@ namespace Nt
     NT_API Color OkLabToRGB(float32 l, float32 a, float32 b);
 } // namespace Nt
 
+#define NT_COLOR_BLACK      ::Nt::Color(0.0f, 0.0f, 0.0f)
+#define NT_COLOR_DARK_GRAY  ::Nt::Color(64.0f, 64.0f, 64.0f)
+#define NT_COLOR_GRAY       ::Nt::Color(128.0f, 128.0f, 128.0f)
+#define NT_COLOR_SILVER     ::Nt::Color(192.0f, 192.0f, 192.0f)
+#define NT_COLOR_WHITE      ::Nt::Color(255.0f, 255.0f, 255.0f)
+#define NT_COLOR_RED        ::Nt::Color(255.0f, 0.0f, 0.0f)
+#define NT_COLOR_ORANGE     ::Nt::Color(255.0f, 165.0f, 0.0f)
+#define NT_COLOR_YELLOW     ::Nt::Color(255.0f, 255.0f, 0.0f)
+#define NT_COLOR_CHARTREUSE ::Nt::Color(0.0f, 255.0f, 0.0f)
+#define NT_COLOR_GREEN      ::Nt::Color(0.0f, 128.0f, 0.0f)
+#define NT_COLOR_TEAL       ::Nt::Color(0.0f, 128.0f, 128.0f)
+#define NT_COLOR_CYAN       ::Nt::Color(0.0f, 255.0f, 255.0f)
+#define NT_COLOR_BLUE       ::Nt::Color(0.0f, 0.0f, 255.0f)
+#define NT_COLOR_MAGENTA    ::Nt::Color(255.0f, 0.0f, 255.0f)
+#define NT_COLOR_PURPLE     ::Nt::Color(128.0f, 0.0f, 128.0f)
+
 #endif // _MATH_COLOR_H_

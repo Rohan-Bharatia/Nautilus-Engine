@@ -60,6 +60,7 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Shader.h"
+#include "Renderer/RenderCommand.h"
 
 #ifdef NT_ALLOW_LITERALS
 using namespace Nt::Literals;

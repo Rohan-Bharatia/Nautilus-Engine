@@ -17,8 +17,6 @@ public:
 
     virtual void OnAttach(void) override
     {
-        glEnable(GL_DEPTH_TEST);
-
         static Nt::float32 vertices[] =
         {
             //  x      y     z     r     g     b     a
@@ -68,20 +66,19 @@ void main()
         m_program = Nt::CreateRef<Nt::Shader>("triangle", vsSource, fsSource);
         m_program->Bind();
 
-        glViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
-        glScissor(0, 0, m_window.GetWidth(), m_window.GetHeight());
+        Nt::RenderCommand::SetViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
+        Nt::RenderCommand::SetScissor(0, 0, m_window.GetWidth(), m_window.GetHeight());
     }
 
     virtual void OnUpdate(Nt::float32 deltaTime) override
     {
-        glViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
-        glScissor(0, 0, m_window.GetWidth(), m_window.GetHeight());
+        Nt::RenderCommand::SetViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
+        Nt::RenderCommand::SetScissor(0, 0, m_window.GetWidth(), m_window.GetHeight());
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Nt::RenderCommand::SetClearColor(NT_COLOR_DARK_GRAY);
+        Nt::RenderCommand::Clear();
 
-        glBindVertexArray(m_vao->GetRenderId());
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        Nt::RenderCommand::DrawFillIndexed(m_vao);
     }
 
 private:
