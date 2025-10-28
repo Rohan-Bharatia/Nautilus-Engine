@@ -38,32 +38,7 @@ public:
         Nt::Ref<Nt::IndexBuffer> ibo = Nt::CreateRef<Nt::IndexBuffer>(indices, sizeof(indices));
         m_vao->SetIndexBuffer(ibo);
 
-        static Nt::String vsSource = R"(#version 460 core
-
-layout(location=0) in vec3 a_position;
-layout(location=1) in vec4 a_color;
-
-layout(location=0) out vec4 v_color;
-
-void main()
-{
-    gl_Position = vec4(a_position, 1.0);
-    v_color     = a_color;
-}
-)";
-        static Nt::String fsSource = R"(#version 460 core
-
-layout (location = 0) in vec4 v_color;
-
-layout (location = 0) out vec4 o_color;
-
-void main()
-{
-    o_color = v_color;
-}
-)";
-
-        m_program = Nt::CreateRef<Nt::Shader>("triangle", vsSource, fsSource);
+        m_program = Nt::CreateRef<Nt::Shader>("triangle", Nt::ReadFile("Assets/Shaders/triangle_vs.glsl"), Nt::ReadFile("Assets/Shaders/triangle_fs.glsl"));
         m_program->Bind();
 
         Nt::RenderCommand::SetViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
