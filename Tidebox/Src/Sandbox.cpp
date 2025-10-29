@@ -9,7 +9,7 @@ class SandboxLayer :
 {
 public:
     SandboxLayer(void) :
-        Layer("SandboxLayer")
+        Layer("SandboxLayer"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
     {}
 
     ~SandboxLayer(void)
@@ -19,41 +19,43 @@ public:
     {
         static Nt::float32 vertices[] =
         {
-            //  x      y     z     r     g     b     a
-             0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+            //  x      y     z     r     g     b     a     u     v
+            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
         };
-        static Nt::uint32 indices[]   = { 0, 1, 2 };
+        static Nt::uint32 indices[]   = { 0, 1, 2, 2, 3, 0 };
 
         m_vao = Nt::CreateRef<Nt::VertexArray>();
 
         Nt::Ref<Nt::VertexBuffer> vbo = Nt::CreateRef<Nt::VertexBuffer>(vertices, sizeof(vertices));
         vbo->SetLayout({
             { Nt::ShaderDataType::Float3, "a_position" },
-            { Nt::ShaderDataType::Float4, "a_color" }
+            { Nt::ShaderDataType::Float4, "a_color" },
+            { Nt::ShaderDataType::Float2, "a_texCoord" },
         });
         m_vao->AddVertexBuffer(vbo);
 
-        Nt::Ref<Nt::IndexBuffer> ibo = Nt::CreateRef<Nt::IndexBuffer>(indices, sizeof(indices));
+        Nt::Ref<Nt::IndexBuffer> ibo = Nt::CreateRef<Nt::IndexBuffer>(indices, NT_ARRAY_COUNT(indices));
         m_vao->SetIndexBuffer(ibo);
 
-        m_program = Nt::CreateRef<Nt::Shader>("triangle", Nt::ReadFile("Assets/Shaders/triangle_vs.glsl"), Nt::ReadFile("Assets/Shaders/triangle_fs.glsl"));
-        m_program->Bind();
+        m_texture = Nt::CreateRef<Nt::Texture2D>("Assets/Textures/Checkerboard.png");
 
-        Nt::RenderCommand::SetViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
-        Nt::RenderCommand::SetScissor(0, 0, m_window.GetWidth(), m_window.GetHeight());
+        m_program = Nt::CreateRef<Nt::Shader>("triangle", "Assets/Shaders/triangle_vs.glsl", "Assets/Shaders/triangle_fs.glsl");
+        m_program->Bind();
+        m_program->SetInt("u_texture", 0);
     }
 
     virtual void OnUpdate(Nt::float32 deltaTime) override
     {
-        Nt::RenderCommand::SetViewport(0, 0, m_window.GetWidth(), m_window.GetHeight());
-        Nt::RenderCommand::SetScissor(0, 0, m_window.GetWidth(), m_window.GetHeight());
-
         Nt::RenderCommand::SetClearColor(NT_COLOR_DARK_GRAY);
         Nt::RenderCommand::Clear();
 
-        Nt::RenderCommand::DrawFillIndexed(m_vao);
+        Nt::RendererAPI::BeginScene(m_camera);
+            m_texture->Bind(0);
+            Nt::RendererAPI::Submit(m_program, m_vao);
+        Nt::RendererAPI::EndScene();
     }
 
 private:
@@ -61,6 +63,8 @@ private:
 
     Nt::Ref<Nt::VertexArray> m_vao;
     Nt::Ref<Nt::Shader> m_program;
+    Nt::Ref<Nt::Texture2D> m_texture;
+    Nt::OrthographicCamera m_camera;
 };
 
 class SandboxApplication :

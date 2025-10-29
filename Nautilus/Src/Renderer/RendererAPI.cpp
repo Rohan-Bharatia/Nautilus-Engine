@@ -24,33 +24,47 @@
 
 #pragma endregion LICENSE
 
-#pragma once
+#ifndef _RENDERER_RENDERER_API_CPP_
+    #define _RENDERER_RENDERER_API_CPP_
 
-#ifndef _RENDERER_RENDER_COMMAND_H_
-    #define _RENDERER_RENDER_COMMAND_H_
+#include "RendererAPI.h"
 
-#include "VertexArray.h"
-#include "Math/Color.h"
+#include "RenderCommand.h"
 
 namespace Nt
 {
-    class NT_API RenderCommand
+    void RendererAPI::Initialize(void)
     {
-    public:
-        static void Initialize(void);
-        static void Shutdown(void);
-
-        static void SetViewport(uint32 x, uint32 y, uint32 width, uint32 height);
-        static void SetScissor(uint32 x, uint32 y, uint32 width, uint32 height);
-
-        static void SetClearColor(const Color& color);
-        static void Clear(void);
-
-        static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 indexCount=0);
-        static void DrawWireframe(const Ref<VertexArray>& vertexArray, uint32 vertexCount);
-
-        static void SetLineWidth(float32 width);
+        RenderCommand::Initialize();
     };
+
+    void RendererAPI::Shutdown(void)
+    {
+        RenderCommand::Shutdown();
+    };
+
+    void RendererAPI::OnWindowResize(uint32 width, uint32 height)
+    {
+        RenderCommand::SetViewport(0, 0, width, height);
+        RenderCommand::SetScissor(0, 0, width, height);
+    }
+
+    void RendererAPI::BeginScene(const Camera& camera)
+    {
+        s_viewProjection = camera.GetViewProjection();
+    }
+
+    void RendererAPI::EndScene(void)
+    {}
+
+    void RendererAPI::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const Matrix4& transform)
+    {
+        shader->Bind();
+        shader->SetMatrix4("u_viewProjection", s_viewProjection);
+        shader->SetMatrix4("u_transform", transform);
+        vertexArray->Bind();
+        RenderCommand::DrawIndexed(vertexArray);
+    }
 } // namespace Nt
 
-#endif // _RENDERER_RENDER_COMMAND_H_
+#endif // _RENDERER_RENDERER_API_CPP_

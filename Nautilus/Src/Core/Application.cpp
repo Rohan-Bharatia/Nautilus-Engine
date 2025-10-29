@@ -32,6 +32,7 @@
 
 #include "Timer.h"
 #include "Input.h"
+#include "Renderer/RendererAPI.h"
 
 namespace Nt
 {
@@ -44,6 +45,13 @@ namespace Nt
         s_instance = this;
 
         Log::Initialize("Nautilus.log");
+
+        WindowProperties props{};
+        m_window = CreateScope<Window>(props);
+        m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
+
+        RendererAPI::Initialize();
+        PushLayer(new InputLayer());
 
         NT_CORE_INFO(R"(MIT License
 
@@ -66,17 +74,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.)");
-
-        WindowProperties props{};
-        m_window = CreateScope<Window>(props);
-        m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
-
-        PushLayer(new InputLayer());
     }
 
     Application::~Application(void)
     {
-        s_instance = nullptr;
+        RendererAPI::Shutdown();
+
+        if (s_instance)
+            s_instance = nullptr;
     }
 
     void Application::PushLayer(Layer* layer)
@@ -162,6 +167,7 @@ SOFTWARE.)");
         }
 
         m_minimized = false;
+        RendererAPI::OnWindowResize(e.GetWidth(), e.GetHeight());
         return true;
     }
 

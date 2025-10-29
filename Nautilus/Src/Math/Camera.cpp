@@ -31,6 +31,36 @@
 
 namespace Nt
 {
+    void Camera::SetProjection(const Matrix4& projection)
+    {
+        m_projection = (glm::mat4)projection;
+    }
+
+    const Matrix4 Camera::GetProjection(void) const
+    {
+        return Matrix4(m_projection);
+    }
+
+    void Camera::SetView(const Matrix4& view)
+    {
+        m_view = (glm::mat4)view;
+    }
+
+    const Matrix4 Camera::GetView(void) const
+    {
+        return Matrix4(m_view);
+    }
+
+    void Camera::SetViewProjection(const Matrix4& viewProjection)
+    {
+        m_viewProjection = (glm::mat4)viewProjection;
+    }
+
+    const Matrix4 Camera::GetViewProjection(void) const
+    {
+        return Matrix4(m_viewProjection);
+    }
+
     OrthographicCamera::OrthographicCamera(float32 left, float32 right, float32 bottom, float32 top, float32 near, float32 far) :
         m_left(left), m_right(right), m_bottom(bottom), m_top(top), m_near(near), m_far(far), m_position(0.0f), m_rotation(0.0f)
     {
@@ -49,30 +79,15 @@ namespace Nt
         return Vector3(m_position);
     }
 
-    void OrthographicCamera::SetRotation(const Angle& rotation)
+    void OrthographicCamera::SetRotation(const float32& rotation)
     {
-        m_rotation = rotation.Degrees();
+        m_rotation = rotation;
         RecalculateView();
     }
 
-    Angle OrthographicCamera::GetRotation(void) const
+    float32 OrthographicCamera::GetRotation(void) const
     {
-        return Angle(m_rotation * (NT_PI / 180.0f));
-    }
-
-    const Matrix4 OrthographicCamera::GetProjection(void) const
-    {
-        return Matrix4(m_projection);
-    }
-
-    const Matrix4 OrthographicCamera::GetView(void) const
-    {
-        return Matrix4(m_view);
-    }
-
-    const Matrix4 OrthographicCamera::GetViewProjection(void) const
-    {
-        return Matrix4(m_viewProjection);
+        return float32(m_rotation * (NT_PI / 180.0f));
     }
 
     void OrthographicCamera::RecalculateView(void)
@@ -104,26 +119,26 @@ namespace Nt
         return Vector3(m_position);
     }
 
-    void PerspectiveCamera::SetRotation(const Angle& roll, const Angle& pitch, const Angle& yaw)
+    void PerspectiveCamera::SetRotation(const float32& roll, const float32& pitch, const float32& yaw)
     {
-        glm::vec3 direction = glm::vec3(roll.Degrees(), pitch.Degrees(), yaw.Degrees());
+        glm::vec3 direction = glm::vec3(roll, pitch, yaw);
         m_front             = glm::normalize(direction);
         RecalculateView();
     }
 
-    Angle PerspectiveCamera::GetRoll(void) const
+    float32 PerspectiveCamera::GetRoll(void) const
     {
-        return Angle(m_front.x * (NT_PI / 180.0f));
+        return (m_front.x * (NT_PI / 180.0f));
     }
 
-    Angle PerspectiveCamera::GetPitch(void) const
+    float32 PerspectiveCamera::GetPitch(void) const
     {
-        return Angle(m_front.y * (NT_PI / 180.0f));
+        return (m_front.y * (NT_PI / 180.0f));
     }
 
-    Angle PerspectiveCamera::GetYaw(void) const
+    float32 PerspectiveCamera::GetYaw(void) const
     {
-        return Angle(m_front.z * (NT_PI / 180.0f));
+        return (m_front.z * (NT_PI / 180.0f));
     }
 
     void PerspectiveCamera::SetUpDirection(const Vector3& up)
@@ -141,21 +156,6 @@ namespace Nt
         m_fov        = fov;
         m_projection = glm::perspective(glm::radians(fov), m_aspectRatio, m_near, m_far);
         RecalculateView();
-    }
-
-    const Matrix4 PerspectiveCamera::GetProjection(void) const
-    {
-        return Matrix4(m_projection);
-    }
-
-    const Matrix4 PerspectiveCamera::GetView(void) const
-    {
-        return Matrix4(m_view);
-    }
-
-    const Matrix4 PerspectiveCamera::GetViewProjection(void) const
-    {
-        return Matrix4(m_viewProjection);
     }
 
     void PerspectiveCamera::RecalculateView(void)

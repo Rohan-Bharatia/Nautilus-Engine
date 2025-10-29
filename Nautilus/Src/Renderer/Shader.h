@@ -47,7 +47,7 @@ namespace Nt
     {
     public:
         NT_CLASS_DEFAULTS(Shader)
-        Shader(const String& name, const String& vertexSource, const String& fragmentSource);
+        Shader(const String& name, const String& vertexFilepath, const String& fragmentFilepath);
         ~Shader(void);
 
         void Bind(void);

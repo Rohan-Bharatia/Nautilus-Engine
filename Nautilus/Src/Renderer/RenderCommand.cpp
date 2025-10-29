@@ -65,6 +65,9 @@ namespace Nt
         glEnable(GL_LINE_SMOOTH);
     }
 
+    void RenderCommand::Shutdown(void)
+    {}
+
     void RenderCommand::SetViewport(uint32 x, uint32 y, uint32 width, uint32 height)
     {
         glViewport(x, y, width, height);
@@ -85,14 +88,14 @@ namespace Nt
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void RenderCommand::DrawFillIndexed(const Ref<VertexArray>& vertexArray, uint32 indexCount)
+    void RenderCommand::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 indexCount)
     {
         vertexArray->Bind();
         uint32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 
-    void RenderCommand::DrawWireframeIndexed(const Ref<VertexArray>& vertexArray, uint32 vertexCount)
+    void RenderCommand::DrawWireframe(const Ref<VertexArray>& vertexArray, uint32 vertexCount)
     {
         vertexArray->Bind();
         glDrawArrays(GL_LINES, 0, vertexCount);

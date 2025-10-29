@@ -598,9 +598,6 @@ namespace Nt
 #ifndef GLM_ENABLE_EXPERIMENTAL
     #define GLM_ENABLE_EXPERIMENTAL
 #endif // GLM_ENABLE_EXPERIMENTAL
-/*#ifndef STB_IMAGE_IMPLEMENTATION
-    #define STB_IMAGE_IMPLEMENTATION
-#endif // STB_IMAGE_IMPLEMENTATION*/
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>

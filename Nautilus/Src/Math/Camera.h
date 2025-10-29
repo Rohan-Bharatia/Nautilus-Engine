@@ -31,11 +31,32 @@
 
 #include "Matrix.h"
 #include "Vector.h"
-#include "Angle.h"
 
 namespace Nt
 {
-    class NT_API OrthographicCamera
+    class NT_API Camera
+    {
+    public:
+        NT_CLASS_DEFAULTS(Camera)
+        Camera(void) = default;
+
+        void SetProjection(const Matrix4& projection);
+        const Matrix4 GetProjection(void) const;
+
+        void SetView(const Matrix4& view);
+        const Matrix4 GetView(void) const;
+
+        void SetViewProjection(const Matrix4& viewProjection);
+        const Matrix4 GetViewProjection(void) const;
+
+    protected:
+        glm::mat4 m_projection;
+        glm::mat4 m_view;
+        glm::mat4 m_viewProjection;
+    };
+
+    class NT_API OrthographicCamera :
+        public Camera
     {
     public:
         NT_CLASS_DEFAULTS(OrthographicCamera)
@@ -44,12 +65,8 @@ namespace Nt
         void SetPosition(const Vector3& position);
         Vector3 GetPosition(void) const;
 
-        void SetRotation(const Angle& rotation);
-        Angle GetRotation(void) const;
-
-        const Matrix4 GetProjection(void) const;
-        const Matrix4 GetView(void) const;
-        const Matrix4 GetViewProjection(void) const;
+        void SetRotation(const float32& rotation);
+        float32 GetRotation(void) const;
 
     private:
         void RecalculateView(void);
@@ -57,12 +74,10 @@ namespace Nt
         float32 m_left, m_right, m_bottom, m_top, m_near, m_far;
         glm::vec3 m_position;
         float32 m_rotation;
-        glm::mat4 m_projection;
-        glm::mat4 m_view;
-        glm::mat4 m_viewProjection;
     };
 
-    class NT_API PerspectiveCamera
+    class NT_API PerspectiveCamera :
+        public Camera
     {
     public:
         NT_CLASS_DEFAULTS(PerspectiveCamera)
@@ -71,19 +86,15 @@ namespace Nt
         void SetPosition(const Vector3& position);
         Vector3 GetPosition(void) const;
 
-        void SetRotation(const Angle& roll, const Angle& pitch, const Angle& yaw);
-        Angle GetRoll(void) const;
-        Angle GetPitch(void) const;
-        Angle GetYaw(void) const;
+        void SetRotation(const float32& roll, const float32& pitch, const float32& yaw);
+        float32 GetRoll(void) const;
+        float32 GetPitch(void) const;
+        float32 GetYaw(void) const;
 
         void SetUpDirection(const Vector3& up);
         Vector3 GetUpDirection(void) const;
 
         void SetFOV(float32 fov);
-
-        const Matrix4 GetProjection(void) const;
-        const Matrix4 GetView(void) const;
-        const Matrix4 GetViewProjection(void) const;
 
     private:
         void RecalculateView(void);
@@ -92,9 +103,6 @@ namespace Nt
         glm::vec3 m_position;
         glm::vec3 m_front;
         glm::vec3 m_up;
-        glm::mat4 m_projection;
-        glm::mat4 m_view;
-        glm::mat4 m_viewProjection;
     };
 } // namespace Nt
 

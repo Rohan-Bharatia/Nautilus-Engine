@@ -29,144 +29,15 @@
 #ifndef _MATH_MATRIX_H_
     #define _MATH_MATRIX_H_
 
-#include "Vector.h"
+#include "PCH.h"
 
 namespace Nt
 {
-    class NT_API Matrix3
-    {
-    public:
-        NT_CLASS_DEFAULTS(Matrix3)
-        Matrix3(void);
-        Matrix3(float32 value);
-        Matrix3(float32* value);
-        Matrix3(const glm::mat3& value);
+    using Matrix3 = glm::mat3;
+    using Matrix4 = glm::mat4;
 
-        // Typecast operators
-        operator float32*(void) const;
-        operator glm::mat3(void) const;
-
-        // Sign operators
-        Matrix3 operator+(void) const;
-        Matrix3 operator-(void) const;
-
-        // Arithmetic operators
-        Matrix3 operator+(const Matrix3& value) const;
-        Matrix3 operator+(float32 value) const;
-        Matrix3 operator-(const Matrix3& value) const;
-        Matrix3 operator-(float32 value) const;
-        Matrix3 operator*(const Matrix3& value) const;
-        Matrix3 operator*(float32 value) const;
-        Matrix3 operator/(const Matrix3& value) const;
-        Matrix3 operator/(float32 value) const;
-        Matrix3 operator%(const Matrix3& value) const;
-        Matrix3 operator%(float32 value) const;
-
-        // Increment operators
-        Matrix3& operator++(void);
-        Matrix3 operator++(int32);
-        Matrix3& operator--(void);
-        Matrix3 operator--(int32);
-
-        // Assignment operators
-        Matrix3& operator+=(const Matrix3& value);
-        Matrix3& operator+=(float32 value);
-        Matrix3& operator-=(const Matrix3& value);
-        Matrix3& operator-=(float32 value);
-        Matrix3& operator*=(const Matrix3& value);
-        Matrix3& operator*=(float32 value);
-        Matrix3& operator/=(const Matrix3& value);
-        Matrix3& operator/=(float32 value);
-        Matrix3& operator%=(const Matrix3& value);
-        Matrix3& operator%=(float32 value);
-
-        // Comparison operators
-        bool operator==(const Matrix3& value) const;
-        bool operator==(const float32& value) const;
-        bool operator!=(const Matrix3& value) const;
-        bool operator!=(const float32& value) const;
-        bool operator>(const Matrix3& value) const;
-        bool operator>(const float32& value) const;
-        bool operator>=(const Matrix3& value) const;
-        bool operator>=(const float32& value) const;
-        bool operator<(const Matrix3& value) const;
-        bool operator<(const float32& value) const;
-        bool operator<=(const Matrix3& value) const;
-        bool operator<=(const float32& value) const;
-
-        float32& operator[](uint32 index);
-        float32 operator[](uint32 index) const;
-
-        float32* mat;
-    };
-
-    class NT_API Matrix4
-    {
-    public:
-        NT_CLASS_DEFAULTS(Matrix4)
-        Matrix4(void);
-        Matrix4(float32 value);
-        Matrix4(float32* value);
-        Matrix4(const glm::mat4& value);
-        Matrix4(const Matrix3& value);
-
-        // Typecast operators
-        operator float32*(void) const;
-        operator glm::mat4(void) const;
-
-        // Sign operators
-        Matrix4 operator+(void) const;
-        Matrix4 operator-(void) const;
-
-        // Arithmetic operators
-        Matrix4 operator+(const Matrix4& value) const;
-        Matrix4 operator+(float32 value) const;
-        Matrix4 operator-(const Matrix4& value) const;
-        Matrix4 operator-(float32 value) const;
-        Matrix4 operator*(const Matrix4& value) const;
-        Matrix4 operator*(float32 value) const;
-        Matrix4 operator/(const Matrix4& value) const;
-        Matrix4 operator/(float32 value) const;
-        Matrix4 operator%(const Matrix4& value) const;
-        Matrix4 operator%(float32 value) const;
-
-        // Increment operators
-        Matrix4& operator++(void);
-        Matrix4 operator++(int32);
-        Matrix4& operator--(void);
-        Matrix4 operator--(int32);
-
-        // Assignment operators
-        Matrix4& operator+=(const Matrix4& value);
-        Matrix4& operator+=(float32 value);
-        Matrix4& operator-=(const Matrix4& value);
-        Matrix4& operator-=(float32 value);
-        Matrix4& operator*=(const Matrix4& value);
-        Matrix4& operator*=(float32 value);
-        Matrix4& operator/=(const Matrix4& value);
-        Matrix4& operator/=(float32 value);
-        Matrix4& operator%=(const Matrix4& value);
-        Matrix4& operator%=(float32 value);
-
-        // Comparison operators
-        bool operator==(const Matrix4& value) const;
-        bool operator==(const float32& value) const;
-        bool operator!=(const Matrix4& value) const;
-        bool operator!=(const float32& value) const;
-        bool operator>(const Matrix4& value) const;
-        bool operator>(const float32& value) const;
-        bool operator>=(const Matrix4& value) const;
-        bool operator>=(const float32& value) const;
-        bool operator<(const Matrix4& value) const;
-        bool operator<(const float32& value) const;
-        bool operator<=(const Matrix4& value) const;
-        bool operator<=(const float32& value) const;
-
-        float32& operator[](uint32 index);
-        float32 operator[](uint32 index) const;
-
-        float32* mat;
-    };
+    std::ostream& operator<<(std::ostream& stream, const Matrix3& matrix);
+    std::ostream& operator<<(std::ostream& stream, const Matrix4& matrix);
 } // namespace Nt
 
 #endif // _MATH_MATRIX_H_

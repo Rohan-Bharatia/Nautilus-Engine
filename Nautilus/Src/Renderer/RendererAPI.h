@@ -26,31 +26,31 @@
 
 #pragma once
 
-#ifndef _RENDERER_RENDER_COMMAND_H_
-    #define _RENDERER_RENDER_COMMAND_H_
+#ifndef _RENDERER_RENDERER_API_H_
+    #define _RENDERER_RENDERER_API_H_
 
+#include "Shader.h"
 #include "VertexArray.h"
-#include "Math/Color.h"
+#include "Math/Matrix.h"
+#include "Math/Camera.h"
 
 namespace Nt
 {
-    class NT_API RenderCommand
+    class NT_API RendererAPI
     {
     public:
         static void Initialize(void);
         static void Shutdown(void);
 
-        static void SetViewport(uint32 x, uint32 y, uint32 width, uint32 height);
-        static void SetScissor(uint32 x, uint32 y, uint32 width, uint32 height);
+        static void OnWindowResize(uint32 width, uint32 height);
 
-        static void SetClearColor(const Color& color);
-        static void Clear(void);
+        static void BeginScene(const Camera& camera);
+        static void EndScene(void);
+        static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const Matrix4& transform=Matrix4(1.0f));
 
-        static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32 indexCount=0);
-        static void DrawWireframe(const Ref<VertexArray>& vertexArray, uint32 vertexCount);
-
-        static void SetLineWidth(float32 width);
+    private:
+        inline static Matrix4 s_viewProjection = Matrix4(1.0f);
     };
 } // namespace Nt
 
-#endif // _RENDERER_RENDER_COMMAND_H_
+#endif // _RENDERER_RENDERER_API_H_

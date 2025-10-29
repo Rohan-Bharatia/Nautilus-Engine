@@ -33,14 +33,16 @@
 
 namespace Nt
 {
-    Shader::Shader(const String& name, const String& vertexSource, const String& fragmentSource) :
+    Shader::Shader(const String& name, const String& vertexFilePath, const String& fragmentFilePath) :
         m_name(name)
     {
-        const char* vsSource = (const char*)vertexSource;
-        const char* fsSource = (const char*)fragmentSource;;
+        const String& vsSource  = ReadFile(vertexFilePath);
+        const String& fsSource  = ReadFile(fragmentFilePath);
+        const char* vsSourceRaw = (const char*)vsSource;
+        const char* fsSourceRaw = (const char*)fsSource;;
 
         GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vs, 1, &vsSource, nullptr);
+        glShaderSource(vs, 1, &vsSourceRaw, nullptr);
         glCompileShader(vs);
 
         GLint success;
@@ -56,7 +58,7 @@ namespace Nt
         }
 
         GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fs, 1, &fsSource, nullptr);
+        glShaderSource(fs, 1, &fsSourceRaw, nullptr);
         glCompileShader(fs);
 
         glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
@@ -130,13 +132,13 @@ namespace Nt
     void Shader::SetMatrix3(const String& name, const Matrix3& value)
     {
         GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
-        glUniformMatrix3fv(location, 1, GL_FALSE, value.mat);
+        glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr((glm::mat3)value));
     }
 
     void Shader::SetMatrix4(const String& name, const Matrix4& value)
     {
         GLint location = glGetUniformLocation(m_id, ((std::string)name).c_str());
-        glUniformMatrix4fv(location, 1, GL_FALSE, value.mat);
+        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr((glm::mat4)value));
     }
 
     void Shader::SetInt(const String& name, int32 value)
