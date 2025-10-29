@@ -30,9 +30,13 @@
     #define _RENDERER_TEXTURE_H_
 
 #include "Core/String.h"
+#include "Framebuffer.h"
 
 namespace Nt
 {
+    using TextureFilter = FramebufferFilterFormat;
+    using TextureWrap   = FramebufferWrapFormat;
+
     enum class ImageFormat
     {
         None = 0,
@@ -43,12 +47,22 @@ namespace Nt
         RGBA32F,
     };
 
+    struct NT_API TextureSampler
+    {
+        TextureFilter filter = TextureFilter::Linear;
+        TextureWrap wrap     = TextureWrap::Repeat;
+
+        NT_STRUCT_DEFAULTS(TextureSampler)
+        TextureSampler(void) = default;
+    };
+
     struct NT_API TextureProps
     {
-        uint32 width       = 1,
-               height      = 1;
-        ImageFormat format = ImageFormat::RGBA8;
-        bool generateMips  = true;
+        uint32 width           = 1,
+               height          = 1;
+        ImageFormat format     = ImageFormat::RGBA8;
+        bool generateMips      = true;
+        TextureSampler sampler = {};
 
         NT_STRUCT_DEFAULTS(TextureProps)
         TextureProps(void) = default;
@@ -59,7 +73,7 @@ namespace Nt
     public:
         NT_CLASS_DEFAULTS(Texture2D)
         Texture2D(const TextureProps& props);
-        Texture2D(const String& path);
+        Texture2D(const String& path, const TextureSampler& sampler={});
         ~Texture2D(void);
 
         void Bind(uint32 slot=0);
@@ -70,13 +84,11 @@ namespace Nt
         String GetPath(void) const;
         uint32 GetWidth(void) const;
         uint32 GetHeight(void) const;
-        const TextureProps& GetProps(void) const;
 
         uint32 GetRenderId(void) const;
 
     private:
         uint32 m_id;
-        TextureProps m_props;
         String m_path;
         bool m_isLoaded;
         uint32 m_width, m_height;

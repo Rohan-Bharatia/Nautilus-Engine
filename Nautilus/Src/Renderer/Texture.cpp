@@ -57,8 +57,30 @@ namespace Nt
         }
     }
 
+    static GLenum TextureFilterFormatToGL(TextureFilter filter)
+    {
+        switch (filter)
+        {
+            case TextureFilter::Nearest: return GL_NEAREST;
+            case TextureFilter::Linear:  return GL_LINEAR;
+            default:                     return 0;
+        }
+    }
+
+    static GLenum TextureWrapFormatToGL(TextureWrap wrap)
+    {
+        switch (wrap)
+        {
+            case TextureWrap::Repeat:         return GL_REPEAT;
+            case TextureWrap::ClampToEdge:    return GL_CLAMP_TO_EDGE;
+            case TextureWrap::ClampToBorder:  return GL_CLAMP_TO_BORDER;
+            case TextureWrap::MirroredRepeat: return GL_MIRRORED_REPEAT;
+            default:                          return 0;
+        }
+    }
+
     Texture2D::Texture2D(const TextureProps& props) :
-        m_props(props), m_isLoaded(false), m_width(props.width), m_height(props.height)
+        m_isLoaded(false), m_width(props.width), m_height(props.height)
     {
         m_internalFormat = ImageFormatToGLInternalFormat(props.format);
         m_dataFormat     = ImageFormatToGLDataFormat(props.format);
@@ -66,14 +88,14 @@ namespace Nt
         glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
         glTextureStorage2D(m_id, 1, m_internalFormat, m_width, m_height);
 
-        glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTextureParameteri(m_id, GL_TEXTURE_WRAP_R, GL_REPEAT);
-        glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, TextureFilterFormatToGL(props.sampler.filter));
+        glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, TextureFilterFormatToGL(props.sampler.filter));
+        glTextureParameteri(m_id, GL_TEXTURE_WRAP_R, TextureWrapFormatToGL(props.sampler.wrap));
+        glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, TextureWrapFormatToGL(props.sampler.wrap));
+        glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, TextureWrapFormatToGL(props.sampler.wrap));
     }
 
-    Texture2D::Texture2D(const String& path) :
+    Texture2D::Texture2D(const String& path, const TextureSampler& sampler) :
         m_path(path), m_isLoaded(false)
     {
         int32 width, height, channels;
@@ -111,11 +133,10 @@ namespace Nt
             glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
             glTextureStorage2D(m_id, 1, m_internalFormat, m_width, m_height);
 
-            glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTextureParameteri(m_id, GL_TEXTURE_WRAP_R, GL_REPEAT);
-            glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, TextureFilterFormatToGL(sampler.filter));
+            glTextureParameteri(m_id, GL_TEXTURE_WRAP_R, TextureWrapFormatToGL(sampler.wrap));
+            glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, TextureWrapFormatToGL(sampler.wrap));
+            glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, TextureWrapFormatToGL(sampler.wrap));
 
             glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
             stbi_image_free(data);
@@ -157,11 +178,6 @@ namespace Nt
     uint32 Texture2D::GetHeight(void) const
     {
         return m_height;
-    }
-
-    const TextureProps& Texture2D::GetProps(void) const
-    {
-        return m_props;
     }
 
     uint32 Texture2D::GetRenderId(void) const

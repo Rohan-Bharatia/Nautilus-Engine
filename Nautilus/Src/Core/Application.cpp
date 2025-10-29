@@ -36,8 +36,6 @@
 
 namespace Nt
 {
-    Application* Application::s_instance = nullptr;
-
     Application::Application(int32 argc, char* argv[]) :
         m_running(true), m_minimized(false), m_lastFrame(0.0f)
     {

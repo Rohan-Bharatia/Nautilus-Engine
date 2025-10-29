@@ -62,6 +62,8 @@ namespace Nt
         bool OnKeyPressed(KeyPressedEvent& e);
         void ExecuteMainThreadQueue(void);
 
+        inline static Application* s_instance = nullptr;
+
         Scope<Window> m_window;
         bool m_running;
         bool m_minimized;
@@ -69,7 +71,6 @@ namespace Nt
         float32 m_lastFrame;
         std::vector<std::function<void()>> m_mainThreadQueue;
         std::mutex m_mainThreadQueueMutex;
-        static Application* s_instance;
     };
 } // namespace Nt
 

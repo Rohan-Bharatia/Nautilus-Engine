@@ -48,6 +48,9 @@ namespace Nt
 
 NT_MAIN_FN
 {
+    if (!NT_VERSION_CHECK(1, 0, 0))
+        throw std::runtime_error("Nautilus requires at least version 1.0.0 to run!");
+
     auto app = Nt::CreateApplication((Nt::int32)NT_ARGC, NT_ARGV);
     app->Run();
     NT_SAFE_DELETE(app);

@@ -40,7 +40,11 @@ public:
         Nt::Ref<Nt::IndexBuffer> ibo = Nt::CreateRef<Nt::IndexBuffer>(indices, NT_ARRAY_COUNT(indices));
         m_vao->SetIndexBuffer(ibo);
 
-        m_texture = Nt::CreateRef<Nt::Texture2D>("Assets/Textures/Checkerboard.png");
+        Nt::TextureSampler sampler;
+        sampler.filter = Nt::TextureFilter::Nearest;
+        sampler.wrap   = Nt::TextureWrap::Repeat;
+
+        m_texture = Nt::CreateRef<Nt::Texture2D>("Assets/Textures/Checkerboard.png", sampler);
 
         m_program = Nt::CreateRef<Nt::Shader>("basic", "Assets/Shaders/basic_vs.glsl", "Assets/Shaders/basic_fs.glsl");
         m_program->Bind();
