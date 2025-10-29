@@ -9,8 +9,11 @@ class SandboxLayer :
 {
 public:
     SandboxLayer(void) :
-        Layer("SandboxLayer"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
-    {}
+        Layer("SandboxLayer")
+    {
+        Nt::float32 ratio = (Nt::float32)m_window.GetWidth() / m_window.GetHeight();
+        m_camera          = Nt::OrthographicCamera(-ratio * m_zoom, ratio * m_zoom, -m_zoom, m_zoom);
+    }
 
     ~SandboxLayer(void)
     {}
@@ -42,7 +45,7 @@ public:
 
         Nt::TextureSampler sampler;
         sampler.filter = Nt::TextureFilter::Nearest;
-        sampler.wrap   = Nt::TextureWrap::Repeat;
+        sampler.wrap   = Nt::TextureWrap::ClampToEdge;
 
         m_texture = Nt::CreateRef<Nt::Texture2D>("Assets/Textures/Checkerboard.png", sampler);
 
@@ -53,6 +56,33 @@ public:
 
     virtual void OnUpdate(Nt::float32 deltaTime) override
     {
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::W))
+            m_position.y -= m_tSpeed * deltaTime;
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::A))
+            m_position.x += m_tSpeed * deltaTime;
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::S))
+            m_position.y += m_tSpeed * deltaTime;
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::D))
+            m_position.x -= m_tSpeed * deltaTime;
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::Q))
+            m_rotation -= m_rSpeed * deltaTime;
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::E))
+            m_rotation += m_rSpeed * deltaTime;
+        if (Nt::Input::IsKeyPressed(Nt::Keycode::R))
+        {
+            m_position = { 0.0f, 0.0f, 0.0f };
+            m_rotation = 0.0f;
+        }
+
+        if (m_rotation >= 180.0f)
+            m_rotation -= 360.0f;
+        if (m_rotation <= -180.0f)
+            m_rotation += 360.0f;
+
+        m_camera.SetPosition(m_position);
+        m_camera.SetRotation(m_rotation);
+        m_tSpeed = m_zoom;
+
         Nt::RenderCommand::SetClearColor(NT_COLOR_DARK_GRAY);
         Nt::RenderCommand::Clear();
 
@@ -62,13 +92,64 @@ public:
         Nt::RendererAPI::EndScene();
     }
 
+    virtual void OnEvent(Nt::Event& event) override
+    {
+        switch (event.GetEventType())
+        {
+            case Nt::EventType::KeyPressed:
+            {
+                Nt::KeyPressedEvent& e = (Nt::KeyPressedEvent&)event;
+
+                switch (e.GetKeyCode())
+                {
+                    case Nt::Keycode::Escape:
+                        Nt::Application::Get().Close();
+                        break;
+                    case Nt::Keycode::F11:
+                        m_window.SetFullscreen(!m_window.IsFullscreen());
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            }
+            case Nt::EventType::WindowResize:
+            {
+                Nt::WindowResizeEvent& e = (Nt::WindowResizeEvent&)event;
+
+                Nt::float32 ratio = (Nt::float32)e.GetWidth() / e.GetHeight();
+                m_camera.SetProjection(glm::ortho(-ratio * m_zoom, ratio * m_zoom, -m_zoom, m_zoom, -1.0f, 1.0f));
+
+                break;
+            }
+            case Nt::EventType::MouseScrolled:
+            {
+                Nt::MouseScrolledEvent& e = (Nt::MouseScrolledEvent&)event;
+                m_zoom -= e.GetYOffset() * 0.25f;
+                m_zoom  = std::max(m_zoom, 0.25f);
+
+                Nt::float32 ratio = (Nt::float32)m_window.GetWidth() / m_window.GetHeight();
+                m_camera.SetProjection(glm::ortho(-ratio * m_zoom, ratio * m_zoom, -m_zoom, m_zoom, -1.0f, 1.0f));
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
 private:
     Nt::Window& m_window = Nt::Application::Get().GetWindow();
 
     Nt::Ref<Nt::VertexArray> m_vao;
     Nt::Ref<Nt::Shader> m_program;
     Nt::Ref<Nt::Texture2D> m_texture;
+
     Nt::OrthographicCamera m_camera;
+    Nt::Vector3 m_position = { 0.0f, 0.0f, 0.0f };
+    Nt::float32 m_rotation = 0.0f;
+    Nt::float32 m_zoom     = 1.0f;
+    Nt::float32 m_tSpeed   = 5.0f;
+    Nt::float32 m_rSpeed   = 5.0f;
 };
 
 class SandboxApplication :

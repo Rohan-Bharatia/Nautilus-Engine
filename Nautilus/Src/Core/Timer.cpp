@@ -102,7 +102,7 @@ namespace Nt
 
     float32 GetSystemTime(void)
     {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        return SDL_GetTicks() / 1000.0f;
     }
 
     String DateTime::Now(String fmt)

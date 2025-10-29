@@ -99,7 +99,6 @@ SOFTWARE.)");
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(NT_BIND_EVENT_FN(Application::OnWindowClose));
         dispatcher.Dispatch<WindowResizeEvent>(NT_BIND_EVENT_FN(Application::OnWindowResize));
-        dispatcher.Dispatch<KeyPressedEvent>(NT_BIND_EVENT_FN(Application::OnKeyPressed));
 
         for (auto it = m_layerStack.rbegin(); it != m_layerStack.rend(); ++it)
         {
@@ -167,21 +166,6 @@ SOFTWARE.)");
         m_minimized = false;
         RendererAPI::OnWindowResize(e.GetWidth(), e.GetHeight());
         return true;
-    }
-
-    bool Application::OnKeyPressed(KeyPressedEvent& e)
-    {
-        switch (e.GetKeyCode())
-        {
-            case Keycode::Escape:
-                Close();
-                return true;
-            case Keycode::F11:
-                m_window->SetFullscreen(!m_window->IsFullscreen());
-                return true;
-            default:
-                return true;
-        }
     }
 
     void Application::ExecuteMainThreadQueue(void)

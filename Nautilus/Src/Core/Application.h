@@ -59,7 +59,6 @@ namespace Nt
     private:
         bool OnWindowClose(WindowCloseEvent& e);
         bool OnWindowResize(WindowResizeEvent& e);
-        bool OnKeyPressed(KeyPressedEvent& e);
         void ExecuteMainThreadQueue(void);
 
         inline static Application* s_instance = nullptr;

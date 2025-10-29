@@ -60,6 +60,7 @@ namespace Nt
     {
     public:
         NT_CLASS_DEFAULTS(OrthographicCamera)
+        OrthographicCamera(void) = default;
         OrthographicCamera(float32 left, float32 right, float32 bottom, float32 top, float32 near=-1.0f, float32 far=1.0f);
 
         void SetPosition(const Vector3& position);
@@ -81,6 +82,7 @@ namespace Nt
     {
     public:
         NT_CLASS_DEFAULTS(PerspectiveCamera)
+        PerspectiveCamera(void) = default;
         PerspectiveCamera(float32 fov, float32 aspectRatio, float32 near=0.1f, float32 far=1000.0f);
 
         void SetPosition(const Vector3& position);
