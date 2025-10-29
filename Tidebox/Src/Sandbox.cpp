@@ -42,7 +42,7 @@ public:
 
         m_texture = Nt::CreateRef<Nt::Texture2D>("Assets/Textures/Checkerboard.png");
 
-        m_program = Nt::CreateRef<Nt::Shader>("triangle", "Assets/Shaders/triangle_vs.glsl", "Assets/Shaders/triangle_fs.glsl");
+        m_program = Nt::CreateRef<Nt::Shader>("basic", "Assets/Shaders/basic_vs.glsl", "Assets/Shaders/basic_fs.glsl");
         m_program->Bind();
         m_program->SetInt("u_texture", 0);
     }
