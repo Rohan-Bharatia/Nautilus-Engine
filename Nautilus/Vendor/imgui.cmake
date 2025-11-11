@@ -6,8 +6,8 @@ if(APPLE)
 endif()
 
 file(GLOB ImGui_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/imgui/*.h
     ${CMAKE_CURRENT_LIST_DIR}/imgui/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/imguizmo/*.cpp
 )
 
 if(WIN32)
@@ -92,4 +92,5 @@ endif()
 target_include_directories(imgui PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/imgui
     ${CMAKE_CURRENT_LIST_DIR}/imgui/backends
+    ${CMAKE_CURRENT_LIST_DIR}/imguizmo
 )

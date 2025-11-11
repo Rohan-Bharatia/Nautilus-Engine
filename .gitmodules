@@ -11,3 +11,6 @@
 	path = Nautilus/Vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "Nautilus/Vendor/imguizmo"]
+	path = Nautilus/Vendor/imguizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git
