@@ -73,7 +73,7 @@ namespace Nt
         #endif // NT_DEBUG
         }
 
-        m_window = SDL_CreateWindow((const char*)props.title, (int32)props.width, (int32)props.height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+        m_window = SDL_CreateWindow((const char*)props.title, (int32)props.width, (int32)props.height, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
 
         if (!m_window)
         {

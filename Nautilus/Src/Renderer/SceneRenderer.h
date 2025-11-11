@@ -53,6 +53,9 @@ namespace Nt
         static void DrawQuad(const Vector2& position, const Vector2& size, float32 rotation, const Ref<Texture2D>& texture, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
         static void DrawQuad(const Vector3& position, const Vector2& size, float32 rotation, const Ref<Texture2D>& texture, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
 
+        static void DrawSprite(const Vector2& position, const Vector2& size, float32 rotation, const Ref<SubTexture2D>& sprite, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
+        static void DrawSprite(const Vector3& position, const Vector2& size, float32 rotation, const Ref<SubTexture2D>& sprite, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
+
         struct Statistics
         {
             uint32 drawCalls = 0;
@@ -66,7 +69,7 @@ namespace Nt
         static Statistics GetStats(void);
 
     private:
-        static void DrawQuad(const Matrix4& transform, const Ref<Texture2D>& texture, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
+        static void DrawQuadInstance(const Matrix4& transform, const Vector2* texCoords, const Ref<Texture2D>& texture, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
         static void StartBatch(void);
         static void NextBatch(void);
         static void Flush(void);

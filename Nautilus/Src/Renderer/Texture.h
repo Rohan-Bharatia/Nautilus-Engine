@@ -31,6 +31,7 @@
 
 #include "Core/String.h"
 #include "Framebuffer.h"
+#include "Math/Vector.h"
 
 namespace Nt
 {
@@ -94,6 +95,25 @@ namespace Nt
         uint32 m_width, m_height;
         GLenum m_internalFormat, m_dataFormat;
     };
+
+    class NT_API SubTexture2D
+    {
+    public:
+        NT_CLASS_DEFAULTS(SubTexture2D)
+        SubTexture2D(const Ref<Texture2D>& texture, const Vector2& min=Vector2(0.0f), const Vector2& max=Vector2(1.0f));
+
+        Ref<Texture2D> GetTexture(void) const;
+        Vector2* GetTexCoords(void);
+
+    private:
+        Ref<Texture2D> m_texture;
+        Vector2 m_texCoords[4];
+    };
+
+    using TileSet = std::vector<Ref<SubTexture2D>>;
+
+    Ref<SubTexture2D> CreateSubTexture(const Ref<Texture2D>& texture, const Vector2& coords, const Vector2& size=Vector2(1.0f));
+    TileSet CreateTileSet(const Ref<Texture2D>& texture, uint32 cols, uint32 rows);
 } // namespace Nt
 
 #endif // _RENDERER_TEXTURE_H_

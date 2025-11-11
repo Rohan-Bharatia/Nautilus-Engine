@@ -184,6 +184,43 @@ namespace Nt
     {
         return m_id;
     }
+
+    SubTexture2D::SubTexture2D(const Ref<Texture2D>& texture, const Vector2& min, const Vector2& max) :
+        m_texture(texture)
+    {
+        m_texCoords[0] = { min.x, min.y };
+        m_texCoords[1] = { max.x, min.y };
+        m_texCoords[2] = { max.x, max.y };
+        m_texCoords[3] = { min.x, max.y };
+    }
+
+    Ref<Texture2D> SubTexture2D::GetTexture(void) const
+    {
+        return m_texture;
+    }
+
+    Vector2* SubTexture2D::GetTexCoords(void)
+    {
+        return m_texCoords;
+    }
+
+    Ref<SubTexture2D> CreateSubTexture(const Ref<Texture2D>& texture, const Vector2& coords, const Vector2& size)
+    {
+        Vector2 min(((coords.x + 0) * size.x) / texture->GetWidth(),
+                    ((coords.y + 0) * size.y) / texture->GetHeight());
+        Vector2 max(((coords.x + 1) * size.x) / texture->GetWidth(),
+                    ((coords.y + 1) * size.y) / texture->GetHeight());
+        return CreateRef<SubTexture2D>(texture, min, max);
+    }
+
+    TileSet CreateTileSet(const Ref<Texture2D>& texture, uint32 cols, uint32 rows)
+    {
+        std::vector<Ref<SubTexture2D>> subTextures(cols * rows);
+        for (uint32 y = 0; y < rows; ++y)
+            for (uint32 x = 0; x < cols; ++x)
+                subTextures.push_back(CreateSubTexture(texture, { x, y }, { 1.0f / cols, 1.0f / rows }));
+        return subTextures;
+    }
 } // namespace Nt
 
 #endif // _RENDERER_TEXTURE_CPP_

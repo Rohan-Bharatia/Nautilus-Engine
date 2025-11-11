@@ -162,7 +162,29 @@ namespace Nt
                             glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) *
                             glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        DrawQuad(transform, texture, tilingFactor, tintColor);
+        Vector2 texCoords[4] =
+        {
+            { 0.0f, 0.0f },
+            { 1.0f, 0.0f },
+            { 1.0f, 1.0f },
+            { 0.0f, 1.0f },
+        };
+
+        DrawQuadInstance(transform, texCoords, texture, tilingFactor, tintColor);
+    }
+
+    void SceneRenderer::DrawSprite(const Vector2& position, const Vector2& size, float32 rotation, const Ref<SubTexture2D>& sprite, float32 tilingFactor, const Vector4& tintColor)
+    {
+        DrawSprite({ position.x, position.y, 0.0f }, size, rotation, sprite, tilingFactor, tintColor);
+    }
+
+    void SceneRenderer::DrawSprite(const Vector3& position, const Vector2& size, float32 rotation, const Ref<SubTexture2D>& sprite, float32 tilingFactor, const Vector4& tintColor)
+    {
+        Matrix4 transform = glm::translate(glm::mat4(1.0f), position) *
+                            glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) *
+                            glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+        DrawQuadInstance(transform, sprite->GetTexCoords(), sprite->GetTexture(), tilingFactor, tintColor);
     }
 
     uint32 SceneRenderer::Statistics::GetTotalVertexCount(void) const
@@ -185,8 +207,7 @@ namespace Nt
         return s_data.stats;
     }
 
-
-    void SceneRenderer::DrawQuad(const Matrix4& transform, const Ref<Texture2D>& texture, float32 tilingFactor, const Color& tintColor)
+    void SceneRenderer::DrawQuadInstance(const Matrix4& transform, const Vector2* texCoords, const Ref<Texture2D>& texture, float32 tilingFactor, const Color& tintColor)
     {
         if ((s_data.quadIndexCount + 6) > MAX_INDICES)
             NextBatch();
@@ -216,13 +237,6 @@ namespace Nt
             {  0.5f, -0.5f, 0.0f, 1.0f },
             {  0.5f,  0.5f, 0.0f, 1.0f },
             { -0.5f,  0.5f, 0.0f, 1.0f },
-        };
-        Vector2 texCoords[4] =
-        {
-            { 0.0f, 0.0f },
-            { 1.0f, 0.0f },
-            { 1.0f, 1.0f },
-            { 0.0f, 1.0f },
         };
 
         for (uint32 i = 0; i < 4; ++i)
