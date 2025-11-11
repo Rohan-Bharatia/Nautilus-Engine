@@ -64,7 +64,10 @@
 #include "Renderer/UniformBuffer.h"
 #include "Renderer/Font.h"
 #include "Renderer/RenderCommand.h"
+#include "Renderer/SceneRenderer.h"
 #include "Renderer/RendererAPI.h"
+
+#include "GUI/GUILayer.h"
 
 #define NT_VERSION_MAJOR 1
 #define NT_VERSION_MINOR 0

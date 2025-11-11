@@ -54,6 +54,7 @@ namespace Nt
     NT_API Color OkLabToRGB(float32 l, float32 a, float32 b, float32 alpha=1.0f);
 } // namespace Nt
 
+#define NT_COLOR_DEFAULT    ::Nt::Color(10.965f, 15.045f, 142.035f, 1.0f)
 #define NT_COLOR_BLACK      ::Nt::Color(0.0f, 0.0f, 0.0f, 1.0f)
 #define NT_COLOR_DARK_GRAY  ::Nt::Color(64.0f, 64.0f, 64.0f, 1.0f)
 #define NT_COLOR_GRAY       ::Nt::Color(128.0f, 128.0f, 128.0f, 1.0f)

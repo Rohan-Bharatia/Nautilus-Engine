@@ -30,16 +30,19 @@
 #include "RendererAPI.h"
 
 #include "RenderCommand.h"
+#include "SceneRenderer.h"
 
 namespace Nt
 {
     void RendererAPI::Initialize(void)
     {
         RenderCommand::Initialize();
+        SceneRenderer::Initialize();
     };
 
     void RendererAPI::Shutdown(void)
     {
+        SceneRenderer::Shutdown();
         RenderCommand::Shutdown();
     };
 

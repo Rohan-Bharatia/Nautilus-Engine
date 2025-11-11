@@ -64,6 +64,7 @@ target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Core
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Math
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/GUI
 )
 
 set_target_properties(Nautilus PROPERTIES
