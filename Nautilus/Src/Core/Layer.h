@@ -41,10 +41,11 @@ namespace Nt
         Layer(const String& name="Layer");
         virtual ~Layer(void) = default;
 
-        virtual void OnAttach(void)       {}
-        virtual void OnUpdate(float32 dt) {}
-        virtual void OnDetach(void)       {}
-        virtual void OnEvent(Event& e)    {}
+        virtual void OnAttach(void)          {}
+        virtual void OnUpdate(float32 dt)    {}
+        virtual void OnGUIRender(float32 dt) {}
+        virtual void OnDetach(void)          {}
+        virtual void OnEvent(Event& e)       {}
 
         const String& GetName(void) const;
 

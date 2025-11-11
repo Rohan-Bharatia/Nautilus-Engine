@@ -65,6 +65,7 @@ namespace Nt
         bool IsFullscreen(void) const;
 
         void* GetNativeWindow(void) const;
+        void* GetNativeContext(void) const;
 
     private:
         SDL_Window* m_window;

@@ -52,6 +52,8 @@ namespace Nt
         void SwapBuffers(void) const;
         void SetVSync(bool enabled) const;
 
+        void* GetNativeContext(void) const;
+
     private:
         SDL_GLContext m_context;
         SDL_Window* m_native;

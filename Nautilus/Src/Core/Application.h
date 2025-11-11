@@ -33,6 +33,7 @@
 #include "Window.h"
 #include "ApplicationEvent.h"
 #include "KeyEvent.h"
+#include "GUI/GUILayer.h"
 
 namespace Nt
 {
@@ -67,6 +68,7 @@ namespace Nt
         bool m_running;
         bool m_minimized;
         LayerStack m_layerStack;
+        GUILayer* m_guiLayer;
         float32 m_lastFrame;
         std::vector<std::function<void()>> m_mainThreadQueue;
         std::mutex m_mainThreadQueueMutex;

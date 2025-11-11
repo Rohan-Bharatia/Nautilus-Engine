@@ -83,6 +83,8 @@ namespace Nt
         virtual int GetCategoryFlags(void) const   = 0;
         virtual String ToString(void) const;
 
+        bool IsInCategory(EventCategory category) const;
+
         bool IsHandled(void) const;
         void SetHandled(bool handled);
 

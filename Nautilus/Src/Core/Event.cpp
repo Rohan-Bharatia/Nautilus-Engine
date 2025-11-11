@@ -36,6 +36,11 @@ namespace Nt
         return GetName();
     }
 
+    bool Event::IsInCategory(EventCategory category) const
+    {
+        return GetCategoryFlags() & category;
+    }
+
     bool Event::IsHandled(void) const
     {
         return m_handled;

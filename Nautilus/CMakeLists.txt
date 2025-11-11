@@ -46,11 +46,15 @@ set(GLAD_BUILD_STATIC_LIBRARY ON CACHE BOOL "Build GLAD as static library" FORCE
 set(GLAD_BUILD_SHARED_LIBRARY OFF CACHE BOOL "Build GLAD as shared library" FORCE)
 set(MSDF_ATLAS_USE_VCPKG OFF CACHE BOOL "Disable MSDF-Atlas-Gen VCPKG support" FORCE)
 set(MSDF_ATLAS_USE_SKIA OFF CACHE BOOL "Disable MSDF-Atlas-Gen Skia support" FORCE)
+set(IMGUI_BACKEND_SDL3 ON CACHE BOOL "Enable ImGui SDL3 backend" FORCE)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor)
 link_dependency("SDL" "SDL3" "include")
-link_dependency("glm" "glm" "")
+link_dependency("glm" "glm" ".")
 link_dependency("glad" "glad" "include")
-link_dependency("stb" "stb" "")
+link_dependency("stb" "stb" ".")
 link_dependency("msdf-atlas-gen" "msdf-atlas-gen" "msdf-atlas-gen")
+link_dependency("imgui" "imgui" ".")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

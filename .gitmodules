@@ -7,3 +7,7 @@
 [submodule "Nautilus/Vendor/msdf-atlas-gen"]
 	path = Nautilus/Vendor/msdf-atlas-gen
 	url = https://github.com/Chlumsky/msdf-atlas-gen.git
+[submodule "Nautilus/Vendor/imgui"]
+	path = Nautilus/Vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = docking

@@ -70,6 +70,11 @@ namespace Nt
     {
         SDL_GL_SetSwapInterval(enabled ? 1 : 0);
     }
+
+    void* GraphicsContext::GetNativeContext(void) const
+    {
+        return (void*)&m_context;
+    }
 } // namespace Nt
 
 #endif // _RENDERER_GRAPHICS_CONTEXT_CPP_

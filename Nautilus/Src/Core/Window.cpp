@@ -247,6 +247,8 @@ namespace Nt
                 default:
                     break;
             }
+
+            ImGui_ImplSDL3_ProcessEvent(&event);
         }
 
         m_context->SwapBuffers();
@@ -301,6 +303,11 @@ namespace Nt
     void* Window::GetNativeWindow(void) const
     {
         return (void*)m_window;
+    }
+
+    void* Window::GetNativeContext(void) const
+    {
+        return (void*)m_context->GetNativeContext();
     }
 } // namespace Nt
 
