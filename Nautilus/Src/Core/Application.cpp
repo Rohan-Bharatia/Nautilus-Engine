@@ -50,6 +50,7 @@ namespace Nt
 
         RendererAPI::Initialize();
         m_guiLayer = new GUILayer();
+        m_guiLayer->BlockEvents(false);
 
         PushLayer(new InputLayer());
         PushOverlay(m_guiLayer);

@@ -60,8 +60,8 @@ namespace Nt
     struct NT_API FramebufferTextureProps
     {
         FramebufferTextureFormat texture = FramebufferTextureFormat::Depth24Stencil8;
-        FramebufferFilterFormat filter  = FramebufferFilterFormat::Nearest;
-        FramebufferWrapFormat wrap      = FramebufferWrapFormat::Repeat;
+        FramebufferFilterFormat filter   = FramebufferFilterFormat::Nearest;
+        FramebufferWrapFormat wrap       = FramebufferWrapFormat::Repeat;
 
         NT_STRUCT_DEFAULTS(FramebufferTextureProps)
         FramebufferTextureProps(void) = default;
@@ -74,6 +74,11 @@ namespace Nt
         NT_STRUCT_DEFAULTS(FramebufferAttachmentProps)
         FramebufferAttachmentProps(void) = default;
         FramebufferAttachmentProps(std::initializer_list<FramebufferTextureProps> textures);
+
+        inline void Push(FramebufferTextureProps texture)
+        {
+            attachments.push_back(texture);
+        }
     };
 
     struct NT_API FramebufferProps

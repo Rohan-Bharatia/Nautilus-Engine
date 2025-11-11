@@ -20,7 +20,7 @@ public:
 
     virtual void OnAttach(void) override
     {
-        Nt::TextureSampler sampler;
+        Nt::TextureSampler sampler{};
         sampler.filter = Nt::TextureFilter::Nearest;
         m_texture      = Nt::CreateRef<Nt::Texture2D>("Assets/Textures/Checkerboard.png", sampler);
     }
@@ -91,7 +91,6 @@ public:
 
                 Nt::float32 ratio = (Nt::float32)e.GetWidth() / e.GetHeight();
                 m_camera.SetProjection(glm::ortho(-ratio * m_zoom, ratio * m_zoom, -m_zoom, m_zoom, -1.0f, 1.0f));
-
                 break;
             }
             case Nt::EventType::MouseScrolled:
@@ -113,7 +112,6 @@ private:
     Nt::Window& m_window = Nt::Application::Get().GetWindow();
 
     Nt::Ref<Nt::Texture2D> m_texture;
-
     Nt::OrthographicCamera m_camera;
     Nt::Vector3 m_position = { 0.0f, 0.0f, 0.0f };
     Nt::float32 m_rotation = 0.0f;

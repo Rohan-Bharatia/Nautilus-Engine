@@ -57,7 +57,6 @@ namespace Nt
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrap);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
         }
@@ -76,7 +75,6 @@ namespace Nt
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrap);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
         }
@@ -123,9 +121,9 @@ namespace Nt
         for (auto p : m_props.attachments.attachments)
         {
             if (p.texture == FramebufferTextureFormat::Depth24Stencil8)
-                m_colorAttachmentsProps.emplace_back(p);
-            else
                 m_depthAttachmentProps = p;
+            else
+                m_colorAttachmentsProps.push_back(p);
         }
 
         Invalidate();
@@ -151,7 +149,7 @@ namespace Nt
 
     void Framebuffer::Resize(uint32 width, uint32 height)
     {
-        if (width == 0 || height == 0 || m_props.width == width || m_props.height == height)
+        if (width == 0 || height == 0 || (m_props.width == width && m_props.height == height))
             return;
 
         m_props.width  = width;
@@ -172,7 +170,7 @@ namespace Nt
     {
         NT_ASSERT(attachmentIndex < m_colorAttachments.size(), "Index out of range");
         auto& spec = m_colorAttachmentsProps[attachmentIndex];
-        glClearTexImage(m_colorAttachments[attachmentIndex], 0, FramebufferTextureFormatToGL(spec.texture), GL_INT, &value);
+        glClearTexImage(m_colorAttachments[attachmentIndex], 0, FramebufferTextureFormatToGL(spec.texture) == GL_RED_INTEGER ? GL_RED_INTEGER : GL_RGBA, GL_INT, &value);
     }
 
     uint32 Framebuffer::GetColorAttachmentRenderId(uint32 index) const
@@ -199,6 +197,7 @@ namespace Nt
             glDeleteTextures(m_colorAttachments.size(), m_colorAttachments.data());
             glDeleteTextures(1, &m_depthAttachment);
 
+            m_id              = 0;
             m_colorAttachments.clear();
             m_depthAttachment = 0;
         }
