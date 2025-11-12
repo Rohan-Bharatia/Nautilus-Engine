@@ -42,7 +42,6 @@ namespace Nt
         ~GUILayer(void) = default;
 
         virtual void OnAttach(void) override;
-        virtual void OnGUIRender(float32 deltaTime) override;
         virtual void OnDetach(void) override;
         virtual void OnEvent(Event& event) override;
 

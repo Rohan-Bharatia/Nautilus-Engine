@@ -93,6 +93,11 @@ namespace Nt
         sync.cv.wait(lock, [&]() { return sync.done; });
         return sync.files;
     }
+
+    void OpenURL(const String& url)
+    {
+        SDL_OpenURL((const char*)url);
+    }
 } // namespace Nt
 
 #endif // _CORE_DIALOGS_CPP_

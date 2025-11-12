@@ -34,7 +34,7 @@ if "%NO_DEBUG_BUILD%"=="false" (
     @echo Debug build...
     mkdir /s /q debug
     cd debug
-    cmake -G "Ninja" -S ../../Tidebox -DCMAKE_BUILD_TYPE=Debug
+    cmake -G "Ninja" -S ../../Reef -DCMAKE_BUILD_TYPE=Debug
     cmake --build .
     cd ..
 )
@@ -42,7 +42,7 @@ if "%NO_DEBUG_BUILD%"=="false" (
 @echo Release build...
 mkdir /s /q release
 cd release
-cmake -G "Ninja" -S ../../Tidebox -DCMAKE_BUILD_TYPE=Release
+cmake -G "Ninja" -S ../../Reef -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 cd ..
 

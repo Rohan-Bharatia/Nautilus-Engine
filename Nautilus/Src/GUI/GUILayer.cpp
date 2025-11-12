@@ -64,12 +64,6 @@ namespace Nt
         ImGui_ImplOpenGL3_Init("#version 460");
     }
 
-    void GUILayer::OnGUIRender(float32 deltaTime)
-    {
-        bool show = true;
-        ImGui::ShowDemoWindow(&show);
-    }
-
     void GUILayer::OnDetach(void)
     {
         ImGui_ImplOpenGL3_Shutdown();

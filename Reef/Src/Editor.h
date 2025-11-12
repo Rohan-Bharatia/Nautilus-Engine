@@ -26,54 +26,40 @@
 
 #pragma once
 
-#ifndef _CORE_APPLICATION_H_
-    #define _CORE_APPLICATION_H_
+#ifndef _EDITOR_H_
+    #define _EDITOR_H_
 
-#include "LayerStack.h"
-#include "Window.h"
-#include "ApplicationEvent.h"
-#include "KeyEvent.h"
-#include "GUI/GUILayer.h"
+#include <Nautilus.h>
 
 namespace Nt
 {
-    class NT_API Application
+    class NT_API EditorLayer :
+        public Layer
     {
     public:
-        NT_CLASS_DEFAULTS(Application)
-        Application(String name="Nautilus Application");
-        virtual ~Application(void);
+        EditorLayer(void);
+        virtual ~EditorLayer(void) = default;
 
-        void PushLayer(Layer* layer);
-        void PushOverlay(Layer* layer);
-
-        void OnEvent(Event& e);
-
-        void Run(void);
-        void Close(void);
-
-        void SubmitToMainThread(const std::function<void()>& func);
-
-        Window& GetWindow(void);
-        GUILayer* GetGUILayer(void);
-        static Application& Get(void);
+        virtual void OnAttach(void) override;
+        virtual void OnUpdate(float32 deltaTime) override;
+        virtual void OnGUIRender(float32 deltaTime) override;
+        virtual void OnEvent(Event& event) override;
 
     private:
-        bool OnWindowClose(WindowCloseEvent& e);
-        bool OnWindowResize(WindowResizeEvent& e);
-        void ExecuteMainThreadQueue(void);
+        struct WindowStates
+        {
+            bool dockspace      = true;
+            bool viewport       = true;
+            bool sceneHierarchy = true;
+            bool inspector      = true;
+            bool console        = false;
+            bool assetBrowser   = false;
+            bool metrics        = false;
+        };
 
-        inline static Application* s_instance = nullptr;
-
-        Scope<Window> m_window;
-        bool m_running;
-        bool m_minimized;
-        LayerStack m_layerStack;
-        GUILayer* m_guiLayer;
-        float32 m_lastFrame;
-        std::vector<std::function<void()>> m_mainThreadQueue;
-        std::mutex m_mainThreadQueueMutex;
+        WindowStates m_windowStates;
+        Ref<Framebuffer> m_framebuffer;
     };
 } // namespace Nt
 
-#endif // _CORE_APPLICATION_H_
+#endif // _EDITOR_H_

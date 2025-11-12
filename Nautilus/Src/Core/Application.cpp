@@ -36,7 +36,7 @@
 
 namespace Nt
 {
-    Application::Application(int32 argc, char* argv[]) :
+    Application::Application(String name) :
         m_running(true), m_minimized(false), m_lastFrame(0.0f)
     {
         NT_ASSERT(s_instance == nullptr, "Application already exists!");
@@ -45,12 +45,12 @@ namespace Nt
         Log::Initialize("Nautilus.log");
 
         WindowProperties props{};
-        m_window = CreateScope<Window>(props);
+        props.title = name;
+        m_window    = CreateScope<Window>(props);
         m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
 
         RendererAPI::Initialize();
         m_guiLayer = new GUILayer();
-        m_guiLayer->BlockEvents(false);
 
         PushLayer(new InputLayer());
         PushOverlay(m_guiLayer);
@@ -129,6 +129,11 @@ namespace Nt
     Window& Application::GetWindow(void)
     {
         return *m_window;
+    }
+
+    GUILayer* Application::GetGUILayer(void)
+    {
+        return m_guiLayer;
     }
 
     Application& Application::Get(void)

@@ -194,8 +194,10 @@ namespace Nt
         if (m_id)
         {
             glDeleteFramebuffers(1, &m_id);
-            glDeleteTextures(m_colorAttachments.size(), m_colorAttachments.data());
-            glDeleteTextures(1, &m_depthAttachment);
+            if (!m_colorAttachments.empty())
+                glDeleteTextures(m_colorAttachments.size(), m_colorAttachments.data());
+            if (m_depthAttachment)
+                glDeleteTextures(1, &m_depthAttachment);
 
             m_id              = 0;
             m_colorAttachments.clear();

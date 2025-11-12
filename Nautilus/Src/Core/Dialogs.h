@@ -41,6 +41,8 @@ namespace Nt
 
     NT_API String OpenFileDialog(Window* window, const std::vector<Filter>& filters={});
     NT_API std::vector<String> OpenMultiFileDialog(Window* window, const std::vector<Filter>& filters={});
+
+    NT_API void OpenURL(const String& url);
 } // namespace Nt
 
 #endif // _CORE_DIALOGS_H_

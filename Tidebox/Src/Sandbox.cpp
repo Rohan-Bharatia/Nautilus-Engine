@@ -124,8 +124,8 @@ class SandboxApplication :
     public Nt::Application
 {
 public:
-    SandboxApplication(Nt::int32 argc, char* argv[]) :
-        Application(argc, argv)
+    SandboxApplication(void) :
+        Nt::Application("Nautilus Runtime (Testbed)")
     {
         PushLayer(new SandboxLayer());
     }
@@ -136,7 +136,7 @@ public:
 
 Nt::Application* Nt::CreateApplication(Nt::int32 argc, char* argv[])
 {
-    return new SandboxApplication(argc, argv);
+    return new SandboxApplication();
 }
 
 #endif // _SANDBOX_CPP_
