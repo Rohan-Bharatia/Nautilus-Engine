@@ -33,7 +33,8 @@ namespace Nt
 {
     void Camera::SetProjection(const Matrix4& projection)
     {
-        m_projection = (glm::mat4)projection;
+        m_projection     = (glm::mat4)projection;
+        m_viewProjection = m_projection * m_view;
     }
 
     const Matrix4 Camera::GetProjection(void) const
@@ -43,7 +44,8 @@ namespace Nt
 
     void Camera::SetView(const Matrix4& view)
     {
-        m_view = (glm::mat4)view;
+        m_view           = (glm::mat4)view;
+        m_viewProjection = m_projection * m_view;
     }
 
     const Matrix4 Camera::GetView(void) const

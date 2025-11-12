@@ -32,22 +32,27 @@
 namespace Nt
 {
     EditorLayer::EditorLayer(void) :
-        Layer("EditorLayer")
+        Layer("EditorLayer"), m_camera(60, Application::Get().GetWindow().GetWidth() / Application::Get().GetWindow().GetHeight())
     {}
 
     void EditorLayer::OnAttach(void)
     {
+        Application::Get().GetGUILayer()->BlockEvents(false);
         m_windowStates.dockspace = true;
 
-        FramebufferTextureProps colorAttachment;
-        colorAttachment.texture = FramebufferTextureFormat::RGBA8;
-        colorAttachment.filter  = FramebufferFilterFormat::Linear;
-        colorAttachment.wrap    = FramebufferWrapFormat::ClampToEdge;
+        FramebufferTextureProps attc;
+        attc.texture = FramebufferTextureFormat::RGBA8;
+        attc.filter  = FramebufferFilterFormat::Linear;
+        attc.wrap    = FramebufferWrapFormat::ClampToEdge;
 
         FramebufferProps props;
-        props.width   = Application::Get().GetWindow().GetWidth();
-        props.height  = Application::Get().GetWindow().GetHeight();
-        props.attachments.attachments.push_back(colorAttachment);
+        props.width  = Application::Get().GetWindow().GetWidth();
+        props.height = Application::Get().GetWindow().GetHeight();
+
+        props.attachments.attachments.push_back(attc);
+        attc.texture = FramebufferTextureFormat::Depth24Stencil8;
+        props.attachments.attachments.push_back(attc);
+
         m_framebuffer = CreateRef<Framebuffer>(props);
     }
 
@@ -104,7 +109,7 @@ namespace Nt
 
         style.WindowMinSize.x = minWinX;
 
-        if (ImGui::BeginMainMenuBar())
+        if (ImGui::BeginMenuBar())
         {
             ImGui::Separator();
             if (ImGui::BeginMenu("File"))
@@ -228,7 +233,7 @@ namespace Nt
                 ImGui::EndMenu();
             }
             ImGui::Separator();
-            ImGui::EndMainMenuBar();
+            ImGui::EndMenuBar();
         }
 
         ImGui::End();
@@ -237,33 +242,22 @@ namespace Nt
         {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
             ImGui::Begin("Viewport");
-
-            Application::Get().GetGUILayer()->BlockEvents(!ImGui::IsWindowHovered());
             ImGui::Image(ImTextureRef((void*)(uint64)m_framebuffer->GetColorAttachmentRenderId(0)), ImGui::GetContentRegionAvail(), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
             ImGui::End();
             ImGui::PopStyleVar();
         }
 
         if (m_windowStates.sceneHierarchy)
-        {
-            // TODO: Add scene hierarchy panel class
-        }
+            m_sceneHierarchyPanel.Display();
 
         if (m_windowStates.inspector)
-        {
-            // TODO: Add component inspector panel class
-        }
+            m_inspectorPanel.Display();
 
         if (m_windowStates.console)
-        {
-            // TODO: Add terminal emulator panel class
-        }
+            m_consolePanel.Display();
 
         if (m_windowStates.assetBrowser)
-        {
-            // TODO: Add asset browser panel class
-        }
+            m_assetBrowserPanel.Display();
 
         if (m_windowStates.metrics)
         {
@@ -306,6 +300,9 @@ namespace Nt
                         break;
                     case Keycode::F11:
                         Application::Get().GetWindow().SetFullscreen(!Application::Get().GetWindow().IsFullscreen());
+                        break;
+                    case Keycode::Escape:
+                        ImGui::FocusWindow(NULL);
                         break;
                     default:
                         break;

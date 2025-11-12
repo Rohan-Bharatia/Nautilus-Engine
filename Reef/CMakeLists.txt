@@ -12,6 +12,7 @@ project(Reef)
 
 file(GLOB Reef_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/Panels/*.cpp
 )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -22,8 +23,10 @@ target_link_libraries(Reef Nautilus)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(Nautilus PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/Panels
 )
 
 set_target_properties(Reef PROPERTIES

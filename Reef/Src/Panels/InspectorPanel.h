@@ -26,48 +26,21 @@
 
 #pragma once
 
-#ifndef _EDITOR_H_
-    #define _EDITOR_H_
+#ifndef _PANELS_INSPECTOR_PANEL_H_
+    #define _PANELS_INSPECTOR_PANEL_H_
 
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/InspectorPanel.h"
-#include "Panels/ConsolePanel.h"
-#include "Panels/AssetBrowserPanel.h"
+#include <Nautilus.h>
 
 namespace Nt
 {
-    class NT_API EditorLayer :
-        public Layer
+    class InspectorPanel
     {
     public:
-        EditorLayer(void);
-        virtual ~EditorLayer(void) = default;
+        NT_CLASS_DEFAULTS(InspectorPanel)
+        InspectorPanel(void) = default;
 
-        virtual void OnAttach(void) override;
-        virtual void OnUpdate(float32 deltaTime) override;
-        virtual void OnGUIRender(float32 deltaTime) override;
-        virtual void OnEvent(Event& event) override;
-
-    private:
-        struct WindowStates
-        {
-            bool dockspace      = true;
-            bool viewport       = true;
-            bool sceneHierarchy = true;
-            bool inspector      = true;
-            bool console        = true;
-            bool assetBrowser   = true;
-            bool metrics        = true;
-        };
-
-        PerspectiveCamera m_camera;
-        WindowStates m_windowStates;
-        Ref<Framebuffer> m_framebuffer;
-        SceneHierarchyPanel m_sceneHierarchyPanel;
-        InspectorPanel m_inspectorPanel;
-        ConsolePanel m_consolePanel;
-        AssetBrowserPanel m_assetBrowserPanel;
+        void Display(void);
     };
 } // namespace Nt
 
-#endif // _EDITOR_H_
+#endif // _PANELS_INSPECTOR_PANEL_H_

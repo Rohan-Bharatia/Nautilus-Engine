@@ -24,50 +24,18 @@
 
 #pragma endregion LICENSE
 
-#pragma once
+#ifndef _PANELS_CONSOLE_PANEL_CPP_
+    #define _PANELS_CONSOLE_PANEL_CPP_
 
-#ifndef _EDITOR_H_
-    #define _EDITOR_H_
-
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/InspectorPanel.h"
-#include "Panels/ConsolePanel.h"
-#include "Panels/AssetBrowserPanel.h"
+#include "ConsolePanel.h"
 
 namespace Nt
 {
-    class NT_API EditorLayer :
-        public Layer
+    void ConsolePanel::Display(void)
     {
-    public:
-        EditorLayer(void);
-        virtual ~EditorLayer(void) = default;
-
-        virtual void OnAttach(void) override;
-        virtual void OnUpdate(float32 deltaTime) override;
-        virtual void OnGUIRender(float32 deltaTime) override;
-        virtual void OnEvent(Event& event) override;
-
-    private:
-        struct WindowStates
-        {
-            bool dockspace      = true;
-            bool viewport       = true;
-            bool sceneHierarchy = true;
-            bool inspector      = true;
-            bool console        = true;
-            bool assetBrowser   = true;
-            bool metrics        = true;
-        };
-
-        PerspectiveCamera m_camera;
-        WindowStates m_windowStates;
-        Ref<Framebuffer> m_framebuffer;
-        SceneHierarchyPanel m_sceneHierarchyPanel;
-        InspectorPanel m_inspectorPanel;
-        ConsolePanel m_consolePanel;
-        AssetBrowserPanel m_assetBrowserPanel;
-    };
+        ImGui::Begin("Console");
+        ImGui::End();
+    }
 } // namespace Nt
 
-#endif // _EDITOR_H_
+#endif // _PANELS_CONSOLE_PANEL_CPP_

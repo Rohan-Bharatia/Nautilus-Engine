@@ -45,8 +45,10 @@ namespace Nt
         Log::Initialize("Nautilus.log");
 
         WindowProperties props{};
-        props.title = name;
-        m_window    = CreateScope<Window>(props);
+        props.title  = name;
+        props.width  = 1600;
+        props.height = 900;
+        m_window     = CreateScope<Window>(props);
         m_window->SetEventCallback(NT_BIND_EVENT_FN(Application::OnEvent));
 
         RendererAPI::Initialize();
