@@ -128,22 +128,22 @@ namespace Nt
         return m_position;
     }
 
-    Quaternion PerspectiveCamera::GetOrientation(void) const
+    Quaternion PerspectiveCamera::GetOrientation(void)
     {
         return Quaternion(Vector3(-m_pitch, -m_yaw, 0.0f));
     }
 
-    Vector3 PerspectiveCamera::GetUpDirection(void) const
+    Vector3 PerspectiveCamera::GetUpDirection(void)
     {
         return glm::rotate(GetOrientation(), Vector3(0.0f, 0.0f, 1.0f));
     }
 
-    Vector3 PerspectiveCamera::GetRightDirection(void) const
+    Vector3 PerspectiveCamera::GetRightDirection(void)
     {
         return glm::rotate(GetOrientation(), Vector3(0.0f, 1.0f, 0.0f));
     }
 
-    Vector3 PerspectiveCamera::GetForwardDirection(void) const
+    Vector3 PerspectiveCamera::GetForwardDirection(void)
     {
         return glm::rotate(GetOrientation(), Vector3(0.0f, 0.0f, -1.0f));
     }

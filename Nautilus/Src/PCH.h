@@ -616,6 +616,7 @@ namespace Nt
 #include <entt/entt.hpp>
 
 // Nautilus library headers
+#include "Core/String.h"
 #include "Core/Log.h"
 
 #ifdef NT_DEBUG

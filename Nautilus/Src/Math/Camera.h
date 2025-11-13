@@ -93,11 +93,11 @@ namespace Nt
         void SetDistance(float32 distance);
 
         const Vector3& GetPosition(void) const;
-        Quaternion GetOrientation(void) const;
+        Quaternion GetOrientation(void);
 
-        Vector3 GetUpDirection(void) const;
-        Vector3 GetRightDirection(void) const;
-        Vector3 GetForwardDirection(void) const;
+        Vector3 GetUpDirection(void);
+        Vector3 GetRightDirection(void);
+        Vector3 GetForwardDirection(void);
 
         virtual void SetViewportSize(uint32 width, uint32 height) override;
 

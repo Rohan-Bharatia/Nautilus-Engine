@@ -69,6 +69,12 @@
 
 #include "GUI/GUILayer.h"
 
+#include "Scene/Components.h"
+#include "Scene/Entity.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneSerializer.h"
+#include "Scene/ScriptableEntity.h"
+
 #define NT_VERSION_MAJOR 1
 #define NT_VERSION_MINOR 0
 #define NT_VERSION_PATCH 0
