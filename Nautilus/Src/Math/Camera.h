@@ -49,6 +49,8 @@ namespace Nt
         void SetViewProjection(const Matrix4& viewProjection);
         const Matrix4 GetViewProjection(void) const;
 
+        virtual void SetViewportSize(uint32 width, uint32 height) {};
+
     protected:
         glm::mat4 m_projection;
         glm::mat4 m_view;
@@ -69,6 +71,8 @@ namespace Nt
         void SetRotation(const float32& rotation);
         float32 GetRotation(void) const;
 
+        virtual void SetViewportSize(uint32 width, uint32 height) override;
+
     private:
         void RecalculateView(void);
 
@@ -85,26 +89,26 @@ namespace Nt
         PerspectiveCamera(void) = default;
         PerspectiveCamera(float32 fov, float32 aspectRatio, float32 near=0.1f, float32 far=1000.0f);
 
-        void SetPosition(const Vector3& position);
-        Vector3 GetPosition(void) const;
+        float32 GetDistance(void) const;
+        void SetDistance(float32 distance);
 
-        void SetRotation(const float32& roll, const float32& pitch, const float32& yaw);
-        float32 GetRoll(void) const;
-        float32 GetPitch(void) const;
-        float32 GetYaw(void) const;
+        const Vector3& GetPosition(void) const;
+        Quaternion GetOrientation(void) const;
 
-        void SetUpDirection(const Vector3& up);
         Vector3 GetUpDirection(void) const;
+        Vector3 GetRightDirection(void) const;
+        Vector3 GetForwardDirection(void) const;
 
-        void SetFOV(float32 fov);
+        virtual void SetViewportSize(uint32 width, uint32 height) override;
 
     private:
-        void RecalculateView(void);
+        void RecalculateProjection(void);
+        glm::vec3 CalculatePosition(void);
 
-        float32 m_fov, m_aspectRatio, m_near, m_far;
-        glm::vec3 m_position;
-        glm::vec3 m_front;
-        glm::vec3 m_up;
+        float32 m_fov, m_ratio, m_near, m_far;
+        glm::vec3 m_position, m_focalPoint;
+        float32 m_distance, m_pitch, m_yaw;
+        glm::vec2 m_viewport;
     };
 } // namespace Nt
 

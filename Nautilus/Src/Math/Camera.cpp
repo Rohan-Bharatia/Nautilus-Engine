@@ -92,6 +92,12 @@ namespace Nt
         return float32(m_rotation * (NT_PI / 180.0f));
     }
 
+    void OrthographicCamera::SetViewportSize(uint32 width, uint32 height)
+    {
+        m_projection = glm::ortho(m_left, m_right, m_bottom, m_top, m_near, m_far);
+        RecalculateView();
+    }
+
     void OrthographicCamera::RecalculateView(void)
     {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_position) *
@@ -102,68 +108,61 @@ namespace Nt
     }
 
     PerspectiveCamera::PerspectiveCamera(float32 fov, float32 aspectRatio, float32 near, float32 far) :
-        m_fov(fov), m_aspectRatio(aspectRatio), m_near(near), m_far(far), m_position(0.0f), m_front(0.0f, 0.0f, -1.0f),
-        m_up(0.0f, 1.0f, 0.0f)
+        m_fov(fov), m_ratio(aspectRatio), m_near(near), m_far(far), m_position(0.0f), m_focalPoint(0.0f), m_distance(10.0f), m_pitch(0.0f), m_yaw(0.0f)
     {
-        m_projection = glm::perspective(glm::radians(fov), aspectRatio, near, far);
-        RecalculateView();
+        RecalculateProjection();
     }
 
-
-    void PerspectiveCamera::SetPosition(const Vector3& position)
+    float32 PerspectiveCamera::GetDistance(void) const
     {
-        m_position = (glm::vec3)position;
-        RecalculateView();
+        return m_distance;
     }
 
-    Vector3 PerspectiveCamera::GetPosition(void) const
+    void PerspectiveCamera::SetDistance(float32 distance)
     {
-        return Vector3(m_position);
+        m_distance = distance;
     }
 
-    void PerspectiveCamera::SetRotation(const float32& roll, const float32& pitch, const float32& yaw)
+    const Vector3& PerspectiveCamera::GetPosition(void) const
     {
-        glm::vec3 direction = glm::vec3(roll, pitch, yaw);
-        m_front             = glm::normalize(direction);
-        RecalculateView();
+        return m_position;
     }
 
-    float32 PerspectiveCamera::GetRoll(void) const
+    Quaternion PerspectiveCamera::GetOrientation(void) const
     {
-        return (m_front.x * (NT_PI / 180.0f));
-    }
-
-    float32 PerspectiveCamera::GetPitch(void) const
-    {
-        return (m_front.y * (NT_PI / 180.0f));
-    }
-
-    float32 PerspectiveCamera::GetYaw(void) const
-    {
-        return (m_front.z * (NT_PI / 180.0f));
-    }
-
-    void PerspectiveCamera::SetUpDirection(const Vector3& up)
-    {
-        m_up = (glm::vec3)up;
+        return Quaternion(Vector3(-m_pitch, -m_yaw, 0.0f));
     }
 
     Vector3 PerspectiveCamera::GetUpDirection(void) const
     {
-        return Vector3(m_up);
+        return glm::rotate(GetOrientation(), Vector3(0.0f, 0.0f, 1.0f));
     }
 
-    void PerspectiveCamera::SetFOV(float32 fov)
+    Vector3 PerspectiveCamera::GetRightDirection(void) const
     {
-        m_fov        = fov;
-        m_projection = glm::perspective(glm::radians(fov), m_aspectRatio, m_near, m_far);
-        RecalculateView();
+        return glm::rotate(GetOrientation(), Vector3(0.0f, 1.0f, 0.0f));
     }
 
-    void PerspectiveCamera::RecalculateView(void)
+    Vector3 PerspectiveCamera::GetForwardDirection(void) const
     {
-        m_view           = glm::lookAt(m_position, m_position + m_front, m_up);
-        m_viewProjection = m_projection * m_view;
+        return glm::rotate(GetOrientation(), Vector3(0.0f, 0.0f, -1.0f));
+    }
+
+    void PerspectiveCamera::SetViewportSize(uint32 width, uint32 height)
+    {
+        m_viewport = Vector2(float32(width), float32(height));
+        RecalculateProjection();
+    }
+
+    void PerspectiveCamera::RecalculateProjection(void)
+    {
+        m_ratio = m_viewport.x / m_viewport.y;
+        m_projection = glm::perspective(glm::radians(m_fov), m_ratio, m_near, m_far);
+    }
+
+    glm::vec3 PerspectiveCamera::CalculatePosition(void)
+    {
+        return m_focalPoint - GetForwardDirection() - m_distance;
     }
 } // namespace Nt
 

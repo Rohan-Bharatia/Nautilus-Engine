@@ -613,6 +613,7 @@ namespace Nt
 #include <imgui/backends/imgui_impl_sdl3.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <ImGuizmo.h>
+#include <entt/entt.hpp>
 
 // Nautilus library headers
 #include "Core/Log.h"

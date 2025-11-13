@@ -14,3 +14,6 @@
 [submodule "Nautilus/Vendor/imguizmo"]
 	path = Nautilus/Vendor/imguizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "Nautilus/Vendor/entt"]
+	path = Nautilus/Vendor/entt
+	url = https://github.com/skypjack/entt.git
