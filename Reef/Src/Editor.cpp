@@ -32,7 +32,7 @@
 namespace Nt
 {
     EditorLayer::EditorLayer(void) :
-        Layer("EditorLayer"), m_camera(60, Application::Get().GetWindow().GetWidth() / Application::Get().GetWindow().GetHeight())
+        Layer("EditorLayer"), m_viewportSize(0.0f, 0.0f), m_camera(60, 16.0f / 9.0f)
     {}
 
     void EditorLayer::OnAttach(void)
@@ -50,19 +50,30 @@ namespace Nt
         props.height = Application::Get().GetWindow().GetHeight();
 
         props.attachments.attachments.push_back(attc);
-        attc.texture = FramebufferTextureFormat::Depth24Stencil8;
-        props.attachments.attachments.push_back(attc);
 
         m_framebuffer = CreateRef<Framebuffer>(props);
     }
 
     void EditorLayer::OnUpdate(float32 deltaTime)
     {
+        if (FramebufferProps props = m_framebuffer->GetProps();
+            m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && (m_viewportSize.x != props.width || m_viewportSize.y != props.height))
+        {
+            m_framebuffer->Resize((uint32)m_viewportSize.x, (uint32)m_viewportSize.y);
+            m_camera.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
+        }
+
         SceneRenderer::ResetStats();
         m_framebuffer->Bind();
 
         RenderCommand::SetClearColor(NT_COLOR_BLACK);
         RenderCommand::Clear();
+
+        m_camera.OnUpdate(deltaTime);
+
+        SceneRenderer::BeginScene(m_camera);
+        SceneRenderer::DrawQuad({ 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, 0.0f, NT_COLOR_WHITE);
+        SceneRenderer::EndScene();
 
         m_framebuffer->Unbind();
     }
@@ -242,7 +253,9 @@ namespace Nt
         {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
             ImGui::Begin("Viewport");
-            ImGui::Image(ImTextureRef((void*)(uint64)m_framebuffer->GetColorAttachmentRenderId(0)), ImGui::GetContentRegionAvail(), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+            Application::Get().GetGUILayer()->BlockEvents(!ImGui::IsWindowHovered());
+            m_viewportSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
+            ImGui::Image(ImTextureRef((void*)(uint64)m_framebuffer->GetColorAttachmentRenderId(0)), ImVec2(m_viewportSize.x, m_viewportSize.y));
             ImGui::End();
             ImGui::PopStyleVar();
         }
@@ -278,40 +291,40 @@ namespace Nt
 
     void EditorLayer::OnEvent(Event& event)
     {
-        switch (event.GetEventType())
+        m_camera.OnEvent(event);
+
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<WindowResizeEvent>(NT_BIND_EVENT_FN(EditorLayer::OnWindowResize));
+        dispatcher.Dispatch<KeyPressedEvent>(NT_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+    }
+
+    bool EditorLayer::OnWindowResize(WindowResizeEvent& e)
+    {
+        RendererAPI::OnWindowResize(e.GetWidth(), e.GetHeight());
+        return false;
+    }
+
+    bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+    {
+        bool ctrl          = Input::IsKeyPressed(Keycode::LeftControl) || Input::IsKeyPressed(Keycode::RightControl);
+        bool shift         = Input::IsKeyPressed(Keycode::LeftShift) || Input::IsKeyPressed(Keycode::RightShift);
+        bool alt           = Input::IsKeyPressed(Keycode::LeftAlt) || Input::IsKeyPressed(Keycode::RightAlt);
+        switch (e.GetKeyCode())
         {
-            case EventType::WindowResize:
-            {
-                WindowResizeEvent& e = (WindowResizeEvent&)event;
-                RendererAPI::OnWindowResize(e.GetWidth(), e.GetHeight());
+            case Keycode::Q:
+                if (ctrl)
+                    Application::Get().Close();
                 break;
-            }
-            case EventType::KeyPressed:
-            {
-                KeyPressedEvent& e = (KeyPressedEvent&)event;
-                bool ctrl          = Input::IsKeyPressed(Keycode::LeftControl) || Input::IsKeyPressed(Keycode::RightControl);
-                bool shift         = Input::IsKeyPressed(Keycode::LeftShift) || Input::IsKeyPressed(Keycode::RightShift);
-                bool alt           = Input::IsKeyPressed(Keycode::LeftAlt) || Input::IsKeyPressed(Keycode::RightAlt);
-                switch (e.GetKeyCode())
-                {
-                    case Keycode::Q:
-                        if (ctrl)
-                            Application::Get().Close();
-                        break;
-                    case Keycode::F11:
-                        Application::Get().GetWindow().SetFullscreen(!Application::Get().GetWindow().IsFullscreen());
-                        break;
-                    case Keycode::Escape:
-                        ImGui::FocusWindow(NULL);
-                        break;
-                    default:
-                        break;
-                }
+            case Keycode::F11:
+                Application::Get().GetWindow().SetFullscreen(!Application::Get().GetWindow().IsFullscreen());
                 break;
-            }
+            case Keycode::Escape:
+                ImGui::FocusWindow(NULL);
+                break;
             default:
                 break;
         }
+        return false;
     }
 } // namespace Nt
 

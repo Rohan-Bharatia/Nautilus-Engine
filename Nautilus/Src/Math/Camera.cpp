@@ -29,6 +29,8 @@
 
 #include "Camera.h"
 
+#include "Core/Input.h"
+
 namespace Nt
 {
     void Camera::SetProjection(const Matrix4& projection)
@@ -108,9 +110,34 @@ namespace Nt
     }
 
     PerspectiveCamera::PerspectiveCamera(float32 fov, float32 aspectRatio, float32 near, float32 far) :
-        m_fov(fov), m_ratio(aspectRatio), m_near(near), m_far(far), m_position(0.0f), m_focalPoint(0.0f), m_distance(10.0f), m_pitch(0.0f), m_yaw(0.0f)
+        m_fov(fov), m_ratio(aspectRatio), m_near(near), m_far(far), m_position(0.0f), m_focalPoint(0.0f), m_distance(10.0f), m_pitch(0.0f), m_yaw(0.0f), m_prevMousePosition(0.0f, 0.0f)
     {
-        RecalculateProjection();
+        RecalculateView();
+    }
+
+    void PerspectiveCamera::OnUpdate(float32 deltaTime)
+    {
+        if (Input::IsKeyPressed(Keycode::LeftAlt))
+        {
+            const glm::vec2& mouse{ Input::GetMousePositionX(), Input::GetMousePositionY() };
+            glm::vec2 delta     = (mouse - m_prevMousePosition) * 0.003f;
+            m_prevMousePosition = mouse;
+
+            if (Input::IsMouseButtonPressed(MouseButton::Middle))
+                MousePan(delta);
+            if (Input::IsMouseButtonPressed(MouseButton::Left))
+                MouseRotate(delta);
+            if (Input::IsMouseButtonPressed(MouseButton::Right))
+                MouseZoom(delta.y);
+        }
+
+        RecalculateView();
+    }
+
+    void PerspectiveCamera::OnEvent(Event& event)
+    {
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<MouseScrolledEvent>(NT_BIND_EVENT_FN(PerspectiveCamera::OnMouseScroll));
     }
 
     float32 PerspectiveCamera::GetDistance(void) const
@@ -154,6 +181,12 @@ namespace Nt
         RecalculateProjection();
     }
 
+    void PerspectiveCamera::RecalculateView(void)
+    {
+        m_position = CalculatePosition();
+        m_view     = glm::inverse(glm::translate(Matrix4(1.0f), m_position) * glm::toMat4(GetOrientation()));
+    }
+
     void PerspectiveCamera::RecalculateProjection(void)
     {
         m_ratio = m_viewport.x / m_viewport.y;
@@ -163,6 +196,61 @@ namespace Nt
     glm::vec3 PerspectiveCamera::CalculatePosition(void)
     {
         return m_focalPoint - GetForwardDirection() - m_distance;
+    }
+
+    bool PerspectiveCamera::OnMouseScroll(MouseScrolledEvent& e)
+    {
+        float32 delta = e.GetYOffset() * 0.1f;
+        MouseZoom(delta);
+        RecalculateView();
+        return false;
+    }
+
+    void PerspectiveCamera::MousePan(const Vector2& delta)
+    {
+        glm::vec2 speed = PanSpeed();
+        m_focalPoint   -= GetRightDirection() * delta.x * speed.x * m_distance;
+        m_focalPoint   += GetUpDirection() * delta.y * speed.y * m_distance;
+    }
+
+    void PerspectiveCamera::MouseRotate(const Vector2& delta)
+    {
+        float32 yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
+        m_yaw          += yawSign * delta.x * RotationSpeed();
+        m_pitch        += delta.y * RotationSpeed();
+    }
+
+    void PerspectiveCamera::MouseZoom(float32 delta)
+    {
+        m_distance -= delta * ZoomSpeed();
+        if (m_distance < 1.0f)
+        {
+            m_focalPoint += GetForwardDirection();
+            m_distance = 1.0f;
+        }
+    }
+
+    glm::vec2 PerspectiveCamera::PanSpeed(void) const
+    {
+        float32 x       = std::min(m_viewport.x / 1000.0f, 2.4f);
+        float32 xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3025f;
+        float32 y       = std::min(m_viewport.y / 1000.0f, 2.4f);
+        float32 yFactor = 0.0366f * (y * y) - 0.1778f * y + 0.3025f;
+        return {xFactor, yFactor};
+    }
+
+    float32 PerspectiveCamera::RotationSpeed(void) const
+    {
+        return 0.8f;
+    }
+
+    float32 PerspectiveCamera::ZoomSpeed(void) const
+    {
+        float32 distance = m_distance * 0.2f;
+        distance         = std::max(distance, 0.0f);
+        float32 speed    = distance * distance;
+        speed            = std::min(speed, 100.0f);
+        return speed;
     }
 } // namespace Nt
 

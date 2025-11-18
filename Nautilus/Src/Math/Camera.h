@@ -31,6 +31,7 @@
 
 #include "Matrix.h"
 #include "Vector.h"
+#include "Core/MouseEvent.h"
 
 namespace Nt
 {
@@ -89,6 +90,9 @@ namespace Nt
         PerspectiveCamera(void) = default;
         PerspectiveCamera(float32 fov, float32 aspectRatio, float32 near=0.1f, float32 far=1000.0f);
 
+        void OnUpdate(float32 deltaTime);
+        void OnEvent(Event& event);
+
         float32 GetDistance(void) const;
         void SetDistance(float32 distance);
 
@@ -102,13 +106,21 @@ namespace Nt
         virtual void SetViewportSize(uint32 width, uint32 height) override;
 
     private:
+        void RecalculateView(void);
         void RecalculateProjection(void);
         glm::vec3 CalculatePosition(void);
+        bool OnMouseScroll(MouseScrolledEvent& e);
+        void MousePan(const Vector2& delta);
+        void MouseRotate(const Vector2& delta);
+        void MouseZoom(float32 delta);
+        glm::vec2 PanSpeed(void) const;
+        float32 RotationSpeed(void) const;
+        float32 ZoomSpeed(void) const;
 
         float32 m_fov, m_ratio, m_near, m_far;
         glm::vec3 m_position, m_focalPoint;
         float32 m_distance, m_pitch, m_yaw;
-        glm::vec2 m_viewport;
+        glm::vec2 m_viewport, m_prevMousePosition;
     };
 } // namespace Nt
 

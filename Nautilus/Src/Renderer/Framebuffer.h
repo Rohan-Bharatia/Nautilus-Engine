@@ -31,6 +31,8 @@
 
 #include "PCH.h"
 
+#define NT_MAX_FRAMEBUFFER_SIZE 8192
+
 namespace Nt
 {
     enum class FramebufferTextureFormat
@@ -59,9 +61,9 @@ namespace Nt
 
     struct NT_API FramebufferTextureProps
     {
-        FramebufferTextureFormat texture = FramebufferTextureFormat::Depth24Stencil8;
-        FramebufferFilterFormat filter   = FramebufferFilterFormat::Nearest;
-        FramebufferWrapFormat wrap       = FramebufferWrapFormat::Repeat;
+        FramebufferTextureFormat texture = FramebufferTextureFormat::None;
+        FramebufferFilterFormat filter   = FramebufferFilterFormat::Linear;
+        FramebufferWrapFormat wrap       = FramebufferWrapFormat::ClampToEdge;
 
         NT_STRUCT_DEFAULTS(FramebufferTextureProps)
         FramebufferTextureProps(void) = default;
@@ -108,6 +110,7 @@ namespace Nt
 
         void ClearAttachment(uint32 attachmentIndex, int32 value);
         uint32 GetColorAttachmentRenderId(uint32 index=0) const;
+        uint32 GetDepthAttachmentRenderId(void) const;
 
         const FramebufferProps& GetProps(void) const;
 

@@ -49,6 +49,9 @@ namespace Nt
         virtual void OnEvent(Event& event) override;
 
     private:
+        bool OnWindowResize(WindowResizeEvent& e);
+        bool OnKeyPressed(KeyPressedEvent& e);
+
         struct WindowStates
         {
             bool dockspace      = true;
@@ -60,6 +63,7 @@ namespace Nt
             bool metrics        = true;
         };
 
+        Vector2 m_viewportSize;
         PerspectiveCamera m_camera;
         WindowStates m_windowStates;
         Ref<Framebuffer> m_framebuffer;
