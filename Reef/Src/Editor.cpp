@@ -72,7 +72,7 @@ namespace Nt
         m_camera.OnUpdate(deltaTime);
 
         SceneRenderer::BeginScene(m_camera);
-        SceneRenderer::DrawQuad({ 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, 0.0f, NT_COLOR_WHITE);
+        SceneRenderer::DrawQuad({ 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f }, 0.0f, NT_COLOR_WHITE);
         SceneRenderer::EndScene();
 
         m_framebuffer->Unbind();
@@ -253,9 +253,8 @@ namespace Nt
         {
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
             ImGui::Begin("Viewport");
-            Application::Get().GetGUILayer()->BlockEvents(!ImGui::IsWindowHovered());
             m_viewportSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
-            ImGui::Image(ImTextureRef((void*)(uint64)m_framebuffer->GetColorAttachmentRenderId(0)), ImVec2(m_viewportSize.x, m_viewportSize.y));
+            ImGui::Image(ImTextureRef((ImTextureID)m_framebuffer->GetColorAttachmentRenderId(0)), ImVec2(m_viewportSize.x, m_viewportSize.y));
             ImGui::End();
             ImGui::PopStyleVar();
         }
@@ -306,9 +305,9 @@ namespace Nt
 
     bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
     {
-        bool ctrl          = Input::IsKeyPressed(Keycode::LeftControl) || Input::IsKeyPressed(Keycode::RightControl);
-        bool shift         = Input::IsKeyPressed(Keycode::LeftShift) || Input::IsKeyPressed(Keycode::RightShift);
-        bool alt           = Input::IsKeyPressed(Keycode::LeftAlt) || Input::IsKeyPressed(Keycode::RightAlt);
+        bool ctrl  = Input::IsKeyPressed(Keycode::LeftControl) || Input::IsKeyPressed(Keycode::RightControl);
+        bool shift = Input::IsKeyPressed(Keycode::LeftShift) || Input::IsKeyPressed(Keycode::RightShift);
+        bool alt   = Input::IsKeyPressed(Keycode::LeftAlt) || Input::IsKeyPressed(Keycode::RightAlt);
         switch (e.GetKeyCode())
         {
             case Keycode::Q:

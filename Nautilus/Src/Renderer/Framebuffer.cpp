@@ -91,6 +91,8 @@ namespace Nt
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
         }
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentType, TextureTarget(multisampled), id, 0);
     }
 
     static GLenum TextureFormatToGLInternalFormat(FramebufferTextureFormat format)
@@ -287,9 +289,10 @@ namespace Nt
         {
             NT_ASSERT(m_colorAttachments.size() <= 32, "Framebuffer: Maximum of 4 color attachments!");
 
-            std::vector<GLenum> buffers(GL_COLOR_ATTACHMENT31 - GL_COLOR_ATTACHMENT0 + 1);
-            std::iota(buffers.begin(), buffers.end(), GL_COLOR_ATTACHMENT0);
-            glDrawBuffers(m_colorAttachments.size(), buffers.data());
+            std::vector<GLenum> buffers(m_colorAttachments.size());
+            for (uint32 i = 0; i < m_colorAttachments.size(); ++i)
+                buffers.push_back(GL_COLOR_ATTACHMENT0 + i);
+            glDrawBuffers(buffers.size(), buffers.data());
         }
         else if (m_colorAttachments.size() == 1)
         {

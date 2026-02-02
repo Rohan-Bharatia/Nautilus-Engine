@@ -50,6 +50,9 @@ namespace Nt
 
         if (s_windowCount == 0)
         {
+        #ifdef NT_PLATFORM_FAMILY_WINDOWS
+            SetProcessDPIAware();
+        #endif // NT_PLATFORM_FAMILY_WINDOWS
             if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD | SDL_INIT_HAPTIC))
             {
                 NT_CORE_ERROR("SDL_Init failed: %s!", SDL_GetError());

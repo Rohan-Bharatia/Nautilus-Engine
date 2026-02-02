@@ -185,17 +185,19 @@ namespace Nt
     {
         m_position = CalculatePosition();
         m_view     = glm::inverse(glm::translate(Matrix4(1.0f), m_position) * glm::toMat4(GetOrientation()));
+        m_viewProjection = m_projection * m_view;
     }
 
     void PerspectiveCamera::RecalculateProjection(void)
     {
         m_ratio = m_viewport.x / m_viewport.y;
         m_projection = glm::perspective(glm::radians(m_fov), m_ratio, m_near, m_far);
+        m_viewProjection = m_projection * m_view;
     }
 
     glm::vec3 PerspectiveCamera::CalculatePosition(void)
     {
-        return m_focalPoint - GetForwardDirection() - m_distance;
+        return m_focalPoint - GetForwardDirection() * m_distance;
     }
 
     bool PerspectiveCamera::OnMouseScroll(MouseScrolledEvent& e)
