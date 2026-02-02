@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # List of packages to install
-PACKAGES=(git cmake ninja)
+PACKAGES=(git cmake ninja tbb)
 
 # Function to install dependencies
 install_deps() {
@@ -37,10 +37,10 @@ if ! command -v brew &>/dev/null; then
 
     # Add brew to PATH (especially for Apple Silicon Macs)
     if [[ $(uname -m) == "arm64" ]]; then
-        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>~/.zprofile
         eval "$(/opt/homebrew/bin/brew shellenv)"
     else
-        echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.bash_profile
+        echo 'eval "$(/usr/local/bin/brew shellenv)"' >>~/.bash_profile
         eval "$(/usr/local/bin/brew shellenv)"
     fi
 fi

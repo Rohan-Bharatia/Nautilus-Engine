@@ -3,7 +3,7 @@
 setlocal EnableDelayedExpansion
 
 :: List of packages to install
-set PACKAGES=Microsoft.VisualStudio.2022.BuildTools git cmake ninja
+set PACKAGES=Microsoft.VisualStudio.2022.BuildTools git cmake ninja Intel.oneTBB
 
 :: Function to install all dependencies
 :install_deps

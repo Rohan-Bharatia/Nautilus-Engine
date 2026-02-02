@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        uses: lukka/get-cmake@v3
+
+      - name: Verify toolchain
+        run: |
+          cmake --version
+          ninja --version
+
+      - name: Print environment info
+        run: |
+          echo "Operating System: $RUNNER_OS"
+          echo "GitHub Workspace: $GITHUB_WORKSPACE"
+          echo "Capabilities:"
+          cmake -E capabilities
+
+      - name: Make build.sh executable
+        if: runner.os != 'Windows'
+        run: chmod +x build.sh
+
+      - name: Run build script (macOS/Linux)
+        if: runner.os != 'Windows'
+        run: ./build.sh
+
+      - name: Run build script (Windows)
+        if: runner.os == 'Windows'
+        run: build.bat
+        shell: cmd

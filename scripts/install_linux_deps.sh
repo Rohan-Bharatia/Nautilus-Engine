@@ -16,24 +16,24 @@ install_deps() {
     echo "Detected Linux distribution: $DISTRO"
 
     case "$DISTRO" in
-        ubuntu|debian)
-            sudo apt update
-            sudo apt install -y git cmake ninja-build build-essential
-            ;;
+    ubuntu | debian)
+        sudo apt update
+        sudo apt install -y git cmake ninja-build build-essential libtbb-dev
+        ;;
 
-        fedora)
-            sudo dnf install -y git cmake ninja-build @development-tools
-            ;;
+    fedora)
+        sudo dnf install -y git cmake ninja-build @development-tools tbb-devel
+        ;;
 
-        arch)
-            sudo pacman -Sy --noconfirm git cmake ninja base-devel
-            ;;
+    arch)
+        sudo pacman -Sy --noconfirm git cmake ninja base-devel tbb
+        ;;
 
-        *)
-            echo "Unsupported distribution: $DISTRO"
-            echo "Please install the required dependencies manually."
-            exit 1
-            ;;
+    *)
+        echo "Unsupported distribution: $DISTRO"
+        echo "Please install the required dependencies manually."
+        exit 1
+        ;;
     esac
 
     echo "All development tools have been installed."
