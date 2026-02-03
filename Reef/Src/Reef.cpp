@@ -1,5 +1,5 @@
-#ifndef _SANDBOX_CPP_
-    #define _SANDBOX_CPP_
+#ifndef _REEF_CPP_
+    #define _REEF_CPP_
 
 #include "Editor.h"
 
@@ -25,4 +25,4 @@ Nt::Application* Nt::CreateApplication(Nt::int32 argc, char* argv[])
     return new EditorApplication();
 }
 
-#endif // _SANDBOX_CPP_
+#endif // _REEF_CPP_

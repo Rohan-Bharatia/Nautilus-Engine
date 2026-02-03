@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/runtime.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../scripts/runtime.cmake)
 
 project(Nautilus)
 
