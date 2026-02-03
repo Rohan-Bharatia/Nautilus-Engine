@@ -187,6 +187,11 @@ namespace Nt
         DrawQuadInstance(transform, sprite->GetTexCoords(), sprite->GetTexture(), tilingFactor, tintColor);
     }
 
+    void SceneRenderer::DrawSprite(const TransformComponent& transform, const SpriteComponent& sprite)
+    {
+        DrawQuadInstance(transform.GetTransform(), sprite.texture->GetTexCoords(), sprite.texture->GetTexture(), sprite.tilingFactor, sprite.color);
+    }
+
     uint32 SceneRenderer::Statistics::GetTotalVertexCount(void) const
     {
         return quadCount * 4;

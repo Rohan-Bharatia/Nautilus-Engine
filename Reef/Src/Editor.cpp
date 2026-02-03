@@ -32,7 +32,7 @@
 namespace Nt
 {
     EditorLayer::EditorLayer(void) :
-        Layer("EditorLayer"), m_viewportSize(0.0f, 0.0f), m_camera(60, 16.0f / 9.0f)
+        Layer("EditorLayer"), m_viewportSize(0.0f, 0.0f), m_cameraController(60, 16.0f / 9.0f)
     {}
 
     void EditorLayer::OnAttach(void)
@@ -52,6 +52,15 @@ namespace Nt
         props.attachments.attachments.push_back(attc);
 
         m_framebuffer = CreateRef<Framebuffer>(props);
+
+        m_activeScene = CreateRef<Scene>();
+        m_activeScene->OnRuntimeStart();
+        m_camera      = m_activeScene->CreateEntity("Main Camera");
+        m_camera.AddComponent<CameraComponent>(m_cameraController)
+            .primary  = true;
+
+        Entity plane = m_activeScene->CreateEntity("Plane");
+        plane.AddComponent<SpriteComponent>(NT_COLOR_WHITE, CreateRef<SubTexture2D>(CreateRef<Texture2D>("./Assets/Textures/Checkerboard.png")));
     }
 
     void EditorLayer::OnUpdate(float32 deltaTime)
@@ -60,21 +69,16 @@ namespace Nt
             m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f && (m_viewportSize.x != props.width || m_viewportSize.y != props.height))
         {
             m_framebuffer->Resize((uint32)m_viewportSize.x, (uint32)m_viewportSize.y);
-            m_camera.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
+            m_activeScene->OnViewportResize((uint32)m_viewportSize.x, (uint32)m_viewportSize.y);
+            m_cameraController.SetViewportSize(m_viewportSize.x, m_viewportSize.y);
         }
 
         SceneRenderer::ResetStats();
         m_framebuffer->Bind();
-
         RenderCommand::SetClearColor(NT_COLOR_BLACK);
         RenderCommand::Clear();
-
-        m_camera.OnUpdate(deltaTime);
-
-        SceneRenderer::BeginScene(m_camera);
-        SceneRenderer::DrawQuad({ 0.0f, 0.0f, -1.0f }, { 1.0f, 1.0f }, 0.0f, NT_COLOR_WHITE);
-        SceneRenderer::EndScene();
-
+        m_cameraController.OnUpdate(deltaTime);
+        m_activeScene->OnRuntimeUpdate(deltaTime);
         m_framebuffer->Unbind();
     }
 
@@ -169,8 +173,10 @@ namespace Nt
             ImGui::Separator();
             if (ImGui::BeginMenu("Create"))
             {
-                ImGui::MenuItem("Empty Object");
-                ImGui::MenuItem("Camera");
+                if (ImGui::MenuItem("Empty Object"))
+                    m_activeScene->CreateEntity();
+                if (ImGui::MenuItem("Camera"))
+                    m_activeScene->CreateEntity().AddComponent<CameraComponent>(PerspectiveCamera(60.0f, 16.0f / 9.0f));
                 ImGui::MenuItem("Light");
                 ImGui::Separator();
                 if (ImGui::BeginMenu("Primitives"))
@@ -290,7 +296,7 @@ namespace Nt
 
     void EditorLayer::OnEvent(Event& event)
     {
-        m_camera.OnEvent(event);
+        m_cameraController.OnEvent(event);
 
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<WindowResizeEvent>(NT_BIND_EVENT_FN(EditorLayer::OnWindowResize));

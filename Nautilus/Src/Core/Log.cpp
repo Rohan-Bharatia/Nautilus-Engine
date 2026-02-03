@@ -49,27 +49,27 @@ namespace Nt
         switch (level)
         {
             case LogLevel::Trace:
-                color    = "\e[36m"; // Cyan
+                color    = "\e[36;1m"; // Cyan
                 levelStr = "TRACE";
                 break;
             case LogLevel::Debug:
-                color    = "\e[34m"; // Blue
+                color    = "\e[34;1m"; // Blue
                 levelStr = "DEBUG";
                 break;
             case LogLevel::Info:
-                color    = "\e[32m"; // Green
+                color    = "\e[32;1m"; // Green
                 levelStr = "INFO";
                 break;
             case LogLevel::Warning:
-                color    = "\e[33m"; // Yellow
+                color    = "\e[33;1m"; // Yellow
                 levelStr = "WARNING";
                 break;
             case LogLevel::Error:
-                color    = "\e[31m"; // Red
+                color    = "\e[31;1m"; // Red
                 levelStr = "ERROR";
                 break;
             case LogLevel::Fatal:
-                color    = "\e[35m"; // Magenta
+                color    = "\e[35;1m"; // Magenta
                 levelStr = "FATAL";
                 break;
         }

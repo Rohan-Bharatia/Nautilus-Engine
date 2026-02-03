@@ -109,9 +109,12 @@ namespace Nt
 
     Entity Scene::CreateEntity(const UUID& uuid, const String& name)
     {
+        NT_ASSERT(this, "Scene is null!");
+
         Entity entity(m_registry.create(), this);
         entity.AddComponent<IDComponent>(uuid);
         entity.AddComponent<TagComponent>(name == "" ? "Empty Object" : name);
+        entity.AddComponent<TransformComponent>(Vector3(0.0f), Vector3(0.0f), Vector3(1.0f), false);
         m_entityMap[uuid] = (entt::entity)entity;
         return entity;
     }
@@ -173,10 +176,10 @@ namespace Nt
             Camera* mainCamera      = nullptr;
             Matrix4 cameraTransform = Matrix4(1.0f);
             {
-                auto view = m_registry.view<CameraComponent, TransformComponent>();
+                auto view = m_registry.view<TransformComponent, CameraComponent>();
                 for (auto entity : view)
                 {
-                    auto [camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
+                    auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
                     if (camera.primary)
                     {
                         mainCamera      = &camera.camera;
@@ -187,17 +190,19 @@ namespace Nt
             }
 
             if (mainCamera)
-                OnEditorUpdate(deltaTime, *mainCamera);
+            {
+                SceneRenderer::BeginScene(*mainCamera, cameraTransform);
+                {
+                    auto group = m_registry.group<TransformComponent, SpriteComponent>();
+                    for (auto entity : group)
+                    {
+                        auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+                        SceneRenderer::DrawSprite(transform, sprite);
+                    }
+                }
+                SceneRenderer::EndScene();
+            }
         }
-    }
-
-    void Scene::OnEditorUpdate(float32 deltaTime, const Camera& camera)
-    {
-        SceneRenderer::BeginScene(camera, Matrix4(1.0f));
-        {
-            // TODO: Render primitives
-        }
-        SceneRenderer::EndScene();
     }
 
     void Scene::OnRuntimeEnd(void)
@@ -275,6 +280,10 @@ namespace Nt
         if (m_viewport.x != 0.0f && m_viewport.y != 0.0f)
             component.camera.SetViewportSize((uint32)m_viewport.x, (uint32)m_viewport.y);
     }
+
+    template<>
+    void Scene::OnComponentAdded<SpriteComponent>(Entity entity, SpriteComponent& component)
+    {}
 } // namespace Nt
 
 #endif // _SCENE_SCENE_CPP_

@@ -32,6 +32,7 @@
 #include "RenderCommand.h"
 #include "Math/Camera.h"
 #include "Texture.h"
+#include "Scene/Components.h"
 
 namespace Nt
 {
@@ -55,6 +56,7 @@ namespace Nt
 
         static void DrawSprite(const Vector2& position, const Vector2& size, float32 rotation, const Ref<SubTexture2D>& sprite, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
         static void DrawSprite(const Vector3& position, const Vector2& size, float32 rotation, const Ref<SubTexture2D>& sprite, float32 tilingFactor=1.0f, const Color& tintColor=NT_COLOR_WHITE);
+        static void DrawSprite(const TransformComponent& transform, const SpriteComponent& sprite);
 
         struct Statistics
         {

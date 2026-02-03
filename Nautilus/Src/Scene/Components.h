@@ -30,7 +30,9 @@
     #define _SCENE_COMPONENTS_H_
 
 #include "Core/UUID.h"
+#include "Math/Color.h"
 #include "Math/Camera.h"
+#include "Renderer/Texture.h"
 
 namespace Nt
 {
@@ -84,6 +86,19 @@ namespace Nt
         CameraComponent(const Camera& camera, bool primary, bool fixedRatio) : camera(camera), primary(primary), fixedRatio(fixedRatio) {}
     };
 
+    struct NT_API SpriteComponent
+    {
+        Color color          = NT_COLOR_WHITE;
+        Ref<SubTexture2D> texture;
+        float32 tilingFactor = 1.0f;
+
+        NT_STRUCT_DEFAULTS(SpriteComponent)
+        SpriteComponent(void) = default;
+        SpriteComponent(const Color& color) : color(color) {}
+        SpriteComponent(const Color& color, Ref<SubTexture2D> texture) : color(color), texture(texture) {}
+        SpriteComponent(const Color& color, Ref<SubTexture2D> texture, float32 tilingFactor) : color(color), texture(texture), tilingFactor(tilingFactor) {}
+    };
+
     template<typename... T>
     struct NT_API ComponentGroup
     {
@@ -91,7 +106,7 @@ namespace Nt
         ComponentGroup(void) = default;
     };
 
-    using AllComponents = ComponentGroup<IDComponent, TagComponent, TransformComponent, CameraComponent>;
+    using AllComponents = ComponentGroup<IDComponent, TagComponent, TransformComponent, CameraComponent, SpriteComponent>;
 } // namespace Nt
 
 #endif // _SCENE_COMPONENTS_H_

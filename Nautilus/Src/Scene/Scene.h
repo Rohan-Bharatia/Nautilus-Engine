@@ -56,7 +56,6 @@ namespace Nt
 
         void OnRuntimeStart(void);
         void OnRuntimeUpdate(float32 deltaTime);
-        void OnEditorUpdate(float32 deltaTime, const Camera& camera);
         void OnRuntimeEnd(void);
         void OnViewportResize(uint32 width, uint32 height);
 
