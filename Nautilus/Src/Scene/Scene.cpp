@@ -176,13 +176,13 @@ namespace Nt
             Camera* mainCamera      = nullptr;
             Matrix4 cameraTransform = Matrix4(1.0f);
             {
-                auto view = m_registry.view<TransformComponent, CameraComponent>();
-                for (auto entity : view)
+                auto group = m_registry.group<TransformComponent, CameraComponent>();
+                for (auto entity : group)
                 {
-                    auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+                    auto [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
                     if (camera.primary)
                     {
-                        mainCamera      = &camera.camera;
+                        mainCamera      = camera.camera.get();
                         cameraTransform = transform.GetTransform();
                         break;
                     }
@@ -191,17 +191,41 @@ namespace Nt
 
             if (mainCamera)
             {
+                mainCamera->OnUpdate(deltaTime);
                 SceneRenderer::BeginScene(*mainCamera, cameraTransform);
                 {
-                    auto group = m_registry.group<TransformComponent, SpriteComponent>();
-                    for (auto entity : group)
+                    auto view = m_registry.view<TransformComponent, SpriteComponent>();
+                    for (auto entity : view)
                     {
-                        auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+                        auto [transform, sprite] = view.get<TransformComponent, SpriteComponent>(entity);
                         SceneRenderer::DrawSprite(transform, sprite);
                     }
                 }
                 SceneRenderer::EndScene();
             }
+        }
+    }
+
+    void Scene::OnRuntimeEvent(Event& e)
+    {
+        if (!m_paused || m_step-- > 0)
+        {
+            Camera* mainCamera = nullptr;
+            {
+                auto view = m_registry.view<CameraComponent>();
+                for (auto entity : view)
+                {
+                    auto camera = view.get<CameraComponent>(entity);
+                    if (camera.primary)
+                    {
+                        mainCamera = camera.camera.get();
+                        break;
+                    }
+                }
+            }
+
+            if (mainCamera)
+                mainCamera->OnEvent(e);
         }
     }
 
@@ -223,7 +247,7 @@ namespace Nt
         {
             auto& cameraComponent = view.get<CameraComponent>(entity);
             if (!cameraComponent.fixedRatio)
-                cameraComponent.camera.SetViewportSize((uint32)m_viewport.x, (uint32)m_viewport.y);
+                cameraComponent.camera->SetViewportSize((uint32)m_viewport.x, (uint32)m_viewport.y);
         }
     }
 
@@ -278,7 +302,7 @@ namespace Nt
     void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
     {
         if (m_viewport.x != 0.0f && m_viewport.y != 0.0f)
-            component.camera.SetViewportSize((uint32)m_viewport.x, (uint32)m_viewport.y);
+            component.camera->SetViewportSize((uint32)m_viewport.x, (uint32)m_viewport.y);
     }
 
     template<>

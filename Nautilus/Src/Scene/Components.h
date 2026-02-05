@@ -76,14 +76,15 @@ namespace Nt
 
     struct NT_API CameraComponent
     {
-        Camera camera;
+        Ref<Camera> camera;
         bool primary    = false;
         bool fixedRatio = false;
 
         NT_STRUCT_DEFAULTS(CameraComponent)
         CameraComponent(void) = default;
-        CameraComponent(const Camera& camera) : camera(camera) {}
-        CameraComponent(const Camera& camera, bool primary, bool fixedRatio) : camera(camera), primary(primary), fixedRatio(fixedRatio) {}
+        CameraComponent(const Ref<Camera>& camera) : camera(camera) {}
+        CameraComponent(const Ref<Camera>& camera, bool primary) : camera(camera), primary(primary) {}
+        CameraComponent(const Ref<Camera>& camera, bool primary, bool fixedRatio) : camera(camera), primary(primary), fixedRatio(fixedRatio) {}
     };
 
     struct NT_API SpriteComponent

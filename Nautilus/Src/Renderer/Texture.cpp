@@ -102,6 +102,8 @@ namespace Nt
         stbi_set_flip_vertically_on_load(true);
         stbi_uc* data = stbi_load((const char*)path, &width, &height, &channels, 0);
 
+        NT_ASSERT(data, "Failed to load texture: %s", (const char*)path);
+
         if (data)
         {
             m_isLoaded = true;
@@ -133,6 +135,7 @@ namespace Nt
             glCreateTextures(GL_TEXTURE_2D, 1, &m_id);
             glTextureStorage2D(m_id, 1, m_internalFormat, m_width, m_height);
 
+            glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, TextureFilterFormatToGL(sampler.filter));
             glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, TextureFilterFormatToGL(sampler.filter));
             glTextureParameteri(m_id, GL_TEXTURE_WRAP_R, TextureWrapFormatToGL(sampler.wrap));
             glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, TextureWrapFormatToGL(sampler.wrap));
@@ -215,7 +218,7 @@ namespace Nt
 
     TileSet CreateTileSet(const Ref<Texture2D>& texture, uint32 cols, uint32 rows)
     {
-        std::vector<Ref<SubTexture2D>> subTextures(cols * rows);
+        std::vector<Ref<SubTexture2D>> subTextures;
         for (uint32 y = 0; y < rows; ++y)
             for (uint32 x = 0; x < cols; ++x)
                 subTextures.push_back(CreateSubTexture(texture, { x, y }, { 1.0f / cols, 1.0f / rows }));

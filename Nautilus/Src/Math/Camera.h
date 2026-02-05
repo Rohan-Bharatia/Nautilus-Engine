@@ -50,7 +50,9 @@ namespace Nt
         void SetViewProjection(const Matrix4& viewProjection);
         const Matrix4 GetViewProjection(void) const;
 
-        virtual void SetViewportSize(uint32 width, uint32 height) {};
+        virtual void SetViewportSize(uint32 width, uint32 height) {}
+        virtual void OnUpdate(float32 deltaTime) {}
+        virtual void OnEvent(Event& event) {}
 
     protected:
         glm::mat4 m_projection;
@@ -90,8 +92,8 @@ namespace Nt
         PerspectiveCamera(void) = default;
         PerspectiveCamera(float32 fov, float32 aspectRatio, float32 near=0.1f, float32 far=1000.0f);
 
-        void OnUpdate(float32 deltaTime);
-        void OnEvent(Event& event);
+        void OnUpdate(float32 deltaTime) override;
+        void OnEvent(Event& event) override;
 
         float32 GetDistance(void) const;
         void SetDistance(float32 distance);

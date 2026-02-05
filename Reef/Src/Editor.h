@@ -64,9 +64,7 @@ namespace Nt
         };
 
         Vector2 m_viewportSize;
-        PerspectiveCamera m_cameraController;
         Ref<Scene> m_activeScene;
-        Entity m_camera;
         WindowStates m_windowStates;
         Ref<Framebuffer> m_framebuffer;
         SceneHierarchyPanel m_sceneHierarchyPanel;
