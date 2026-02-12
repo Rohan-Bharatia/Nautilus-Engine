@@ -1,12 +1,10 @@
 # ⚓ Nautilus Engine ⚓
 
+| Platform | Status |
 | - | - |
-| Windows | [![Build](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/multi-platform-build.yml/badge.svg)](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/multi-platform-build.yml) |
-| - | - |
-| macOS | [![Build](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/multi-platform-build.yml/badge.svg)](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/multi-platform-build.yml) |
-| - | - |
-| Linux | [![Build](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/multi-platform-build.yml/badge.svg)](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/multi-platform-build.yml) |
-| - | - |
+| Windows | [![Windows Build](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/windows-build.yml/badge.svg)](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/windows-build.yml) |
+| macOS | [![macOS Build](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/macos-build.yml/badge.svg)](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/macos-build.yml) |
+| Linux | [![Linux Build](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/linux-build.yml/badge.svg)](https://github.com/Rohan-Bharatia/Nautilus-Engine/actions/workflows/linux-build.yml) |
 
 Nautilus Engine is an open-source 3d game engine written in modern C++.
 
