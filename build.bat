@@ -21,11 +21,11 @@ if "%CLEAN_OUTPUT%"=="true" (
 
 if "%NO_INSTALL%"=="false" (
     @echo Installing dependencies...
-    call scripts/install_windows_deps.bat
+    call scripts\install_windows_deps.bat
 )
 
 @echo Creating build directory...
-mkdir /s /q build
+mkdir build
 
 @echo Compiling with CMake...
 cd build
@@ -34,7 +34,7 @@ if "%NO_DEBUG_BUILD%"=="false" (
     @echo Debug build...
     mkdir /s /q debug
     cd debug
-    cmake -G "Ninja" -S ../../Reef -DCMAKE_BUILD_TYPE=Debug
+    cmake -G "Ninja" -S ../../../Reef -DCMAKE_BUILD_TYPE=Debug
     cmake --build .
     cd ..
 )
@@ -42,10 +42,10 @@ if "%NO_DEBUG_BUILD%"=="false" (
 @echo Release build...
 mkdir /s /q release
 cd release
-cmake -G "Ninja" -S ../../Reef -DCMAKE_BUILD_TYPE=Release
+cmake -G "Ninja" -S ../../../Reef -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 cd ..
 
 @echo Done...
 cd ..
-exit 0
+exit \b 0

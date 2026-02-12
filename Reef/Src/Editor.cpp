@@ -155,7 +155,7 @@ namespace Nt
             if (ImGui::BeginMenu("View"))
             {
                 ImGui::MenuItem("Reset Layout");
-                if (ImGui::MenuItem("Toggle Fullscreen", "F11"))
+                if (ImGui::MenuItem("Toggle Fullscreen", "F11", Application::Get().GetWindow().IsFullscreen()))
                     Application::Get().GetWindow().SetFullscreen(!Application::Get().GetWindow().IsFullscreen());
                 ImGui::Separator();
                 ImGui::MenuItem("Show Grid");
