@@ -332,27 +332,42 @@
         #define NT_PLATFORM_IOS
         #define NT_PLATFORM_NAME "iOS"
         #define NT_DEVICE_MOBILE
-        #include <UIKit/UIKit.h>
+        #ifdef __OBJC__
+            #import <UIKit/UIKit.h>
+            #import <Foundation/Foundation.h>
+        #endif // __OBJC__
     #elif TARGET_OS_MAC || TARGET_OS_OSX
         #define NT_PLATFORM_MACOS
         #define NT_PLATFORM_NAME "macOS"
         #define NT_DEVICE_DESKTOP
-        #include <AppKit/AppKit.h>
+        #ifdef __OBJC__
+            #import <AppKit/AppKit.h>
+            #import <Foundation/Foundation.h>
+        #endif // __OBJC__
     #elif TARGET_OS_WATCH
         #define NT_PLATFORM_WATCHOS
         #define NT_PLATFORM_NAME "watchOS"
         #define NT_DEVICE_EMBEDDED
-        #include <WatchKit/WatchKit.h>
+        #ifdef __OBJC__
+            #import <WatchKit/WatchKit.h>
+            #import <Foundation/Foundation.h>
+        #endif // __OBJC__
     #elif TARGET_OS_TV
         #define NT_PLATFORM_TVOS
         #define NT_PLATFORM_NAME "tvOS"
         #define NT_DEVICE_EMBEDDED
-        #include <TVMLKit/TVMLKit.h>
+        #ifdef __OBJC__
+            #import <TVMLKit/TVMLKit.h>
+            #import <Foundation/Foundation.h>
+        #endif // __OBJC__
     #elif TARGET_OS_EMBEDDED
         #define NT_PLATFORM_EMBEDDED
         #define NT_PLATFORM_NAME "embeddedOS"
         #define NT_DEVICE_EMBEDDED
-        #include <CoreFoundation/CoreFoundation.h>
+        #ifdef __OBJC__
+            #import <CoreFoundation/CoreFoundation.h>
+            #import <Foundation/Foundation.h>
+        #endif // __OBJC__
     #else // (NOT) TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR, TARGET_OS_MAC || TARGET_OS_OSX, TARGET_OS_WATCH, TARGET_OS_TV, TARGET_OS_EMBEDDED
         #define NT_PLATFORM_UNKNOWN
         #define NT_PLATFORM_NAME "Unknown Apple Platform"

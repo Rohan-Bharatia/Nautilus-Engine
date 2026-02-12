@@ -60,6 +60,16 @@ if(WIN32)
     target_link_libraries(imgui PUBLIC d3d9 d3d11 d3d12 dxgi)
 elseif(APPLE)
     target_link_libraries(imgui PUBLIC "-framework Cocoa" "-framework IOKit" "-framework QuartzCore")
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/imgui/backends/imgui_impl_osx.mm
+        PROPERTIES
+        COMPILE_FLAGS "-x objective-c++"
+    )
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/imgui/backends/imgui_impl_metal.mm
+        PROPERTIES
+        COMPILE_FLAGS "-x objective-c++"
+    )
 elseif(ANDROID)
     target_link_libraries(imgui PUBLIC android log)
 elseif(EMSCRIPTEN)
@@ -75,18 +85,33 @@ endif()
 
 if(IMGUI_BACKEND_GLFW3)
     target_link_libraries(imgui PUBLIC glfw)
+    target_include_directories(imgui PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/glfw/include
+    )
 endif()
 if(IMGUI_BACKEND_GLUT)
     target_link_libraries(imgui PUBLIC glut)
+    target_include_directories(imgui PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/glut/include
+    )
 endif()
 if(IMGUI_BACKEND_SDL2)
     target_link_libraries(imgui PUBLIC SDL2)
+    target_include_directories(imgui PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/SDL/include
+    )
 endif()
 if(IMGUI_BACKEND_SDL3)
     target_link_libraries(imgui PUBLIC SDL3)
+    target_include_directories(imgui PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/SDL/include
+    )
 endif()
 if(IMGUI_BACKEND_ALLEGRO5)
     target_link_libraries(imgui PUBLIC allegro5)
+    target_include_directories(imgui PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/allegro5/include
+    )
 endif()
 
 target_include_directories(imgui PUBLIC
