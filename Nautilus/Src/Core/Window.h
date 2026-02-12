@@ -29,7 +29,6 @@
 #ifndef _CORE_WINDOW_H_
     #define _CORE_WINDOW_H_
 
-#include "String.h"
 #include "Event.h"
 
 namespace Nt

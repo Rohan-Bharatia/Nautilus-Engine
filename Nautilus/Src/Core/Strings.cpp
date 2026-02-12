@@ -27,7 +27,7 @@
 #ifndef _CORE_STRING_CPP_
     #define _CORE_STRING_CPP_
 
-#include "String.h"
+#include "Strings.h"
 
 namespace Nt
 {

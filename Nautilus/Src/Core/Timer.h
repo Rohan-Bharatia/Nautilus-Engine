@@ -29,7 +29,7 @@
 #ifndef _CORE_TIMER_H_
     #define _CORE_TIMER_H_
 
-#include "String.h"
+#include "PCH.h"
 
 namespace Nt
 {

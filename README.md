@@ -17,12 +17,6 @@ Nautilus Engine is released under the [MIT License](https://opensource.org/licen
 - 🪟 Windows
 - 🍎 MacOS
 - 🐧 Linux/BSD (including HaikuOS, steamOS, etc.)
-- 🍏 iOS
-- 🤖 Android
-- 🕸️ WebAssembly (WASM)
-- 🎮 XBox
-- 🕹️ PlayStation 2/4/5/Vita/PSP
-- 🕹️ Nintendo Switch
 
 ## 🔧 Contributing
 

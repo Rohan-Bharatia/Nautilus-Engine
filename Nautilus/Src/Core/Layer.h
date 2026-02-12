@@ -29,7 +29,6 @@
 #ifndef _CORE_LAYER_H_
     #define _CORE_LAYER_H_
 
-#include "String.h"
 #include "Event.h"
 
 namespace Nt

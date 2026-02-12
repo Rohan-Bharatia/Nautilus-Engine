@@ -29,7 +29,6 @@
 #ifndef _RENDERER_TEXTURE_H_
     #define _RENDERER_TEXTURE_H_
 
-#include "Core/String.h"
 #include "Framebuffer.h"
 #include "Math/Vector.h"
 

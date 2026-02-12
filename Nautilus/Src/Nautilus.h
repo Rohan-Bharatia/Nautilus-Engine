@@ -32,7 +32,7 @@
 #include "PCH.h"
 
 #include "Core/Application.h"
-#include "Core/String.h"
+#include "Core/Strings.h"
 #include "Core/IO.h"
 #include "Core/Timer.h"
 #include "Core/Log.h"

@@ -29,7 +29,7 @@
 #ifndef _CORE_EVENT_H_
     #define _CORE_EVENT_H_
 
-#include "String.h"
+#include "PCH.h"
 
 namespace Nt
 {
