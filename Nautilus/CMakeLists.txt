@@ -16,13 +16,11 @@ function(link_dependency directory target)
     foreach(header IN LISTS ARGN)
         target_include_directories(Nautilus PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Vendor/${directory}/${header})
     endforeach()
-    if(NOT ${target} STREQUAL "SDL3")
-        set_target_properties(${target} PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-            ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-        )
-    endif()
+    set_target_properties(${target} PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
 endfunction()
 
 file(GLOB Nautilus_SOURCES
@@ -49,7 +47,7 @@ set(MSDF_ATLAS_USE_SKIA OFF CACHE BOOL "Disable MSDF-Atlas-Gen Skia support" FOR
 set(IMGUI_BACKEND_SDL3 ON CACHE BOOL "Enable ImGui SDL3 backend" FORCE)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Vendor)
-link_dependency("SDL" "SDL3" "include")
+link_dependency("SDL" "SDL3-static" "include")
 link_dependency("glm" "glm" ".")
 link_dependency("glad" "glad" "include")
 link_dependency("stb" "stb" ".")

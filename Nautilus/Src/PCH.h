@@ -457,14 +457,29 @@
 #endif // defined(NT_PLATFORM_WINDOWS) || defined(NT_PLATFORM_XBOX_ONE) || defined(NT_PLATFORM_XBOX_SERIES) || defined(NT_PLATFORM_XBOX), defined(NT_PLATFORM_MACOS) || defined(NT_PLATFORM_IOS) || defined(NT_PLATFORM_WATCHOS) || defined(NT_PLATFORM_TVOS) || defined(NT_PLATFORM_EMBEDDED), defined(NT_PLATFORM_LINUX) || defined(NT_PLATFORM_FREEBSD) || defined(NT_PLATFORM_NETBSD) || defined(NT_PLATFORM_OPENBSD) || defined(NT_PLATFORM_DRAGONFLY) || defined(NT_PLATFORM_HAIKU) || defined(NT_PLATFORM_SOLARIS)
 
 // Endianess check
-#if defined(__BYTE_ORDER) && defined(__BIG_ENDIAN) && __BYTE_ORDER == __BIG_ENDIAN
-    #define NT_ENDIAN_BIG
-#elif defined(__BYTE_ORDER) && defined(__LITTLE_ENDIAN) && __BYTE_ORDER == __LITTLE_ENDIAN
-    #define NT_ENDIAN_LITTLE
-#else // (NOT) defined(__BYTE_ORDER) && defined(__BIG_ENDIAN) && __BYTE_ORDER == __BIG_ENDIAN, defined(__BYTE_ORDER) && defined(__LITTLE_ENDIAN) && __BYTE_ORDER == __LITTLE_ENDIAN
+#if defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && defined(__ORDER_LITTLE_ENDIAN__)
+    #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+        #define NT_ENDIAN_BIG
+    #elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        #define NT_ENDIAN_LITTLE
+    #else
+        #define NT_ENDIAN_UNKNOWN
+        #error Nautilus Engine does not support this endianness!
+    #endif
+#elif defined(NT_PLATFORM_FAMILY_APPLE)
+    #include <machine/endian.h>
+    #if defined(BYTE_ORDER) && defined(BIG_ENDIAN) && (BYTE_ORDER == BIG_ENDIAN)
+        #define NT_ENDIAN_BIG
+    #elif defined(BYTE_ORDER) && defined(LITTLE_ENDIAN) && (BYTE_ORDER == LITTLE_ENDIAN)
+        #define NT_ENDIAN_LITTLE
+    #else
+        #define NT_ENDIAN_UNKNOWN
+        #error Nautilus Engine does not support this endianness!
+    #endif
+#else // (NOT) defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && defined(__ORDER_LITTLE_ENDIAN__), defined(NT_PLATFORM_FAMILY_APPLE)
     #define NT_ENDIAN_UNKNOWN
-    #error Nautilus Engine does not support this endianess!
-#endif // defined(__BYTE_ORDER) && defined(__BIG_ENDIAN) && __BYTE_ORDER == __BIG_ENDIAN, defined(__BYTE_ORDER) && defined(__LITTLE_ENDIAN) && __BYTE_ORDER == __LITTLE_ENDIAN
+    #error Nautilus Engine does not support this endianness!
+#endif // defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && defined(__ORDER_LITTLE_ENDIAN__), defined(NT_PLATFORM_FAMILY_APPLE)
 
 // Nautilus API macros
 #ifdef NT_PLATFORM_FAMILY_MICROSOFT

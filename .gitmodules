@@ -1,19 +1,24 @@
 [submodule "Nautilus/Vendor/SDL"]
 	path = Nautilus/Vendor/SDL
-	url = https://github.com/libsdl-org/SDL.git
+    url = https://github.com/libsdl-org/SDL.git
+    branch = main
 [submodule "Nautilus/Vendor/glm"]
 	path = Nautilus/Vendor/glm
-	url = https://github.com/g-truc/glm.git
+    url = https://github.com/g-truc/glm.git
+    branch = master
 [submodule "Nautilus/Vendor/msdf-atlas-gen"]
 	path = Nautilus/Vendor/msdf-atlas-gen
-	url = https://github.com/Chlumsky/msdf-atlas-gen.git
+    url = https://github.com/Chlumsky/msdf-atlas-gen.git
+    branch = master
 [submodule "Nautilus/Vendor/imgui"]
 	path = Nautilus/Vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
 [submodule "Nautilus/Vendor/imguizmo"]
 	path = Nautilus/Vendor/imguizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo.git
+    url = https://github.com/CedricGuillemet/ImGuizmo.git
+    branch = master
 [submodule "Nautilus/Vendor/entt"]
 	path = Nautilus/Vendor/entt
-	url = https://github.com/skypjack/entt.git
+    url = https://github.com/skypjack/entt.git
+    branch = master
