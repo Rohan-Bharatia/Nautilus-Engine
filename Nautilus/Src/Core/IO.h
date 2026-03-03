@@ -34,9 +34,9 @@
 namespace Nt
 {
     NT_API String ReadConsole(void);
-    NT_API String ReadFile(const char* path);
-    NT_API void WriteConsole(String data, bool newline=true);
-    NT_API void WriteFile(String path, String data, bool overwrite=false);
+    NT_API String ReadFile(const String& path);
+    NT_API void WriteConsole(const String& data, bool newline=true);
+    NT_API void WriteFile(const String& path, const String& data, bool overwrite=false);
 } // namespace Nt
 
 #endif // _CORE_IO_H_

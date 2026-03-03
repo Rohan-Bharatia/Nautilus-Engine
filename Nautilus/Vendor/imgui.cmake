@@ -96,13 +96,13 @@ if(IMGUI_BACKEND_GLUT)
     )
 endif()
 if(IMGUI_BACKEND_SDL2)
-    target_link_libraries(imgui PUBLIC SDL2)
+    target_link_libraries(imgui PUBLIC SDL2-static)
     target_include_directories(imgui PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/SDL/include
     )
 endif()
 if(IMGUI_BACKEND_SDL3)
-    target_link_libraries(imgui PUBLIC SDL3)
+    target_link_libraries(imgui PUBLIC SDL3-static)
     target_include_directories(imgui PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/SDL/include
     )

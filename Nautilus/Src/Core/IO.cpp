@@ -38,26 +38,26 @@ namespace Nt
         return line;
     }
 
-    String ReadFile(const char* path)
+    String ReadFile(const String& path)
     {
-        std::ifstream file(path);
+        std::ifstream file((const char*)path);
         std::stringstream buffer;
         buffer << file.rdbuf();
         return buffer.str();
     }
 
-    void WriteConsole(String data, bool newline)
+    void WriteConsole(const String& data, bool newline)
     {
-        std::cout << data;
+        std::cout << (const char*)data;
         if (newline)
             std::cout << std::endl;
     }
 
-    void WriteFile(String path, String data, bool overwrite)
+    void WriteFile(const String& path, const String& data, bool overwrite)
     {
-        std::ofstream file((std::string)path, overwrite ? std::ios::trunc : std::ios::app);
+        std::ofstream file((const char*)path, overwrite ? std::ios::trunc : std::ios::app);
         NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
-        file << data;
+        file << (const char*)data;
         file.close();
     }
 } // namespace Nt
