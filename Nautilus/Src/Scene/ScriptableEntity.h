@@ -45,8 +45,11 @@ namespace Nt
             return m_entity.GetComponent<T>();
         }
 
+    protected:
         virtual void OnCreate(void) {}
         virtual void OnUpdate(float32 deltaTime) {}
+        virtual void OnGUIRender(float32 deltaTime) {}
+        virtual void OnEvent(Event& e) {}
         virtual void OnDestroy(void) {}
 
     private:

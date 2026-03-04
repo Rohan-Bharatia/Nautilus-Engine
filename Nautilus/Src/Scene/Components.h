@@ -105,12 +105,8 @@ namespace Nt
     {
         ScriptableEntity* instance = nullptr;
 
-        std::function<void(void)> Instantiate;
-        std::function<void(void)> Destroy;
-
-        std::function<void(ScriptableEntity*)> OnCreate;
-        std::function<void(ScriptableEntity*, float32)> OnUpdate;
-        std::function<void(ScriptableEntity*)> OnDestroy;
+        ScriptableEntity*(*Instantiate)(void);
+        void(*Destroy)(NativeScriptComponent*);
 
         NT_STRUCT_DEFAULTS(NativeScriptComponent)
         NativeScriptComponent(void) = default;
@@ -118,12 +114,8 @@ namespace Nt
         template<typename T>
         void Bind(void)
         {
-            Instantiate = [&](void) { instance = new T(); };
-            Destroy     = [&](void) { delete (T*)instance; instance = nullptr; };
-
-            OnCreate    = [](ScriptableEntity* instance) { ((T*)instance)->OnCreate(); };
-            OnUpdate    = [](ScriptableEntity* instance, float32 deltaTime) { ((T*)instance)->OnUpdate(deltaTime); };
-            OnDestroy   = [](ScriptableEntity* instance) { ((T*)instance)->OnDestroy(); };
+            Instantiate = [](void) { return NT_STATIC_CAST(ScriptableEntity*, new T()); };
+            Destroy     = [](NativeScriptComponent* nsc) { delete nsc->instance; nsc->instance = nullptr; };
         }
     };
 

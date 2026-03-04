@@ -177,12 +177,12 @@ namespace Nt
             {
                 if (!nsc.instance)
                 {
-                    nsc.Instantiate();
+                    nsc.instance           = nsc.Instantiate();
                     nsc.instance->m_entity = Entity(entity, this);
-                    nsc.OnCreate(nsc.instance);
+                    nsc.instance->OnCreate();
                 }
 
-                nsc.OnUpdate(nsc.instance, deltaTime);
+                nsc.instance->OnUpdate(deltaTime);
             });
 
             Camera* mainCamera      = nullptr;
@@ -218,10 +218,40 @@ namespace Nt
         }
     }
 
+    void Scene::OnRuntimeGUIRender(float32 deltaTime)
+    {
+        if (!m_paused || m_step-- > 0)
+        {
+            m_registry.view<NativeScriptComponent>().each([&](auto entity, auto& nsc)
+            {
+                if (!nsc.instance)
+                {
+                    nsc.instance           = nsc.Instantiate();
+                    nsc.instance->m_entity = Entity(entity, this);
+                    nsc.instance->OnCreate();
+                }
+
+                nsc.instance->OnGUIRender(deltaTime);
+            });
+        }
+    }
+
     void Scene::OnRuntimeEvent(Event& e)
     {
         if (!m_paused || m_step-- > 0)
         {
+            m_registry.view<NativeScriptComponent>().each([&](auto entity, auto& nsc)
+            {
+                if (!nsc.instance)
+                {
+                    nsc.instance           = nsc.Instantiate();
+                    nsc.instance->m_entity = Entity(entity, this);
+                    nsc.instance->OnCreate();
+                }
+
+                nsc.instance->OnEvent(e);
+            });
+
             Camera* mainCamera = nullptr;
             {
                 auto view = m_registry.view<CameraComponent>();
@@ -243,6 +273,22 @@ namespace Nt
 
     void Scene::OnRuntimeEnd(void)
     {
+        if (m_paused || m_step-- > 0)
+        {
+            m_registry.view<NativeScriptComponent>().each([&](auto entity, auto& nsc)
+            {
+                if (!nsc.instance)
+                {
+                    nsc.instance           = nsc.Instantiate();
+                    nsc.instance->m_entity = Entity(entity, this);
+                    nsc.instance->OnCreate();
+                }
+
+                nsc.instance->OnDestroy();
+                nsc.Destroy(&nsc);
+            });
+        }
+
         m_running = false;
     }
 

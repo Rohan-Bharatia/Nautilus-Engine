@@ -259,6 +259,8 @@ namespace Nt
             ImGui::Image(ImTextureRef((ImTextureID)m_framebuffer->GetColorAttachmentRenderId(0)), ImVec2(m_viewportSize.x, m_viewportSize.y));
             ImGui::End();
             ImGui::PopStyleVar();
+
+            m_activeScene->OnRuntimeGUIRender(deltaTime);
         }
 
         if (m_windowStates.sceneHierarchy)

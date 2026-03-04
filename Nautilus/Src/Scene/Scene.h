@@ -57,6 +57,7 @@ namespace Nt
 
         void OnRuntimeStart(void);
         void OnRuntimeUpdate(float32 deltaTime);
+        void OnRuntimeGUIRender(float32 deltaTime);
         void OnRuntimeEvent(Event& e);
         void OnRuntimeEnd(void);
         void OnViewportResize(uint32 width, uint32 height);
