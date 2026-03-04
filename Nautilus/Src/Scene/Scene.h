@@ -69,6 +69,8 @@ namespace Nt
         void Resume(void);
         void Step(int32 frames=1);
 
+        entt::registry& GetRegistry(void);
+
         template<typename... T>
         auto GetAllEntitiesWith(void)
         {

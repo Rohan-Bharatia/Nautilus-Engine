@@ -31,10 +31,51 @@
 
 namespace Nt
 {
+    SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene) :
+        m_context(scene)
+    {}
+
+    void SceneHierarchyPanel::SetContext(const Ref<Scene>& scene)
+    {
+        m_context = scene;
+    }
+
+    Ref<Scene>& SceneHierarchyPanel::GetContext(void)
+    {
+        return m_context;
+    }
+
+    void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
+    {
+        m_selectedEntity = entity;
+    }
+
+    Entity SceneHierarchyPanel::GetSelectedEntity(void)
+    {
+        return m_selectedEntity;
+    }
+
     void SceneHierarchyPanel::Display(void)
     {
         ImGui::Begin("Scene Hierarchy");
+        m_context->GetRegistry().view<TagComponent>().each([&](auto entityId, auto&)
+        {
+            Entity entity(entityId, m_context.get());
+            DrawEntityNode(entity);
+        });
+        if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered())
+            m_selectedEntity = {};
         ImGui::End();
+    }
+
+    void SceneHierarchyPanel::DrawEntityNode(Entity entity)
+    {
+        ImGuiTreeNodeFlags flags = ((m_selectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+        bool opened = ImGui::TreeNodeEx((void*)(uint64)(uint32)entity, flags, (const char*)entity.GetName());
+        if (ImGui::IsItemClicked())
+            m_selectedEntity = entity;
+        if (opened)
+            ImGui::TreePop();
     }
 } // namespace Nt
 

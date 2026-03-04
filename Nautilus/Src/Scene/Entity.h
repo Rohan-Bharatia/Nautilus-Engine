@@ -86,6 +86,8 @@ namespace Nt
         }
 
         UUID GetUUID(void);
+
+        void SetName(String name);
         String GetName(void);
 
         operator bool(void) const;

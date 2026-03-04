@@ -38,8 +38,21 @@ namespace Nt
     public:
         NT_CLASS_DEFAULTS(SceneHierarchyPanel)
         SceneHierarchyPanel(void) = default;
+        SceneHierarchyPanel(const Ref<Scene>& scene);
+
+        void SetContext(const Ref<Scene>& scene);
+        Ref<Scene>& GetContext(void);
+
+        void SetSelectedEntity(Entity entity);
+        Entity GetSelectedEntity(void);
 
         void Display(void);
+
+    private:
+        void DrawEntityNode(Entity entity);
+
+        Ref<Scene> m_context;
+        Entity m_selectedEntity;
     };
 } // namespace Nt
 

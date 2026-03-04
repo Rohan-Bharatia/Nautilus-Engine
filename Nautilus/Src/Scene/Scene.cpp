@@ -338,6 +338,11 @@ namespace Nt
         m_step    = frames;
     }
 
+    entt::registry& Scene::GetRegistry(void)
+    {
+        return m_registry;
+    }
+
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component)
     {

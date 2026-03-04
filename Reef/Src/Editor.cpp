@@ -59,6 +59,9 @@ namespace Nt
             .AddComponent<CameraComponent>(CreateRef<SceneCamera>(CameraType::Perspective), true);
         m_activeScene->CreateEntity("Plane")
             .AddComponent<SpriteComponent>(NT_COLOR_WHITE, CreateRef<SubTexture2D>(CreateRef<Texture2D>("./Assets/Textures/Checkerboard.png")));
+
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
+        m_inspectorPanel.SetContext(m_activeScene);
     }
 
     void EditorLayer::OnUpdate(float32 deltaTime)
@@ -76,6 +79,9 @@ namespace Nt
         RenderCommand::Clear();
         m_activeScene->OnRuntimeUpdate(deltaTime);
         m_framebuffer->Unbind();
+
+        if (m_sceneHierarchyPanel.GetSelectedEntity() != m_inspectorPanel.GetSelectedEntity())
+            m_inspectorPanel.SetSelectedEntity(m_sceneHierarchyPanel.GetSelectedEntity());
     }
 
     void EditorLayer::OnGUIRender(float32 deltaTime)

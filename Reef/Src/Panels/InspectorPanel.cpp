@@ -31,10 +31,60 @@
 
 namespace Nt
 {
+    InspectorPanel::InspectorPanel(const Ref<Scene>& scene) :
+        m_context(scene)
+    {}
+
+    void InspectorPanel::SetContext(const Ref<Scene>& scene)
+    {
+        m_context = scene;
+    }
+
+    Ref<Scene>& InspectorPanel::GetContext(void)
+    {
+        return m_context;
+    }
+
+    void InspectorPanel::SetSelectedEntity(Entity entity)
+    {
+        m_selectedEntity = entity;
+    }
+
+    Entity InspectorPanel::GetSelectedEntity(void)
+    {
+        return m_selectedEntity;
+    }
+
     void InspectorPanel::Display(void)
     {
         ImGui::Begin("Inspector");
+        if (m_selectedEntity)
+            DrawComponents(m_selectedEntity);
         ImGui::End();
+    }
+
+    void InspectorPanel::DrawComponents(Entity entity)
+    {
+        char buffer[256];
+        memset(buffer, 0, sizeof(buffer));
+        strcpy(buffer, (const char*)entity.GetName());
+        if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
+            entity.SetName(buffer);
+
+        ImGui::Separator();
+
+        auto flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+        if (entity.HasComponent<TransformComponent>())
+        {
+            if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), flags, "Transform"))
+            {
+                auto& transform = entity.GetComponent<TransformComponent>();
+                ImGui::DragFloat3("Translation", glm::value_ptr(transform.position), 0.1f);
+                ImGui::DragFloat3("Rotation", glm::value_ptr(transform.rotation), 0.1f);
+                ImGui::DragFloat3("Scale", glm::value_ptr(transform.scale), 0.1f);
+                ImGui::TreePop();
+            }
+        }
     }
 } // namespace Nt
 

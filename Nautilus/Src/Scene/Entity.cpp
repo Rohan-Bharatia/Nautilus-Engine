@@ -43,6 +43,12 @@ namespace Nt
         return ic.id;
     }
 
+    void Entity::SetName(String name)
+    {
+        auto& tc = GetComponent<TagComponent>();
+        tc.tag = name;
+    }
+
     String Entity::GetName(void)
     {
         auto& tc = GetComponent<TagComponent>();
