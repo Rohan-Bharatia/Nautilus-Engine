@@ -35,20 +35,27 @@
 
 namespace Nt
 {
+    enum class CameraType
+    {
+        None = 0,
+        Orthographic,
+        Perspective,
+    };
+
     class NT_API Camera
     {
     public:
         NT_CLASS_DEFAULTS(Camera)
         Camera(void) = default;
 
-        void SetProjection(const Matrix4& projection);
-        const Matrix4 GetProjection(void) const;
+        virtual void SetProjection(const Matrix4& projection);
+        virtual const Matrix4 GetProjection(void) const;
 
-        void SetView(const Matrix4& view);
-        const Matrix4 GetView(void) const;
+        virtual void SetView(const Matrix4& view);
+        virtual const Matrix4 GetView(void) const;
 
-        void SetViewProjection(const Matrix4& viewProjection);
-        const Matrix4 GetViewProjection(void) const;
+        virtual void SetViewProjection(const Matrix4& viewProjection);
+        virtual const Matrix4 GetViewProjection(void) const;
 
         virtual void SetViewportSize(uint32 width, uint32 height) {}
         virtual void OnUpdate(float32 deltaTime) {}

@@ -53,11 +53,13 @@ namespace Nt
 
         m_framebuffer = CreateRef<Framebuffer>(props);
 
+        Ref<SceneCamera> camera = CreateRef<SceneCamera>();
+        camera->SetPerspective(45.0f);
+
         m_activeScene = CreateRef<Scene>();
         m_activeScene->OnRuntimeStart();
         m_activeScene->CreateEntity("Main Camera")
-            .AddComponent<CameraComponent>(CreateRef<PerspectiveCamera>(60, 16.0f / 9.0f), true);
-
+            .AddComponent<CameraComponent>(camera, true);
         m_activeScene->CreateEntity("Plane")
             .AddComponent<SpriteComponent>(NT_COLOR_WHITE, CreateRef<SubTexture2D>(CreateRef<Texture2D>("./Assets/Textures/Checkerboard.png")));
     }
