@@ -31,6 +31,14 @@
 
 namespace Nt
 {
+    SceneCamera::SceneCamera(CameraType type)
+    {
+        if (type == CameraType::Orthographic)
+            SetOrthographic(1.0f);
+        else if (type == CameraType::Perspective)
+            SetPerspective(45.0f);
+    }
+
     void SceneCamera::SetProjection(const Matrix4& projection)
 	{
 		m_camera->SetProjection(projection);

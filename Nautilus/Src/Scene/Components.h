@@ -33,6 +33,7 @@
 #include "Math/Color.h"
 #include "Math/Camera.h"
 #include "Renderer/Texture.h"
+#include "ScriptableEntity.h"
 
 namespace Nt
 {
@@ -100,6 +101,32 @@ namespace Nt
         SpriteComponent(const Color& color, Ref<SubTexture2D> texture, float32 tilingFactor) : color(color), texture(texture), tilingFactor(tilingFactor) {}
     };
 
+    struct NT_API NativeScriptComponent
+    {
+        ScriptableEntity* instance = nullptr;
+
+        std::function<void(void)> Instantiate;
+        std::function<void(void)> Destroy;
+
+        std::function<void(ScriptableEntity*)> OnCreate;
+        std::function<void(ScriptableEntity*, float32)> OnUpdate;
+        std::function<void(ScriptableEntity*)> OnDestroy;
+
+        NT_STRUCT_DEFAULTS(NativeScriptComponent)
+        NativeScriptComponent(void) = default;
+
+        template<typename T>
+        void Bind(void)
+        {
+            Instantiate = [&](void) { instance = new T(); };
+            Destroy     = [&](void) { delete (T*)instance; instance = nullptr; };
+
+            OnCreate    = [](ScriptableEntity* instance) { ((T*)instance)->OnCreate(); };
+            OnUpdate    = [](ScriptableEntity* instance, float32 deltaTime) { ((T*)instance)->OnUpdate(deltaTime); };
+            OnDestroy   = [](ScriptableEntity* instance) { ((T*)instance)->OnDestroy(); };
+        }
+    };
+
     template<typename... T>
     struct NT_API ComponentGroup
     {
@@ -107,7 +134,7 @@ namespace Nt
         ComponentGroup(void) = default;
     };
 
-    using AllComponents = ComponentGroup<IDComponent, TagComponent, TransformComponent, CameraComponent, SpriteComponent>;
+    using AllComponents = ComponentGroup<IDComponent, TagComponent, TransformComponent, CameraComponent, SpriteComponent, NativeScriptComponent>;
 } // namespace Nt
 
 #endif // _SCENE_COMPONENTS_H_

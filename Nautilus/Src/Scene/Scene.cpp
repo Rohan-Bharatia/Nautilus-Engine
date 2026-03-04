@@ -173,6 +173,18 @@ namespace Nt
     {
         if (!m_paused || m_step-- > 0)
         {
+            m_registry.view<NativeScriptComponent>().each([&](auto entity, auto& nsc)
+            {
+                if (!nsc.instance)
+                {
+                    nsc.Instantiate();
+                    nsc.instance->m_entity = Entity(entity, this);
+                    nsc.OnCreate(nsc.instance);
+                }
+
+                nsc.OnUpdate(nsc.instance, deltaTime);
+            });
+
             Camera* mainCamera      = nullptr;
             Matrix4 cameraTransform = Matrix4(1.0f);
             {
@@ -307,6 +319,10 @@ namespace Nt
 
     template<>
     void Scene::OnComponentAdded<SpriteComponent>(Entity entity, SpriteComponent& component)
+    {}
+
+    template<>
+    void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
     {}
 } // namespace Nt
 

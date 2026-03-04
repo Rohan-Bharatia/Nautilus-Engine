@@ -36,7 +36,7 @@ namespace Nt
     class NT_API ScriptableEntity
     {
     public:
-        NT_CLASS_DEFAULTS(ScriptableEntity)
+        // NT_CLASS_DEFAULTS(ScriptableEntity)
         virtual ~ScriptableEntity(void) = default;
 
         template<typename T>
@@ -45,7 +45,6 @@ namespace Nt
             return m_entity.GetComponent<T>();
         }
 
-    protected:
         virtual void OnCreate(void) {}
         virtual void OnUpdate(float32 deltaTime) {}
         virtual void OnDestroy(void) {}

@@ -39,6 +39,7 @@ namespace Nt
     public:
         NT_CLASS_DEFAULTS(SceneCamera)
         SceneCamera(void) = default;
+        SceneCamera(CameraType type);
         virtual ~SceneCamera(void) = default;
 
         virtual void SetProjection(const Matrix4& projection) override;
