@@ -70,7 +70,7 @@ namespace Nt
         Matrix4 GetTransform(void) const
         {
             return glm::translate(Matrix4(1.0f), position) *
-                   glm::toMat4(glm::quat(rotation)) *
+                   glm::toMat4(glm::quat(glm::radians(rotation))) *
                    glm::scale(Matrix4(1.0f), scale);
         }
     };
@@ -104,12 +104,14 @@ namespace Nt
     struct NT_API NativeScriptComponent
     {
         ScriptableEntity* instance = nullptr;
+        String className;
 
         ScriptableEntity*(*Instantiate)(void);
         void(*Destroy)(NativeScriptComponent*);
 
         NT_STRUCT_DEFAULTS(NativeScriptComponent)
         NativeScriptComponent(void) = default;
+        NativeScriptComponent(String className) : className(className) {}
 
         template<typename T>
         void Bind(void)

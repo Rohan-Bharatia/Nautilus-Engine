@@ -54,6 +54,21 @@ namespace Nt
         void SetOrthographic(float32 size, float32 near=-1.0f, float32 far=1.0f);
         void SetPerspective(float32 fov, float32 near=0.01f, float32 far=1000.0f);
 
+        void SetOrthographicSize(float32 size);
+        float32 GetOrthographicSize(void) const;
+        void SetOrthographicNear(float32 near);
+        float32 GetOrthographicNear(void) const;
+        void SetOrthographicFar(float32 far);
+        float32 GetOrthographicFar(void) const;
+
+        void SetPerspectiveFOV(float32 fov);
+        float32 GetPerspectiveFOV(void) const;
+        void SetPerspectiveNear(float32 near);
+        float32 GetPerspectiveNear(void) const;
+        void SetPerspectiveFar(float32 far);
+        float32 GetPerspectiveFar(void) const;
+
+        void SetCameraType(CameraType type);
         CameraType GetCameraType(void) const;
 
         virtual void SetViewportSize(uint32 width, uint32 height) override;
@@ -64,6 +79,12 @@ namespace Nt
         CameraType m_type     = CameraType::Orthographic;
         float32 m_aspectRatio = 16.0f / 9.0f;
         Ref<Camera> m_camera  = CreateRef<PerspectiveCamera>(-1.0f, 1.0f, -1.0f, 1.0f);
+        float32 m_orthoSize   = 10.0f,
+                m_orthoNear   = -1.0f,
+                m_orthoFar    = 1.0f;
+        float32 m_perspFOV    = 60.0f,
+                m_perspNear   = 0.01f,
+                m_perspFar    = 1000.0f;
     };
 } // namespace Nt
 

@@ -37,10 +37,11 @@ namespace Nt
 {
     enum class CameraType
     {
-        None = 0,
-        Orthographic,
+        Orthographic = 0,
         Perspective,
     };
+
+    class SceneCamera;
 
     class NT_API Camera
     {
@@ -83,6 +84,8 @@ namespace Nt
 
         virtual void SetViewportSize(uint32 width, uint32 height) override;
 
+        operator SceneCamera(void) const;
+
     private:
         void RecalculateView(void);
 
@@ -113,6 +116,8 @@ namespace Nt
         Vector3 GetForwardDirection(void);
 
         virtual void SetViewportSize(uint32 width, uint32 height) override;
+
+        operator SceneCamera(void) const;
 
     private:
         void RecalculateView(void);
