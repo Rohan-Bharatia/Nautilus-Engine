@@ -31,6 +31,7 @@
 
 #include "Components.h"
 #include "Entity.h"
+#include "SceneCamera.h"
 #include "Renderer/SceneRenderer.h"
 
 namespace Nt
@@ -185,7 +186,7 @@ namespace Nt
                 nsc.instance->OnUpdate(deltaTime);
             });
 
-            Camera* mainCamera      = nullptr;
+            SceneCamera* mainCamera = nullptr;
             Matrix4 cameraTransform = Matrix4(1.0f);
             {
                 auto group = m_registry.group<TransformComponent, CameraComponent>();
@@ -252,7 +253,7 @@ namespace Nt
                 nsc.instance->OnEvent(e);
             });
 
-            Camera* mainCamera = nullptr;
+            SceneCamera* mainCamera = nullptr;
             {
                 auto view = m_registry.view<CameraComponent>();
                 for (auto entity : view)

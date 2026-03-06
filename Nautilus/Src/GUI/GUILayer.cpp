@@ -47,14 +47,18 @@ namespace Nt
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-        io.FontDefault  = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf", 18.0f);
+
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/Noto_Sans/static/NotoSans-Regular.ttf", 18.0f);
+        io.Fonts->AddFontFromFileTTF("Assets/Fonts/Noto_Sans/static/NotoSans-Bold.ttf", 18.0f);
+        io.Fonts->AddFontFromFileTTF("Assets/Fonts/Noto_Sans/static/NotoSans-Italic.ttf", 18.0f);
+        io.Fonts->AddFontFromFileTTF("Assets/Fonts/Noto_Sans/static/NotoSans-BoldItalic.ttf", 18.0f);
 
         ImGui::StyleColorsDark();
 
         ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         {
-            style.WindowRounding              = 0.0f;
+            style.WindowRounding              = 1.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 

@@ -136,6 +136,11 @@ namespace Nt
         BeginScene(camera, Matrix4(1.0f));
     }
 
+    void SceneRenderer::BeginScene(const SceneCamera& camera)
+    {
+        BeginScene(camera, Matrix4(1.0f));
+    }
+
     void SceneRenderer::EndScene(void)
     {
         Flush();

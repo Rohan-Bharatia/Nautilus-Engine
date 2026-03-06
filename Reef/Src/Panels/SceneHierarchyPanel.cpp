@@ -65,6 +65,12 @@ namespace Nt
         });
         if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered())
             m_selectedEntity = {};
+        if (ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_NoOpenOverItems | ImGuiPopupFlags_MouseButtonRight))
+        {
+            if (ImGui::MenuItem("Create New Empty Entity"))
+                m_context->CreateEntity("New Entity");
+            ImGui::EndPopup();
+        }
         ImGui::End();
     }
 
@@ -74,8 +80,22 @@ namespace Nt
         bool opened = ImGui::TreeNodeEx((void*)(uint64)(uint32)entity, flags, (const char*)entity.GetName());
         if (ImGui::IsItemClicked())
             m_selectedEntity = entity;
+        bool deleted = false;
+        if (ImGui::BeginPopupContextItem(0, ImGuiPopupFlags_MouseButtonRight))
+        {
+            if (ImGui::MenuItem("Delete Entity"))
+                deleted = true;
+            ImGui::EndPopup();
+        }
         if (opened)
+        {
+            bool opened = ImGui::TreeNodeEx((void*)9817239, flags, (const char*)entity.GetName());
+            if (opened)
+                ImGui::TreePop();
             ImGui::TreePop();
+        }
+        if (deleted)
+            m_context->DestroyEntity(entity);
     }
 } // namespace Nt
 

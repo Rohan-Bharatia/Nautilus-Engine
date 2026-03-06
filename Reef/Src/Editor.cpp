@@ -178,7 +178,7 @@ namespace Nt
                 if (ImGui::MenuItem("Empty Object"))
                     m_activeScene->CreateEntity();
                 if (ImGui::MenuItem("Camera"))
-                    m_activeScene->CreateEntity().AddComponent<CameraComponent>(CreateRef<PerspectiveCamera>(60.0f, 16.0f / 9.0f));
+                    m_activeScene->CreateEntity().AddComponent<CameraComponent>();
                 ImGui::MenuItem("Light");
                 ImGui::Separator();
                 if (ImGui::BeginMenu("Primitives"))

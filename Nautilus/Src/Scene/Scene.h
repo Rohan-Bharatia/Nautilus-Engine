@@ -82,7 +82,7 @@ namespace Nt
         void OnComponentAdded(Entity entity, T& component);
 
         entt::registry m_registry;
-        Vector2 m_viewport;
+        Vector2 m_viewport = { 0.0f, 0.0f };
         bool m_running, m_paused;
         int32 m_step;
         std::unordered_map<UUID, entt::entity> m_entityMap;

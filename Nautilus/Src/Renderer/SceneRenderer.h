@@ -33,6 +33,7 @@
 #include "Math/Camera.h"
 #include "Texture.h"
 #include "Scene/Components.h"
+#include "Scene/SceneCamera.h"
 
 namespace Nt
 {
@@ -47,6 +48,7 @@ namespace Nt
         static void BeginScene(const Camera& camera, const Matrix4& transform);
         static void BeginScene(const OrthographicCamera& camera);
         static void BeginScene(const PerspectiveCamera& camera);
+        static void BeginScene(const SceneCamera& camera);
         static void EndScene(void);
 
         static void DrawQuad(const Vector2& position, const Vector2& size, float32 rotation, const Vector4& color);

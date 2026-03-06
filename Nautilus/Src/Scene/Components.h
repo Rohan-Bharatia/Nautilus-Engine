@@ -33,13 +33,14 @@
 #include "Math/Color.h"
 #include "Math/Camera.h"
 #include "Renderer/Texture.h"
+#include "SceneCamera.h"
 #include "ScriptableEntity.h"
 
 namespace Nt
 {
     struct NT_API IDComponent
     {
-        UUID id;
+        UUID id = UUID(0);
 
         NT_STRUCT_DEFAULTS(IDComponent)
         IDComponent(void) = default;
@@ -77,22 +78,22 @@ namespace Nt
 
     struct NT_API CameraComponent
     {
-        Ref<Camera> camera;
-        bool primary    = false;
-        bool fixedRatio = false;
+        Ref<SceneCamera> camera = CreateRef<SceneCamera>();
+        bool primary            = false;
+        bool fixedRatio         = false;
 
         NT_STRUCT_DEFAULTS(CameraComponent)
         CameraComponent(void) = default;
-        CameraComponent(const Ref<Camera>& camera) : camera(camera) {}
-        CameraComponent(const Ref<Camera>& camera, bool primary) : camera(camera), primary(primary) {}
-        CameraComponent(const Ref<Camera>& camera, bool primary, bool fixedRatio) : camera(camera), primary(primary), fixedRatio(fixedRatio) {}
+        CameraComponent(const Ref<SceneCamera>& camera) : camera(camera) {}
+        CameraComponent(const Ref<SceneCamera>& camera, bool primary) : camera(camera), primary(primary) {}
+        CameraComponent(const Ref<SceneCamera>& camera, bool primary, bool fixedRatio) : camera(camera), primary(primary), fixedRatio(fixedRatio) {}
     };
 
     struct NT_API SpriteComponent
     {
-        Color color          = NT_COLOR_WHITE;
-        Ref<SubTexture2D> texture;
-        float32 tilingFactor = 1.0f;
+        Color color               = NT_COLOR_WHITE;
+        Ref<SubTexture2D> texture = CreateRef<SubTexture2D>(CreateRef<Texture2D>(TextureProps{}));
+        float32 tilingFactor      = 1.0f;
 
         NT_STRUCT_DEFAULTS(SpriteComponent)
         SpriteComponent(void) = default;
@@ -104,7 +105,7 @@ namespace Nt
     struct NT_API NativeScriptComponent
     {
         ScriptableEntity* instance = nullptr;
-        String className;
+        String className           = "ClassName";
 
         ScriptableEntity*(*Instantiate)(void);
         void(*Destroy)(NativeScriptComponent*);

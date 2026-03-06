@@ -93,6 +93,9 @@ namespace Nt
         glTextureParameteri(m_id, GL_TEXTURE_WRAP_R, TextureWrapFormatToGL(props.sampler.wrap));
         glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, TextureWrapFormatToGL(props.sampler.wrap));
         glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, TextureWrapFormatToGL(props.sampler.wrap));
+
+        uint8 white[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
+        glTextureSubImage2D(m_id, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, white);
     }
 
     Texture2D::Texture2D(const String& path, const TextureSampler& sampler) :
