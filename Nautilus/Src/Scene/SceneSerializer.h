@@ -40,7 +40,10 @@ namespace Nt
         SceneSerializer(const Ref<Scene>& scene);
 
         void Serialize(const String& filepath);
-        void Deserialize(const String& filepath);
+        void SerializeRuntime(const String& filepath);
+
+        bool Deserialize(const String& filepath);
+        bool DeserializeRuntime(const String& filepath);
 
     private:
         Ref<Scene> m_scene;

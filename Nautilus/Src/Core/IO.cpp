@@ -35,7 +35,7 @@ namespace Nt
     {
         std::string line;
         std::getline(std::cin, line);
-        return line;
+        return String(line);
     }
 
     String ReadFile(const String& path)
@@ -43,7 +43,7 @@ namespace Nt
         std::ifstream file((const char*)path);
         std::stringstream buffer;
         buffer << file.rdbuf();
-        return buffer.str();
+        return String(buffer.str());
     }
 
     void WriteConsole(const String& data, bool newline)
@@ -55,8 +55,8 @@ namespace Nt
 
     void WriteFile(const String& path, const String& data, bool overwrite)
     {
-        std::ofstream file((const char*)path, overwrite ? std::ios::trunc : std::ios::app);
-        NT_ASSERT(file.is_open(), "Failed to open file: %s", path);
+        std::ofstream file((const char*)path, std::ios::out | (overwrite ? std::ios::trunc : std::ios::app));
+        NT_ASSERT(file.is_open(), "Failed to open file: %s", (const char*)path);
         file << (const char*)data;
         file.close();
     }

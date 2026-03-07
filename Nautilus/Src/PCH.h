@@ -644,6 +644,7 @@ namespace Nt
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <ImGuizmo.h>
 #include <entt/entt.hpp>
+#include <yaml-cpp/yaml.h>
 
 // Nautilus library headers
 #include "Core/Strings.h"

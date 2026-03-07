@@ -54,6 +54,7 @@ link_dependency("stb" "stb" ".")
 link_dependency("msdf-atlas-gen" "msdf-atlas-gen" "msdf-atlas-gen")
 link_dependency("imgui" "imgui" ".")
 link_dependency("entt" "EnTT" "src")
+link_dependency("yaml-cpp" "yaml-cpp" "include")
 
 target_include_directories(Nautilus PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/..

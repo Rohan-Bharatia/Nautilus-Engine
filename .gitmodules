@@ -22,3 +22,6 @@
 	path = Nautilus/Vendor/entt
     url = https://github.com/skypjack/entt.git
     branch = master
+[submodule "Nautilus/Vendor/yaml-cpp"]
+	path = Nautilus/Vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
