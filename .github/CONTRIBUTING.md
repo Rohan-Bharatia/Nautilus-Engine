@@ -50,11 +50,9 @@ Notify any collaborators to get editor access or to push requests.
 
 ### 🧰 Prerequisites
 
-- [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [Intall CMake](https://cmake.org/install/)
-
-> [!NOTE]
-> Read the main [README](https://github.com/Rohan-Bharatia/Nautilus-Engine/blob/main/README.md) for more information on platform specific requirements
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [CMake](https://cmake.org/install/)
+- [GCC](https://gcc.gnu.org/install/)/[Clang](https://clang.llvm.org/get_started.html)/[MSVC](https://visualstudio.microsoft.com/downloads/)/[ICC](https://www.intel.com/content/www/us/en/developer/articles/tool/intel-system-studio-download-and-install-intel-c-compiler.html)
 
 ### ⚙️ Installation
 
@@ -65,7 +63,7 @@ Notify any collaborators to get editor access or to push requests.
 ### ▶️ Testing and Running your project
 
 1. Navigate to the repo directory.
-2. Run either the ```build.bat``` or ```build.sh``` script.
+2. Run either the ```build.bat``` (Windows) or ```build.sh``` (macOS/Linux) script.
 
 ## 📄 Style Guide
 
