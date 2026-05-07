@@ -40,7 +40,7 @@ namespace Nt
     class NT_API Application
     {
     public:
-        NT_CLASS_DEFAULTS(Application)
+        // NT_CLASS_DEFAULTS(Application)
         Application(String name="Nautilus Application");
         virtual ~Application(void);
 
