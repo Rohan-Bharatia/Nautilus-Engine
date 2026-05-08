@@ -39,8 +39,9 @@ namespace Nt
         String pattern;
     };
 
-    NT_API String OpenFileDialog(Window* window, const std::vector<Filter>& filters={});
-    NT_API std::vector<String> OpenMultiFileDialog(Window* window, const std::vector<Filter>& filters={});
+    NT_API String OpenFileDialog(Window* window, const std::initializer_list<Filter>& filters={});
+    NT_API std::vector<String> OpenMultiFileDialog(Window* window, const std::initializer_list<Filter>& filters={});
+    NT_API String SaveFileDialog(Window* window, const std::initializer_list<Filter>& filters={});
 
     NT_API void OpenURL(const String& url);
 } // namespace Nt

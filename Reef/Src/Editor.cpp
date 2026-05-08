@@ -32,7 +32,7 @@
 namespace Nt
 {
     EditorLayer::EditorLayer(void) :
-        Layer("EditorLayer"), m_viewportSize(0.0f, 0.0f)
+        Layer("EditorLayer"), m_viewportSize(0.0f, 0.0f), m_currentScenePath("")
     {}
 
     void EditorLayer::OnAttach(void)
@@ -54,7 +54,6 @@ namespace Nt
         m_framebuffer = CreateRef<Framebuffer>(props);
 
         m_activeScene = CreateRef<Scene>();
-        m_activeScene->OnRuntimeStart();
         m_activeScene->CreateEntity("Main Camera")
             .AddComponent<CameraComponent>(CreateRef<SceneCamera>(CameraType::Perspective), true);
         m_activeScene->CreateEntity("Plane")
@@ -131,11 +130,15 @@ namespace Nt
             ImGui::Separator();
             if (ImGui::BeginMenu("File"))
             {
-                ImGui::MenuItem("Open Scene", "Ctrl+O");
+                if (ImGui::MenuItem("Open Scene", "Ctrl+O"))
+                    OpenScene();
                 ImGui::Separator();
-                ImGui::MenuItem("New Scene", "Ctrl+N");
-                ImGui::MenuItem("Save Scene", "Ctrl+S");
-                ImGui::MenuItem("Save Scene As", "Ctrl+Shift+S");
+                if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+                    NewScene();
+                if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+                    SaveScene();
+                if (ImGui::MenuItem("Save Scene As", "Ctrl+Shift+S"))
+                    SaveSceneAs();
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit", "Ctrl+Q"))
                     Application::Get().Close();
@@ -263,6 +266,23 @@ namespace Nt
             ImGui::Begin("Viewport");
             m_viewportSize = { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y };
             ImGui::Image(ImTextureRef((ImTextureID)m_framebuffer->GetColorAttachmentRenderId(0)), ImVec2(m_viewportSize.x, m_viewportSize.y));
+
+            Entity selected = m_sceneHierarchyPanel.GetSelectedEntity();
+            if (selected)
+            {
+                ImGuizmo::SetOrthographic(false);
+                ImGuizmo::SetDrawlist();
+                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+                auto camera         = m_activeScene->GetPrimaryCamera();
+                const auto& cc      = camera.GetComponent<CameraComponent>().camera;
+                const Matrix4& proj = cc->GetProjection();
+                Matrix4 view        = (camera.GetComponent<TransformComponent>().GetTransform());
+                auto& tc            = selected.GetComponent<TransformComponent>();
+                Matrix4 transform   = tc.GetTransform();
+                ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), ImGuizmo::OPERATION::UNIVERSAL,
+                                     ImGuizmo::LOCAL, glm::value_ptr(transform));
+            }
+
             ImGui::End();
             ImGui::PopStyleVar();
 
@@ -320,6 +340,20 @@ namespace Nt
         bool alt   = Input::IsKeyPressed(Keycode::LeftAlt) || Input::IsKeyPressed(Keycode::RightAlt);
         switch (e.GetKeyCode())
         {
+            case Keycode::N:
+                if (ctrl)
+                    NewScene();
+                break;
+            case Keycode::O:
+                if (ctrl)
+                    OpenScene();
+                break;
+            case Keycode::S:
+                if (ctrl && shift)
+                    SaveSceneAs();
+                else if (ctrl)
+                    SaveScene();
+                break;
             case Keycode::Q:
                 if (ctrl)
                     Application::Get().Close();
@@ -334,6 +368,59 @@ namespace Nt
                 break;
         }
         return false;
+    }
+
+    void EditorLayer::NewScene(void)
+    {
+        m_activeScene      = CreateRef<Scene>();
+        m_currentScenePath = "";
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
+        m_inspectorPanel.SetContext(m_activeScene);
+        NT_CORE_INFO("New scene created");
+    }
+
+    void EditorLayer::OpenScene(void)
+    {
+        String path = OpenFileDialog(&Application::Get().GetWindow(),
+                                    {
+                                        { "Nautilus Scene", "ntscene" },
+                                        { "All Files",      "*" }
+                                    });
+
+        NT_ASSERT(path != "", "Scene not opened");
+
+        m_currentScenePath = path;
+        m_activeScene      = CreateRef<Scene>();
+        SceneSerializer serializer(m_activeScene);
+        serializer.Deserialize(path);
+        m_sceneHierarchyPanel.SetContext(m_activeScene);
+        m_inspectorPanel.SetContext(m_activeScene);
+    }
+
+    void EditorLayer::SaveScene(void)
+    {
+        if (m_currentScenePath == "")
+        {
+            SaveSceneAs();
+            return;
+        }
+
+        SceneSerializer serializer(m_activeScene);
+        serializer.Serialize(m_currentScenePath);
+    }
+
+    void EditorLayer::SaveSceneAs(void)
+    {
+        String path = SaveFileDialog(&Application::Get().GetWindow(),
+                                     {
+                                         { "Nautilus Scene", "ntscene" },
+                                         { "All Files",      "*" }
+                                     });
+
+        NT_ASSERT(path != "", "Scene not opened");
+
+        m_currentScenePath = path;
+        SaveScene();
     }
 } // namespace Nt
 

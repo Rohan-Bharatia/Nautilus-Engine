@@ -47,6 +47,11 @@ namespace YAML
 
         static bool decode(const Node& node, Nt::String& rhs)
         {
+            if (node.IsScalar())
+            {
+                rhs = Nt::String(node.as<std::string>().c_str());
+                return true;
+            }
             if (!node.IsSequence() || node.size() != 1)
                 return false;
             rhs = Nt::String(node[0].as<std::string>().c_str());
@@ -66,6 +71,11 @@ namespace YAML
 
         static bool decode(const Node& node, Nt::UUID& rhs)
         {
+            if (node.IsScalar())
+            {
+                rhs = Nt::UUID(node.as<Nt::uint64>());
+                return true;
+            }
             if (!node.IsSequence() || node.size() != 1)
                 return false;
             rhs = Nt::UUID(node[0].as<Nt::uint64>());
@@ -144,31 +154,6 @@ namespace YAML
             return true;
         }
     };
-
-    // template<>
-    // struct convert<Nt::Color>
-    // {
-    //     static Node encode(const Nt::Color& rhs)
-    //     {
-    //         Node node;
-    //         node.push_back(rhs.r);
-    //         node.push_back(rhs.g);
-    //         node.push_back(rhs.b);
-    //         node.push_back(rhs.a);
-    //         return node;
-    //     }
-
-    //     static bool decode(const Node& node, Nt::Color& rhs)
-    //     {
-    //         if (!node.IsSequence() || node.size() != 4)
-    //             return false;
-    //         rhs.r = node[0].as<Nt::float32>();
-    //         rhs.g = node[1].as<Nt::float32>();
-    //         rhs.b = node[2].as<Nt::float32>();
-    //         rhs.a = node[3].as<Nt::float32>();
-    //         return true;
-    //     }
-    // };
 } // namespace YAML
 
 namespace Nt
@@ -208,24 +193,20 @@ namespace Nt
         return out;
     }
 
-    // YAML::Emitter& operator<<(YAML::Emitter& out, const Color& col)
-    // {
-    //     out << YAML::Flow;
-    //     out << YAML::BeginSeq << col.r << col.g << col.b << col.a << YAML::EndSeq;
-    //     return out;
-    // }
-
     SceneSerializer::SceneSerializer(const Ref<Scene>& scene) :
         m_scene(scene)
     {}
 
     void SceneSerializer::Serialize(const String& filepath)
     {
-        NT_CORE_INFO("Saving scene %s", "Untitled");
+        String sceneName(std::filesystem::path(((std::string)filepath).c_str()).stem().string());
+        NT_CORE_INFO("Serializing scene: %s", ((std::string)sceneName).c_str());
+
         YAML::Emitter out;
         out << YAML::BeginMap;
-        out << YAML::Key << "Scene" << YAML::Value << "Untitled";
+        out << YAML::Key << "Scene" << YAML::Value << sceneName;
         out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
+
         m_scene->GetRegistry().view<IDComponent>().each([&](auto entityId, auto&)
         {
             Entity entity(entityId, m_scene.get());
@@ -233,10 +214,9 @@ namespace Nt
                 return;
 
             out << YAML::BeginMap;
+
             if (entity.HasComponent<IDComponent>())
                 out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
-
-            out << YAML::EndMap;
 
             if (entity.HasComponent<TagComponent>())
             {
@@ -253,9 +233,9 @@ namespace Nt
 
                 auto& tc = entity.GetComponent<TransformComponent>();
                 out << YAML::Key << "Translation" << YAML::Value << tc.position;
-                out << YAML::Key << "Rotation" << YAML::Value << tc.rotation;
-                out << YAML::Key << "Scale" << YAML::Value << tc.scale;
-                out << YAML::Key << "LockZAxis" << YAML::Value << tc.lockZAxis;
+                out << YAML::Key << "Rotation"    << YAML::Value << tc.rotation;
+                out << YAML::Key << "Scale"       << YAML::Value << tc.scale;
+                out << YAML::Key << "LockZAxis"   << YAML::Value << tc.lockZAxis;
 
                 out << YAML::EndMap;
             }
@@ -266,15 +246,15 @@ namespace Nt
                 out << YAML::BeginMap;
 
                 auto& cc = entity.GetComponent<CameraComponent>();
-                out << YAML::Key << "ProjectionType" << YAML::Value << (uint32)cc.camera->GetCameraType();
+                out << YAML::Key << "ProjectionType"   << YAML::Value << (uint32)cc.camera->GetCameraType();
                 out << YAML::Key << "OrthographicSize" << YAML::Value << cc.camera->GetOrthographicSize();
                 out << YAML::Key << "OrthographicNear" << YAML::Value << cc.camera->GetOrthographicNear();
-                out << YAML::Key << "OrthographicFar" << YAML::Value << cc.camera->GetOrthographicFar();
-                out << YAML::Key << "PerspectiveFOV" << YAML::Value << cc.camera->GetPerspectiveFOV();
-                out << YAML::Key << "PerspectiveNear" << YAML::Value << cc.camera->GetPerspectiveNear();
-                out << YAML::Key << "PerspectiveFar" << YAML::Value << cc.camera->GetPerspectiveFar();
-                out << YAML::Key << "Primary" << YAML::Value << cc.primary;
-                out << YAML::Key << "FixedRatio" << YAML::Value << cc.fixedRatio;
+                out << YAML::Key << "OrthographicFar"  << YAML::Value << cc.camera->GetOrthographicFar();
+                out << YAML::Key << "PerspectiveFOV"   << YAML::Value << cc.camera->GetPerspectiveFOV();
+                out << YAML::Key << "PerspectiveNear"  << YAML::Value << cc.camera->GetPerspectiveNear();
+                out << YAML::Key << "PerspectiveFar"   << YAML::Value << cc.camera->GetPerspectiveFar();
+                out << YAML::Key << "Primary"          << YAML::Value << cc.primary;
+                out << YAML::Key << "FixedRatio"       << YAML::Value << cc.fixedRatio;
 
                 out << YAML::EndMap;
             }
@@ -285,8 +265,8 @@ namespace Nt
                 out << YAML::BeginMap;
 
                 auto& sc = entity.GetComponent<SpriteComponent>();
-                out << YAML::Key << "Color" << YAML::Value << sc.color;
-                out << YAML::Key << "Texture" << YAML::Value << sc.texture->GetTexture()->GetRenderId();
+                out << YAML::Key << "Color"        << YAML::Value << sc.color;
+                out << YAML::Key << "TexturePath"  << YAML::Value << sc.texture->GetTexture()->GetPath();
                 out << YAML::Key << "TilingFactor" << YAML::Value << sc.tilingFactor;
 
                 out << YAML::EndMap;
@@ -299,7 +279,11 @@ namespace Nt
 
                 auto& nsc = entity.GetComponent<NativeScriptComponent>();
                 out << YAML::Key << "ClassName" << YAML::Value << nsc.className;
+
+                out << YAML::EndMap;
             }
+
+            out << YAML::EndMap;
         });
         out << YAML::EndSeq << YAML::EndMap;
 
@@ -369,7 +353,7 @@ namespace Nt
                     {
                         auto& sc        = deserializedEntity.GetComponent<SpriteComponent>();
                         sc.color        = spriteComponent["Color"].as<Color>();
-                        // sc.texture      = CreateRef<Texture2D>(spriteComponent["Texture"].as<uint32>());
+                        sc.texture      = CreateRef<SubTexture2D>(CreateRef<Texture2D>(spriteComponent["TexturePath"].as<String>()));
                         sc.tilingFactor = spriteComponent["TilingFactor"].as<float32>();
                     }
 

@@ -52,6 +52,11 @@ namespace Nt
         bool OnWindowResize(WindowResizeEvent& e);
         bool OnKeyPressed(KeyPressedEvent& e);
 
+        void NewScene(void);
+        void OpenScene(void);
+        void SaveScene(void);
+        void SaveSceneAs(void);
+
         struct WindowStates
         {
             bool dockspace      = true;
@@ -65,6 +70,7 @@ namespace Nt
 
         Vector2 m_viewportSize;
         Ref<Scene> m_activeScene;
+        String m_currentScenePath;
         WindowStates m_windowStates;
         Ref<Framebuffer> m_framebuffer;
         SceneHierarchyPanel m_sceneHierarchyPanel;

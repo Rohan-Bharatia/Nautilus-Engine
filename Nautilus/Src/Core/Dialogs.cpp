@@ -70,7 +70,7 @@ namespace Nt
         sync->cv.notify_one();
     }
 
-    String OpenFileDialog(Window* window, const std::vector<Filter>& filters)
+    String OpenFileDialog(Window* window, const std::initializer_list<Filter>& filters)
     {
         FileDialogSync sync;
         auto sdlFilters = MakeFilters(filters);
@@ -82,7 +82,7 @@ namespace Nt
         return sync.files.empty() ? String("") : sync.files.front();
     }
 
-    std::vector<String> OpenMultiFileDialog(Window* window, const std::vector<Filter>& filters)
+    std::vector<String> OpenMultiFileDialog(Window* window, const std::initializer_list<Filter>& filters)
     {
         FileDialogSync sync;
         auto sdlFilters = MakeFilters(filters);
@@ -92,6 +92,18 @@ namespace Nt
         std::unique_lock<std::mutex> lock(sync.mutex);
         sync.cv.wait(lock, [&]() { return sync.done; });
         return sync.files;
+    }
+
+    String SaveFileDialog(Window* window, const std::initializer_list<Filter>& filters)
+    {
+        FileDialogSync sync;
+        auto sdlFilters = MakeFilters(filters);
+
+        SDL_ShowSaveFileDialog(FileDialogCallback, &sync, (SDL_Window*)window->GetNativeWindow(), sdlFilters.empty() ? nullptr : sdlFilters.data(), (int32)sdlFilters.size(), nullptr);
+
+        std::unique_lock<std::mutex> lock(sync.mutex);
+        sync.cv.wait(lock, [&]() { return sync.done; });
+        return sync.files.empty() ? String("") : sync.files.front();
     }
 
     void OpenURL(const String& url)
